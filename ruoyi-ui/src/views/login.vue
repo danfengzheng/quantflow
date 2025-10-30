@@ -1,5 +1,14 @@
 <template>
   <div class="login">
+    <div class="lang-switch">
+      <el-dropdown @command="changeLang">
+        <span class="el-dropdown-link">{{ currentLangLabel }}</span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="zh-CN">中文</el-dropdown-item>
+          <el-dropdown-item command="en-US">English</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">{{title}}</h3>
       <el-form-item prop="username">
@@ -7,7 +16,7 @@
           v-model="loginForm.username"
           type="text"
           auto-complete="off"
-          placeholder="账号"
+          :placeholder="$t('login.username')"
         >
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
@@ -17,7 +26,7 @@
           v-model="loginForm.password"
           type="password"
           auto-complete="off"
-          placeholder="密码"
+          :placeholder="$t('login.password')"
           @keyup.enter.native="handleLogin"
         >
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
@@ -27,7 +36,7 @@
         <el-input
           v-model="loginForm.code"
           auto-complete="off"
-          placeholder="验证码"
+          :placeholder="$t('login.captcha')"
           style="width: 63%"
           @keyup.enter.native="handleLogin"
         >
@@ -37,7 +46,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{$t('login.remember')}}</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -46,11 +55,11 @@
           style="width:100%;"
           @click.native.prevent="handleLogin"
         >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
+          <span v-if="!loading">{{$t('login.signIn')}}</span>
+          <span v-else>{{$t('login.signingIn')}}</span>
         </el-button>
         <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
+          <router-link class="link-type" :to="'/register'">{{$t('login.registerNow')}}</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -81,12 +90,12 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", message: "请输入您的账号" }
+          { required: true, trigger: "blur", message: this.$t('login.ruleUsername') }
         ],
         password: [
-          { required: true, trigger: "blur", message: "请输入您的密码" }
+          { required: true, trigger: "blur", message: this.$t('login.rulePassword') }
         ],
-        code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+        code: [{ required: true, trigger: "change", message: this.$t('login.ruleCaptcha') }]
       },
       loading: false,
       // 验证码开关
@@ -94,6 +103,11 @@ export default {
       // 注册开关
       register: false,
       redirect: undefined
+    }
+  },
+  computed: {
+    currentLangLabel() {
+      return this.$i18n && this.$i18n.locale === 'en-US' ? 'EN' : '中文'
     }
   },
   watch: {
@@ -109,6 +123,13 @@ export default {
     this.getCookie()
   },
   methods: {
+    changeLang(lang) {
+      if (this.$i18n && this.$i18n.locale !== lang) {
+        this.$i18n.locale = lang
+        localStorage.setItem('lang', lang)
+        this.$message.success(lang === 'en-US' ? 'Language switched' : '已切换语言')
+      }
+    },
     getCode() {
       getCodeImg().then(res => {
         this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled
@@ -164,6 +185,14 @@ export default {
   height: 100%;
   background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
+}
+.lang-switch {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  color: #fff;
+  .el-dropdown-link { cursor: pointer; }
 }
 .title {
   margin: 0px auto 30px auto;

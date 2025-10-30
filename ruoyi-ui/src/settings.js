@@ -53,4 +53,10 @@ module.exports = {
    * 底部版权文本内容
    */
   footerContent: 'Copyright © 2018-2025 RuoYi. All Rights Reserved.'
+  ,
+  /**
+   * 默认语言（不配置或为空时使用 zh-CN）
+   * 可选：'zh-CN' | 'en-US'
+   */
+  defaultLang: ''
 }

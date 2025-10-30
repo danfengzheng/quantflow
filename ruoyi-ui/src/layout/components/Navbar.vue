@@ -23,6 +23,16 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
+        <el-dropdown class="right-menu-item hover-effect" @command="changeLang">
+          <span class="el-dropdown-link">
+            {{ currentLangLabel }}
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="zh-CN">中文</el-dropdown-item>
+            <el-dropdown-item command="en-US">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="hover">
@@ -85,6 +95,9 @@ export default {
       get() {
         return this.$store.state.settings.topNav
       }
+    },
+    currentLangLabel() {
+      return this.$i18n && this.$i18n.locale === 'en-US' ? 'EN' : '中文'
     }
   },
   methods: {
@@ -104,6 +117,14 @@ export default {
           location.href = '/index'
         })
       }).catch(() => {})
+    },
+    changeLang(lang) {
+      if (this.$i18n && this.$i18n.locale !== lang) {
+        this.$i18n.locale = lang
+        localStorage.setItem('lang', lang)
+        // 可按需刷新路由文案或强制刷新
+        this.$message.success(lang === 'en-US' ? 'Language switched' : '已切换语言')
+      }
     }
   }
 }

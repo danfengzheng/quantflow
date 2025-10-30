@@ -74,3 +74,15 @@ quantflow:
         wsBase: wss://ws.okx.com:8443/ws/v5/public
         apiKey: DEV_OKX_KEY
         secret: DEV_OKX_SECRET
+
+# QuantFlow 量化交易系统配置
+    # 是否启用模拟交易
+    mock-enabled: true
+    # 默认交易所
+    default-exchange: binance
+    # 策略引擎线程池大小
+    strategy-thread-pool-size: 10
+    # 订单超时时间（秒）
+    order-timeout: 60
+    # WebSocket重连间隔（毫秒）
+    ws-reconnect-interval: 5000
