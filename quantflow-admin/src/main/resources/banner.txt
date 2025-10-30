@@ -1,0 +1,10 @@
+Application Version: ${ruoyi.version}
+Spring Boot Version: ${spring-boot.version}
+___  _____
+  / _ \|  ___|
+ | | | | |_
+ | |_| |  _|
+  \__\_\_|
+
+QuantFlow
+让量化交易如水般流畅
