@@ -1,0 +1,76 @@
+# 开发环境覆盖配置
+server:
+  port: 8080
+
+logging:
+  level:
+    com.quantflow: debug
+    org.springframework: warn
+
+ruoyi:
+  profile: /tmp/quantflow/upload
+
+spring:
+  # 数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://localhost:3306/quantflow_db?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root123
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置连接超时时间
+      connectTimeout: 30000
+      # 配置网络超时时间
+      socketTimeout: 60000
+  data:
+    redis:
+      # 地址
+      host: 192.168.6.100
+      # 端口，默认为6379
+      port: 6379
+      # 数据库索引
+      database: 3
+      # 密码
+      password:
+  devtools:
+    restart:
+      enabled: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+
+referer:
+  allowed-domains: localhost,127.0.0.1
+
+quantflow:
+  trading:
+    exchanges:
+      binance:
+        restBase: https://api.binance.com
+        wsBase: wss://stream.binance.com:9443
+        apiKey: DEV_BINANCE_KEY
+        secret: DEV_BINANCE_SECRET
+      okx:
+        restBase: https://www.okx.com
+        wsBase: wss://ws.okx.com:8443/ws/v5/public
+        apiKey: DEV_OKX_KEY
+        secret: DEV_OKX_SECRET

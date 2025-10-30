@@ -1,0 +1,50 @@
+# 生产环境覆盖配置
+server:
+  port: 8080
+
+logging:
+  level:
+    com.quantflow: info
+    org.springframework: warn
+
+ruoyi:
+  profile: /data/quantflow/upload
+
+spring:
+  datasource:
+    druid:
+      master:
+        url: ${DB_URL:jdbc:mysql://10.0.0.20:3306/quantflow_db?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8}
+        username: ${DB_USERNAME:quantflow}
+        password: ${DB_PASSWORD:}
+  data:
+    redis:
+      host: 10.0.0.10
+      port: 6379
+      database: 0
+  devtools:
+    restart:
+      enabled: false
+
+springdoc:
+  swagger-ui:
+    enabled: false
+
+referer:
+  allowed-domains: quantflow.com,www.quantflow.com,quantflow.cn,www.quantflow.cn
+
+quantflow:
+  trading:
+    exchanges:
+      binance:
+        restBase: https://api.binance.com
+        wsBase: wss://stream.binance.com:9443
+        apiKey: ${BINANCE_KEY:}
+        secret: ${BINANCE_SECRET:}
+      okx:
+        restBase: https://www.okx.com
+        wsBase: wss://ws.okx.com:8443/ws/v5/public
+        apiKey: ${OKX_KEY:}
+        secret: ${OKX_SECRET:}
+
+
