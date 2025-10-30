@@ -1,4 +1,4 @@
-package com.ruoyi;
+package com.quantflow;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -8,11 +8,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * 
  * @author ruoyi
  */
-public class RuoYiServletInitializer extends SpringBootServletInitializer
+public class QuantflowServletInitializer extends SpringBootServletInitializer
 {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application)
     {
-        return application.sources(RuoYiApplication.class);
+        return application.sources(QuantflowApplication.class);
     }
 }
