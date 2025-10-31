@@ -16,7 +16,7 @@
           v-model="loginForm.username"
           type="text"
           auto-complete="off"
-          :placeholder="$t('login.username')"
+          :placeholder="$t('module.login.username')"
         >
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
@@ -26,7 +26,7 @@
           v-model="loginForm.password"
           type="password"
           auto-complete="off"
-          :placeholder="$t('login.password')"
+          :placeholder="$t('module.login.password')"
           @keyup.enter.native="handleLogin"
         >
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
@@ -36,7 +36,7 @@
         <el-input
           v-model="loginForm.code"
           auto-complete="off"
-          :placeholder="$t('login.captcha')"
+          :placeholder="$t('module.login.captcha')"
           style="width: 63%"
           @keyup.enter.native="handleLogin"
         >
@@ -46,7 +46,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{$t('login.remember')}}</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{$t('module.login.remember')}}</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -55,11 +55,11 @@
           style="width:100%;"
           @click.native.prevent="handleLogin"
         >
-          <span v-if="!loading">{{$t('login.signIn')}}</span>
-          <span v-else>{{$t('login.signingIn')}}</span>
+          <span v-if="!loading">{{$t('module.login.signIn')}}</span>
+          <span v-else>{{$t('module.login.signingIn')}}</span>
         </el-button>
         <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">{{$t('login.registerNow')}}</router-link>
+          <router-link class="link-type" :to="'/register'">{{$t('module.login.registerNow')}}</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -90,12 +90,12 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", message: this.$t('login.ruleUsername') }
+          { required: true, trigger: "blur", message: this.$t('module.login.ruleUsername') }
         ],
         password: [
-          { required: true, trigger: "blur", message: this.$t('login.rulePassword') }
+          { required: true, trigger: "blur", message: this.$t('module.login.rulePassword') }
         ],
-        code: [{ required: true, trigger: "change", message: this.$t('login.ruleCaptcha') }]
+        code: [{ required: true, trigger: "change", message: this.$t('module.login.ruleCaptcha') }]
       },
       loading: false,
       // 验证码开关
@@ -127,7 +127,7 @@ export default {
       if (this.$i18n && this.$i18n.locale !== lang) {
         this.$i18n.locale = lang
         localStorage.setItem('lang', lang)
-        this.$message.success(lang === 'en-US' ? 'Language switched' : '已切换语言')
+        this.$message.success(this.$t('message.success.switchLang'))
       }
     },
     getCode() {

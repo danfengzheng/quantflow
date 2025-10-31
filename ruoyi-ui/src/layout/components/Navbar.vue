@@ -9,17 +9,17 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
 
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
+        <el-tooltip :content="$t('module.navbar.sourceCode')" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
         </el-tooltip>
 
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
+        <el-tooltip :content="$t('module.navbar.document')" effect="dark" placement="bottom">
           <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
         </el-tooltip>
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
-        <el-tooltip content="布局大小" effect="dark" placement="bottom">
+        <el-tooltip :content="$t('module.navbar.layoutSize')" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
@@ -42,13 +42,13 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
-            <el-dropdown-item>个人中心</el-dropdown-item>
+            <el-dropdown-item>{{$t('module.navbar.profile')}}</el-dropdown-item>
           </router-link>
           <el-dropdown-item @click.native="setLayout" v-if="setting">
-            <span>布局设置</span>
+            <span>{{$t('module.navbar.layoutSetting')}}</span>
           </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span>退出登录</span>
+            <span>{{$t('module.navbar.logout')}}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -108,9 +108,9 @@ export default {
       this.$emit('setLayout')
     },
     logout() {
-      this.$confirm('确定注销并退出系统吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('module.navbar.logoutConfirm'), this.$t('common.tips'), {
+        confirmButtonText: this.$t('button.confirm'),
+        cancelButtonText: this.$t('button.cancel'),
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('LogOut').then(() => {
@@ -123,7 +123,7 @@ export default {
         this.$i18n.locale = lang
         localStorage.setItem('lang', lang)
         // 可按需刷新路由文案或强制刷新
-        this.$message.success(lang === 'en-US' ? 'Language switched' : '已切换语言')
+        this.$message.success(this.$t('message.success.switchLang'))
       }
     }
   }
