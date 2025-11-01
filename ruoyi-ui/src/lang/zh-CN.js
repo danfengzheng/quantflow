@@ -93,6 +93,7 @@ export default {
     import: '导入',
     query: '查询',
     refresh: '刷新',
+    refreshCache: '刷新缓存',
     expand: '展开',
     collapse: '折叠',
     more: '更多',
@@ -149,7 +150,9 @@ export default {
     dataScope: '数据权限',
     assignUser: '分配用户',
     cancelAuth: '取消授权',
-    batchCancelAuth: '批量取消授权'
+    batchCancelAuth: '批量取消授权',
+    lock: '锁定',
+    unlock: '解锁'
   },
   // 模块
   module: {

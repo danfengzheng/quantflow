@@ -91,6 +91,7 @@ export default {
     import: 'Import',
     query: 'Query',
     refresh: 'Refresh',
+    refreshCache: 'Refresh Cache',
     reset: 'Reset',
     expand: 'Expand',
     collapse: 'Collapse',
@@ -149,7 +150,9 @@ export default {
     dataScope: 'data scope',
     assignUser: 'assign user',
     cancelAuth: 'Cancel Auth',
-    batchCancelAuth: 'Batch Cancel Auth'
+    batchCancelAuth: 'Batch Cancel Auth',
+    lock: 'Lock',
+    unlock: 'Unlock'
   },
   // Modules
   module: {

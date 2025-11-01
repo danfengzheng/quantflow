@@ -71,8 +71,8 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search')}}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset')}}</el-button>
       </el-form-item>
     </el-form>
 
@@ -86,7 +86,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['monitor:operlog:remove']"
-        >删除</el-button>
+        >{{ $t('button.delete')}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -96,7 +96,7 @@
           size="mini"
           @click="handleClean"
           v-hasPermi="['monitor:operlog:remove']"
-        >清空</el-button>
+        >{{ $t('button.clear')}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -106,7 +106,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['monitor:operlog:export']"
-        >导出</el-button>
+        >{{ $t('button.export')}}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -146,7 +146,7 @@
             icon="el-icon-view"
             @click="handleView(scope.row,scope.index)"
             v-hasPermi="['monitor:operlog:query']"
-          >详细</el-button>
+          >{{ $t('button.detail')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -200,7 +200,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="open = false">关 闭</el-button>
+        <el-button @click="open = false">{{ $t('button.close')}}</el-button>
       </div>
     </el-dialog>
   </div>
