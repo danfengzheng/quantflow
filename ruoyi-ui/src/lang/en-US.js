@@ -76,7 +76,11 @@ export default {
     lastMonth: 'Last Month',
     thisYear: 'This Year',
     lastYear: 'Last Year',
-    hint: 'Hint'
+    hint: 'Hint',
+    startTime: 'Start Time',
+    endTime: 'End Time',
+    startDate: 'Start Date',
+    endDate: 'End Date',
   },
   // Buttons
   button: {
@@ -154,6 +158,25 @@ export default {
     lock: 'Lock',
     unlock: 'Unlock'
   },
+  // 字段
+  field:{
+    email: 'Email',
+    phone: 'Phone',
+    remark: 'Remark',
+    createTime: 'Create',
+    id: 'ID',
+    status: 'Status',
+    username: 'Name',
+    nickname: 'Nick',
+    sex: 'Gender',
+    dept: 'Department',
+    post: 'Post',
+    role: 'Role',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    oldPassword: 'Old Password',
+    newPassword: 'New Password'
+  },
   // Modules
   module: {
     login: {
@@ -188,21 +211,6 @@ export default {
     system: {
       user: {
         title: 'User Management',
-        username: 'Username',
-        nickname: 'Nickname',
-        email: 'Email',
-        phone: 'Phone',
-        sex: 'Gender',
-        status: 'Status',
-        dept: 'Department',
-        post: 'Post',
-        role: 'Role',
-        remark: 'Remark',
-        createTime: 'Create Time',
-        password: 'Password',
-        confirmPassword: 'Confirm Password',
-        oldPassword: 'Old Password',
-        newPassword: 'New Password'
       },
       role: {
         title: 'Role Management',
@@ -239,7 +247,7 @@ export default {
         parentId: 'Parent Department',
         leader: 'Leader',
         phone: 'Phone',
-        email: 'Email'
+        email: 'Email',
       },
       post: {
         title: 'Post Management',
@@ -379,6 +387,24 @@ export default {
         description: 'System API Documentation'
       }
     }
+  },
+  // placeholder
+  placeholder:{
+    email: 'Please enter your email',
+    phone: 'Please enter your phone',
+    deptName: 'Please enter department name',
+    selectDept: 'Please select department',
+    username: 'Please enter username',
+    nickname: 'Please enter nickname',
+    password: 'Please enter password',
+    sex: 'Please enter sex',
+    selectSex: 'Please select sex',
+    post: 'Please enter post',
+    selectPost: 'Please select post',
+    role: 'Please enter role',
+    roleName: 'Please enter roleName',
+    selectRole: 'Please select role',
+    remark: 'Please enter remark',
   },
   // Messages
   message: {

@@ -76,7 +76,11 @@ export default {
     lastMonth: '上月',
     thisYear: '今年',
     lastYear: '去年',
-    hint: '提示'
+    hint: '提示',
+    startTime: '开始时间',
+    endTime: '结束时间',
+    startDate: '开始日期',
+    endDate: '结束日期',
   },
   // 按钮
   button: {
@@ -154,6 +158,25 @@ export default {
     lock: '锁定',
     unlock: '解锁'
   },
+  // 字段
+  field:{
+    email: '邮箱',
+    phone: '手机号码',
+    remark: '备注',
+    createTime: '创建时间',
+    id: '编号',
+    status: '状态',
+    username: '用户名称',
+    nickname: '用户昵称',
+    sex: '用户性别',
+    dept: '部门',
+    post: '岗位',
+    role: '角色',
+    password: '密码',
+    confirmPassword: '确认密码',
+    oldPassword: '旧密码',
+    newPassword: '新密码',
+  },
   // 模块
   module: {
     login: {
@@ -190,19 +213,14 @@ export default {
         title: '用户管理',
         username: '用户名称',
         nickname: '用户昵称',
-        email: '用户邮箱',
-        phone: '手机号码',
         sex: '用户性别',
-        status: '账号状态',
         dept: '部门',
         post: '岗位',
         role: '角色',
-        remark: '备注',
-        createTime: '创建时间',
         password: '密码',
         confirmPassword: '确认密码',
         oldPassword: '旧密码',
-        newPassword: '新密码'
+        newPassword: '新密码',
       },
       role: {
         title: '角色管理',
@@ -239,7 +257,7 @@ export default {
         parentId: '上级部门',
         leader: '负责人',
         phone: '联系电话',
-        email: '邮箱'
+        email: '邮箱',
       },
       post: {
         title: '岗位管理',
@@ -379,6 +397,24 @@ export default {
         description: '系统接口文档'
       }
     }
+  },
+  // placeholder
+  placeholder:{
+    email: '请输入邮箱',
+    phone: '请输入手机号码',
+    deptName: '请输入部门名称',
+    selectDept: '请选择部门',
+    username: '请输入用户名称',
+    nickname: '请输入用户昵称',
+    password: '请输入用户密码',
+    sex: '请输入性别',
+    selectSex: '请选择性别',
+    post: '请输入部门',
+    selectPost: '请选择部门',
+    role: '请输入角色',
+    roleName: '请输入角色名称',
+    selectRole: '请选择角色',
+    remark: '请输入备注',
   },
   // 提示信息
   message: {
