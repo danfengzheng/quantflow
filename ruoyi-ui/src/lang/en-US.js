@@ -1,6 +1,6 @@
 export default {
   // Common
-  common: {
+    common: {
     confirm: 'Confirm',
     cancel: 'Cancel',
     submit: 'Submit',
@@ -26,6 +26,8 @@ export default {
     disable: 'Disable',
     yes: 'Yes',
     no: 'No',
+    cache: 'Cache',
+    notCache: 'Not Cache',
     normal: 'Normal',
     abnormal: 'Abnormal',
     success: 'Success',
@@ -156,18 +158,23 @@ export default {
     cancelAuth: 'Cancel Auth',
     batchCancelAuth: 'Batch Cancel Auth',
     lock: 'Lock',
-    unlock: 'Unlock'
+    unlock: 'Unlock',
+    runOnce: 'Run Once',
+    taskDetail: 'Task Detail',
+    dispatchLog: 'Dispatch Log',
+    log: 'Log',
+    forceLogout: 'Force Logout'
   },
   // 字段
   field:{
     email: 'Email',
     phone: 'Phone',
     remark: 'Remark',
-    createTime: 'Create',
+    createTime: 'Create Time',
     id: 'ID',
     status: 'Status',
     username: 'Name',
-    nickname: 'Nick',
+    nickname: 'Nickname',
     sex: 'Gender',
     dept: 'Department',
     post: 'Post',
@@ -175,7 +182,89 @@ export default {
     password: 'Password',
     confirmPassword: 'Confirm Password',
     oldPassword: 'Old Password',
-    newPassword: 'New Password'
+    newPassword: 'New Password',
+    // 角色相关
+    roleId: 'Role ID',
+    roleName: 'Role Name',
+    roleKey: 'Permission Key',
+    roleSort: 'Sort Order',
+    // 部门相关
+    deptId: 'Dept ID',
+    deptName: 'Department Name',
+    parentId: 'Parent Department',
+    orderNum: 'Sort Order',
+    leader: 'Leader',
+    // 岗位相关
+    postId: 'Post ID',
+    postCode: 'Post Code',
+    postName: 'Post Name',
+    postSort: 'Post Sort',
+    // 菜单相关
+    menuId: 'Menu ID',
+    menuName: 'Menu Name',
+    menuType: 'Menu Type',
+    icon: 'Icon',
+    perms: 'Permission',
+    component: 'Component Path',
+    path: 'Route Path',
+    routeName: 'Route Name',
+    query: 'Route Params',
+    isFrame: 'External Link',
+    isCache: 'Cache',
+    visible: 'Visible',
+    // 字典相关
+    dictId: 'Dict ID',
+    dictName: 'Dict Name',
+    dictType: 'Dict Type',
+    dictLabel: 'Dict Label',
+    dictValue: 'Dict Value',
+    dictSort: 'Dict Sort',
+    cssClass: 'CSS Class',
+    listClass: 'List Class',
+    // 参数相关
+    configId: 'Config ID',
+    configName: 'Config Name',
+    configKey: 'Config Key',
+    configValue: 'Config Value',
+    configType: 'System Built-in',
+    // 通知相关
+    noticeId: 'Notice ID',
+    noticeTitle: 'Notice Title',
+    noticeType: 'Notice Type',
+    noticeContent: 'Notice Content',
+    createBy: 'Creator',
+    // 登录日志相关
+    infoId: 'Access ID',
+    userName: 'User Name',
+    ipaddr: 'Login Address',
+    loginLocation: 'Login Location',
+    browser: 'Browser',
+    os: 'Operating System',
+    msg: 'Operation Info',
+    loginTime: 'Login Date',
+    // 操作日志相关
+    operId: 'Log ID',
+    title: 'System Module',
+    businessType: 'Operation Type',
+    operName: 'Operator',
+    operIp: 'Operation Address',
+    operLocation: 'Operation Location',
+    operTime: 'Operation Date',
+    costTime: 'Cost Time',
+    // 在线用户相关
+    tokenId: 'Session ID',
+    loginName: 'Login Name',
+    // 定时任务相关
+    jobId: 'Job ID',
+    jobName: 'Job Name',
+    jobGroup: 'Job Group',
+    invokeTarget: 'Invoke Target',
+    cronExpression: 'Cron Expression',
+    misfirePolicy: 'Misfire Policy',
+    concurrent: 'Concurrent',
+    // 通用
+    operate: 'Operation',
+    sort: 'Sort',
   },
   // Modules
   module: {
@@ -233,10 +322,14 @@ export default {
         isFrame: 'Is External Link',
         isCache: 'Is Cache',
         menuType: 'Menu Type',
+        menuTypeDirectory: 'Directory',
+        menuTypeMenu: 'Menu',
+        menuTypeButton: 'Button',
         visible: 'Visible',
         status: 'Status',
         perms: 'Permission',
         icon: 'Icon',
+        routeName: 'Route Name',
         remark: 'Remark'
       },
       dept: {
@@ -402,9 +495,57 @@ export default {
     post: 'Please enter post',
     selectPost: 'Please select post',
     role: 'Please enter role',
-    roleName: 'Please enter roleName',
+    roleName: 'Please enter role name',
+    roleKey: 'Please enter permission key',
     selectRole: 'Please select role',
     remark: 'Please enter remark',
+    // 部门相关
+    selectParentDept: 'Select parent department',
+    enterLeader: 'Please enter leader',
+    enterPhone: 'Please enter phone',
+    // 岗位相关
+    postCode: 'Please enter post code',
+    postName: 'Please enter post name',
+    enterPostCode: 'Please enter code name',
+    // 菜单相关
+    menuName: 'Please enter menu name',
+    selectParentMenu: 'Select parent menu',
+    selectIcon: 'Click to select icon',
+    routeName: 'Please enter route name',
+    routePath: 'Please enter route path',
+    componentPath: 'Please enter component path',
+    perms: 'Please enter permission',
+    routeParams: 'Please enter route params',
+    // 字典相关
+    dictName: 'Please enter dict name',
+    dictType: 'Please enter dict type',
+    // 参数相关
+    configName: 'Please enter config name',
+    configKey: 'Please enter config key',
+    configValue: 'Please enter config value',
+    // 通知相关
+    noticeTitle: 'Please enter notice title',
+    selectNoticeType: 'Please select notice type',
+    createBy: 'Please enter operator',
+    enterContent: 'Please enter content',
+    // 登录日志相关
+    ipaddr: 'Please enter login address',
+    userName: 'Please enter user name',
+    // 操作日志相关
+    operIp: 'Please enter operation address',
+    systemTitle: 'Please enter system module',
+    operName: 'Please enter operator',
+    selectBusinessType: 'Operation Type',
+    // 在线用户相关
+    loginName: 'Please enter user name',
+    // 定时任务相关
+    jobName: 'Please enter job name',
+    selectJobGroup: 'Please select job group',
+    selectJobStatus: 'Please select job status',
+    invokeTarget: 'Please enter invoke target',
+    cronExpression: 'Please enter cron expression',
+    // 通用
+    loading: 'Loading, please wait...',
   },
   // Messages
   message: {

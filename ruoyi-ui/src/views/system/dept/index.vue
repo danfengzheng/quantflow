@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
-      <el-form-item label="部门名称" prop="deptName">
+      <el-form-item :label="$t('field.deptName')" prop="deptName">
         <el-input
           v-model="queryParams.deptName"
-          placeholder="请输入部门名称"
+          :placeholder="$t('placeholder.deptName')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="部门状态" clearable>
+      <el-form-item :label="$t('field.status')" prop="status">
+        <el-select v-model="queryParams.status" :placeholder="$t('field.status')" clearable>
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
             :key="dict.value"
@@ -56,19 +56,19 @@
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-      <el-table-column prop="orderNum" label="排序" width="200"></el-table-column>
-      <el-table-column prop="status" label="状态" width="100">
+      <el-table-column prop="deptName" :label="$t('field.deptName')" width="260"></el-table-column>
+      <el-table-column prop="orderNum" :label="$t('field.sort')" width="200"></el-table-column>
+      <el-table-column prop="status" :label="$t('field.status')" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="200">
+      <el-table-column :label="$t('field.createTime')" align="center" prop="createTime" width="200">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('common.operate')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -101,43 +101,43 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24" v-if="form.parentId !== 0">
-            <el-form-item label="上级部门" prop="parentId">
-              <treeselect v-model="form.parentId" :options="deptOptions" :normalizer="normalizer" placeholder="选择上级部门" />
+            <el-form-item :label="$t('field.parentId')" prop="parentId">
+              <treeselect v-model="form.parentId" :options="deptOptions" :normalizer="normalizer" :placeholder="$t('placeholder.selectParentDept')" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="部门名称" prop="deptName">
-              <el-input v-model="form.deptName" placeholder="请输入部门名称" />
+            <el-form-item :label="$t('field.deptName')" prop="deptName">
+              <el-input v-model="form.deptName" :placeholder="$t('placeholder.deptName')" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="显示排序" prop="orderNum">
+            <el-form-item :label="$t('field.orderNum')" prop="orderNum">
               <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="负责人" prop="leader">
-              <el-input v-model="form.leader" placeholder="请输入负责人" maxlength="20" />
+            <el-form-item :label="$t('field.leader')" prop="leader">
+              <el-input v-model="form.leader" :placeholder="$t('placeholder.enterLeader')" maxlength="20" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="联系电话" prop="phone">
-              <el-input v-model="form.phone" placeholder="请输入联系电话" maxlength="11" />
+            <el-form-item :label="$t('field.phone')" prop="phone">
+              <el-input v-model="form.phone" :placeholder="$t('placeholder.enterPhone')" maxlength="11" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+            <el-form-item :label="$t('field.email')" prop="email">
+              <el-input v-model="form.email" :placeholder="$t('placeholder.email')" maxlength="50" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="部门状态">
+            <el-form-item :label="$t('module.system.dept.status')">
               <el-radio-group v-model="form.status">
                 <el-radio
                   v-for="dict in dict.type.sys_normal_disable"
@@ -194,25 +194,25 @@ export default {
       // 表单校验
       rules: {
         parentId: [
-          { required: true, message: "上级部门不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ],
         deptName: [
-          { required: true, message: "部门名称不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ],
         orderNum: [
-          { required: true, message: "显示排序不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ],
         email: [
           {
             type: "email",
-            message: "请输入正确的邮箱地址",
+            message: this.$t('message.validate.email'),
             trigger: ["blur", "change"]
           }
         ],
         phone: [
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-            message: "请输入正确的手机号码",
+            message: this.$t('message.validate.phone'),
             trigger: "blur"
           }
         ]
@@ -277,7 +277,7 @@ export default {
         this.form.parentId = row.deptId
       }
       this.open = true
-      this.title = "添加部门"
+      this.title = this.$t('module.system.dept.title') + ' - ' + this.$t('button.add')
       listDept().then(response => {
         this.deptOptions = this.handleTree(response.data, "deptId")
       })
@@ -296,7 +296,7 @@ export default {
       getDept(row.deptId).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改部门"
+        this.title = this.$t('module.system.dept.title') + ' - ' + this.$t('button.edit')
         listDeptExcludeChild(row.deptId).then(response => {
           this.deptOptions = this.handleTree(response.data, "deptId")
           if (this.deptOptions.length == 0) {
@@ -312,13 +312,13 @@ export default {
         if (valid) {
           if (this.form.deptId != undefined) {
             updateDept(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('message.success.edit'))
               this.open = false
               this.getList()
             })
           } else {
             addDept(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('message.success.add'))
               this.open = false
               this.getList()
             })
@@ -332,7 +332,7 @@ export default {
         return delDept(row.deptId)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('message.success.delete'))
       }).catch(() => {})
     }
   }

@@ -1,16 +1,25 @@
 package com.quantflow.trading.market.domain;
 
+import com.quantflow.common.core.domain.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
+/**
+ * 实时行情
+ */
 @Data
-public class Ticker {
+@EqualsAndHashCode(callSuper = true)
+public class MarketTicker extends BaseEntity {
 
-private BigDecimal open;
+    private static final long serialVersionUID = 1L;
+
+    /** 交易对 */
+    private String symbol;
+
     /** 最新价 */
-private BigDecimal last;
+    private BigDecimal last;
 
     /** 买一价 */
     private BigDecimal bid;
@@ -26,6 +35,7 @@ private BigDecimal last;
 
     /** 24h成交量 */
     private BigDecimal volume;
+
     /** 24h成交额 */
     private BigDecimal quoteVolume;
 
@@ -33,8 +43,5 @@ private BigDecimal last;
     private BigDecimal priceChangePercent;
 
     /** 时间戳 */
-    private Timestamp timestamp;
-
+    private Long timestamp;
 }
-
-

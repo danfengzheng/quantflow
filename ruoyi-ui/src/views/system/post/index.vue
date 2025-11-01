@@ -1,24 +1,24 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="岗位编码" prop="postCode">
+      <el-form-item :label="$t('field.postCode')" prop="postCode">
         <el-input
           v-model="queryParams.postCode"
-          placeholder="请输入岗位编码"
+          :placeholder="$t('placeholder.postCode')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="岗位名称" prop="postName">
+      <el-form-item :label="$t('field.postName')" prop="postName">
         <el-input
           v-model="queryParams.postName"
-          placeholder="请输入岗位名称"
+          :placeholder="$t('placeholder.postName')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="岗位状态" clearable>
+      <el-form-item :label="$t('field.status')" prop="status">
+        <el-select v-model="queryParams.status" :placeholder="$t('field.status')" clearable>
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
             :key="dict.value"
@@ -81,21 +81,21 @@
 
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="岗位编号" align="center" prop="postId" />
-      <el-table-column label="岗位编码" align="center" prop="postCode" />
-      <el-table-column label="岗位名称" align="center" prop="postName" />
-      <el-table-column label="岗位排序" align="center" prop="postSort" />
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column :label="$t('field.postId')" align="center" prop="postId" />
+      <el-table-column :label="$t('field.postCode')" align="center" prop="postCode" />
+      <el-table-column :label="$t('field.postName')" align="center" prop="postName" />
+      <el-table-column :label="$t('field.postSort')" align="center" prop="postSort" />
+      <el-table-column :label="$t('field.status')" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('field.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('common.operate')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -126,16 +126,16 @@
     <!-- 添加或修改岗位对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="岗位名称" prop="postName">
-          <el-input v-model="form.postName" placeholder="请输入岗位名称" />
+        <el-form-item :label="$t('field.postName')" prop="postName">
+          <el-input v-model="form.postName" :placeholder="$t('placeholder.postName')" />
         </el-form-item>
-        <el-form-item label="岗位编码" prop="postCode">
-          <el-input v-model="form.postCode" placeholder="请输入编码名称" />
+        <el-form-item :label="$t('field.postCode')" prop="postCode">
+          <el-input v-model="form.postCode" :placeholder="$t('placeholder.enterPostCode')" />
         </el-form-item>
-        <el-form-item label="岗位顺序" prop="postSort">
+        <el-form-item :label="$t('field.postSort')" prop="postSort">
           <el-input-number v-model="form.postSort" controls-position="right" :min="0" />
         </el-form-item>
-        <el-form-item label="岗位状态" prop="status">
+        <el-form-item :label="$t('module.system.post.status')" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.sys_normal_disable"
@@ -144,8 +144,8 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('field.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('placeholder.enterContent')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -195,13 +195,13 @@ export default {
       // 表单校验
       rules: {
         postName: [
-          { required: true, message: "岗位名称不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ],
         postCode: [
-          { required: true, message: "岗位编码不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ],
         postSort: [
-          { required: true, message: "岗位顺序不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ]
       }
     }
@@ -256,7 +256,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加岗位"
+      this.title = this.$t('module.system.post.title') + ' - ' + this.$t('button.add')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -265,7 +265,7 @@ export default {
       getPost(postId).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改岗位"
+        this.title = this.$t('module.system.post.title') + ' - ' + this.$t('button.edit')
       })
     },
     /** 提交按钮 */
@@ -274,13 +274,13 @@ export default {
         if (valid) {
           if (this.form.postId != undefined) {
             updatePost(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('message.success.edit'))
               this.open = false
               this.getList()
             })
           } else {
             addPost(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('message.success.add'))
               this.open = false
               this.getList()
             })
@@ -295,7 +295,7 @@ export default {
         return delPost(postIds)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('message.success.delete'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

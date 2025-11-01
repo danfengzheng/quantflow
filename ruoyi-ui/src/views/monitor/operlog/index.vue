@@ -1,37 +1,37 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="操作地址" prop="operIp">
+      <el-form-item :label="$t('field.operIp')" prop="operIp">
         <el-input
           v-model="queryParams.operIp"
-          placeholder="请输入操作地址"
+          :placeholder="$t('placeholder.operIp')"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="系统模块" prop="title">
+      <el-form-item :label="$t('field.title')" prop="title">
         <el-input
           v-model="queryParams.title"
-          placeholder="请输入系统模块"
+          :placeholder="$t('placeholder.systemTitle')"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="操作人员" prop="operName">
+      <el-form-item :label="$t('field.operName')" prop="operName">
         <el-input
           v-model="queryParams.operName"
-          placeholder="请输入操作人员"
+          :placeholder="$t('placeholder.operName')"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="类型" prop="businessType">
+      <el-form-item :label="$t('field.businessType')" prop="businessType">
         <el-select
           v-model="queryParams.businessType"
-          placeholder="操作类型"
+          :placeholder="$t('placeholder.selectBusinessType')"
           clearable
           style="width: 240px"
         >
@@ -43,10 +43,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item :label="$t('field.status')" prop="status">
         <el-select
           v-model="queryParams.status"
-          placeholder="操作状态"
+          :placeholder="$t('module.monitor.operLog.status')"
           clearable
           style="width: 240px"
         >
@@ -58,15 +58,15 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="操作时间">
+      <el-form-item :label="$t('field.operTime')">
         <el-date-picker
           v-model="dateRange"
           style="width: 240px"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startTime')"
+          :end-placeholder="$t('common.endTime')"
           :default-time="['00:00:00', '23:59:59']"
         ></el-date-picker>
       </el-form-item>
@@ -113,32 +113,32 @@
 
     <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column label="日志编号" align="center" prop="operId" />
-      <el-table-column label="系统模块" align="center" prop="title" :show-overflow-tooltip="true" />
-      <el-table-column label="操作类型" align="center" prop="businessType">
+      <el-table-column :label="$t('field.operId')" align="center" prop="operId" />
+      <el-table-column :label="$t('field.title')" align="center" prop="title" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('field.businessType')" align="center" prop="businessType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_oper_type" :value="scope.row.businessType"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作人员" align="center" prop="operName" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
-      <el-table-column label="操作地址" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="操作地点" align="center" prop="operLocation" :show-overflow-tooltip="true" />
-      <el-table-column label="操作状态" align="center" prop="status">
+      <el-table-column :label="$t('field.operName')" align="center" prop="operName" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
+      <el-table-column :label="$t('field.operIp')" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('field.operLocation')" align="center" prop="operLocation" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('module.monitor.operLog.status')" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作日期" align="center" prop="operTime" width="160" sortable="custom" :sort-orders="['descending', 'ascending']">
+      <el-table-column :label="$t('field.operTime')" align="center" prop="operTime" width="160" sortable="custom" :sort-orders="['descending', 'ascending']">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.operTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="消耗时间" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
+      <el-table-column :label="$t('field.costTime')" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
         <template slot-scope="scope">
           <span>{{ scope.row.costTime }}毫秒</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('common.operate')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -160,7 +160,7 @@
     />
 
     <!-- 操作日志详细 -->
-    <el-dialog title="操作日志详细" :visible.sync="open" width="800px" append-to-body>
+    <el-dialog :title="$t('module.monitor.operLog.title') + ' - ' + $t('button.detail')" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="12">
@@ -299,7 +299,7 @@ export default {
         return delOperlog(operIds)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('message.success.delete'))
       }).catch(() => {})
     },
     /** 清空按钮操作 */
@@ -308,7 +308,7 @@ export default {
         return cleanOperlog()
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("清空成功")
+        this.$modal.msgSuccess(this.$t('message.success.operate'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

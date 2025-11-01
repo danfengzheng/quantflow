@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.quantflow.trading.account.mapper.QfAccountMapper">
+<mapper namespace="com.quantflow.trading.account.mapper.AccountMapper">
     
-    <resultMap type="QfAccount" id="QfAccountResult">
+    <resultMap type="Account" id="AccountResult">
         <result property="id"    column="id"    />
         <result property="userId"    column="user_id"    />
         <result property="accountName"    column="account_name"    />
@@ -21,12 +21,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
     </resultMap>
 
-    <sql id="selectQfAccountVo">
+    <sql id="selectAccountVo">
         select id, user_id, account_name, exchange, api_key, api_secret, passphrase, is_testnet, status, create_by, create_time, update_by, update_time, remark from qf_account
     </sql>
 
-    <select id="selectQfAccountList" parameterType="QfAccount" resultMap="QfAccountResult">
-        <include refid="selectQfAccountVo"/>
+    <select id="selectAccountList" parameterType="Account" resultMap="AccountResult">
+        <include refid="selectAccountVo"/>
         <where>  
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="accountName != null  and accountName != ''"> and account_name like concat('%', #{accountName}, '%')</if>
@@ -36,12 +36,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectQfAccountById" parameterType="Long" resultMap="QfAccountResult">
-        <include refid="selectQfAccountVo"/>
+    <select id="selectAccountById" parameterType="Long" resultMap="AccountResult">
+        <include refid="selectAccountVo"/>
         where id = #{id}
     </select>
 
-    <insert id="insertQfAccount" parameterType="QfAccount" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertAccount" parameterType="Account" useGeneratedKeys="true" keyProperty="id">
         insert into qf_account
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateQfAccount" parameterType="QfAccount">
+    <update id="updateAccount" parameterType="Account">
         update qf_account
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
@@ -95,11 +95,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteQfAccountById" parameterType="Long">
+    <delete id="deleteAccountById" parameterType="Long">
         delete from qf_account where id = #{id}
     </delete>
 
-    <delete id="deleteQfAccountByIds" parameterType="String">
+    <delete id="deleteAccountByIds" parameterType="String">
         delete from qf_account where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

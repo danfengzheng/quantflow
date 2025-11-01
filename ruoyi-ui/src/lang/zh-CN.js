@@ -1,6 +1,6 @@
 export default {
   // 通用
-  common: {
+    common: {
     confirm: '确定',
     cancel: '取消',
     submit: '提交',
@@ -26,6 +26,8 @@ export default {
     disable: '禁用',
     yes: '是',
     no: '否',
+    cache: '缓存',
+    notCache: '不缓存',
     normal: '正常',
     abnormal: '异常',
     success: '成功',
@@ -156,7 +158,12 @@ export default {
     cancelAuth: '取消授权',
     batchCancelAuth: '批量取消授权',
     lock: '锁定',
-    unlock: '解锁'
+    unlock: '解锁',
+    runOnce: '执行一次',
+    taskDetail: '任务详细',
+    dispatchLog: '调度日志',
+    log: '日志',
+    forceLogout: '强退'
   },
   // 字段
   field:{
@@ -176,6 +183,88 @@ export default {
     confirmPassword: '确认密码',
     oldPassword: '旧密码',
     newPassword: '新密码',
+    // 角色相关
+    roleId: '角色编号',
+    roleName: '角色名称',
+    roleKey: '权限字符',
+    roleSort: '显示顺序',
+    // 部门相关
+    deptId: '部门编号',
+    deptName: '部门名称',
+    parentId: '上级部门',
+    orderNum: '显示排序',
+    leader: '负责人',
+    // 岗位相关
+    postId: '岗位编号',
+    postCode: '岗位编码',
+    postName: '岗位名称',
+    postSort: '岗位排序',
+    // 菜单相关
+    menuId: '菜单编号',
+    menuName: '菜单名称',
+    menuType: '菜单类型',
+    icon: '图标',
+    perms: '权限标识',
+    component: '组件路径',
+    path: '路由地址',
+    routeName: '路由名称',
+    query: '路由参数',
+    isFrame: '是否外链',
+    isCache: '是否缓存',
+    visible: '显示状态',
+    // 字典相关
+    dictId: '字典编号',
+    dictName: '字典名称',
+    dictType: '字典类型',
+    dictLabel: '字典标签',
+    dictValue: '字典键值',
+    dictSort: '字典排序',
+    cssClass: '样式属性',
+    listClass: '表格回显样式',
+    // 参数相关
+    configId: '参数主键',
+    configName: '参数名称',
+    configKey: '参数键名',
+    configValue: '参数键值',
+    configType: '系统内置',
+    // 通知相关
+    noticeId: '序号',
+    noticeTitle: '公告标题',
+    noticeType: '公告类型',
+    noticeContent: '公告内容',
+    createBy: '创建者',
+    // 登录日志相关
+    infoId: '访问编号',
+    userName: '用户名称',
+    ipaddr: '登录地址',
+    loginLocation: '登录地点',
+    browser: '浏览器',
+    os: '操作系统',
+    msg: '操作信息',
+    loginTime: '登录日期',
+    // 操作日志相关
+    operId: '日志编号',
+    title: '系统模块',
+    businessType: '操作类型',
+    operName: '操作人员',
+    operIp: '操作地址',
+    operLocation: '操作地点',
+    operTime: '操作日期',
+    costTime: '消耗时间',
+    // 在线用户相关
+    tokenId: '会话编号',
+    loginName: '登录名称',
+    // 定时任务相关
+    jobId: '任务编号',
+    jobName: '任务名称',
+    jobGroup: '任务组名',
+    invokeTarget: '调用目标字符串',
+    cronExpression: 'cron执行表达式',
+    misfirePolicy: '执行策略',
+    concurrent: '是否并发',
+    // 通用
+    operate: '操作',
+    sort: '排序',
   },
   // 模块
   module: {
@@ -243,10 +332,14 @@ export default {
         isFrame: '是否外链',
         isCache: '是否缓存',
         menuType: '菜单类型',
+        menuTypeDirectory: '目录',
+        menuTypeMenu: '菜单',
+        menuTypeButton: '按钮',
         visible: '显示状态',
         status: '菜单状态',
-        perms: '权限标识',
+        perms: '权限字符',
         icon: '菜单图标',
+        routeName: '路由名称',
         remark: '备注'
       },
       dept: {
@@ -409,12 +502,60 @@ export default {
     password: '请输入用户密码',
     sex: '请输入性别',
     selectSex: '请选择性别',
-    post: '请输入部门',
-    selectPost: '请选择部门',
+    post: '请输入岗位',
+    selectPost: '请选择岗位',
     role: '请输入角色',
     roleName: '请输入角色名称',
+    roleKey: '请输入权限字符',
     selectRole: '请选择角色',
     remark: '请输入备注',
+    // 部门相关
+    selectParentDept: '选择上级部门',
+    enterLeader: '请输入负责人',
+    enterPhone: '请输入联系电话',
+    // 岗位相关
+    postCode: '请输入岗位编码',
+    postName: '请输入岗位名称',
+    enterPostCode: '请输入编码名称',
+    // 菜单相关
+    menuName: '请输入菜单名称',
+    selectParentMenu: '选择上级菜单',
+    selectIcon: '点击选择图标',
+    routeName: '请输入路由名称',
+    routePath: '请输入路由地址',
+    componentPath: '请输入组件路径',
+    perms: '请输入权限标识',
+    routeParams: '请输入路由参数',
+    // 字典相关
+    dictName: '请输入字典名称',
+    dictType: '请输入字典类型',
+    // 参数相关
+    configName: '请输入参数名称',
+    configKey: '请输入参数键名',
+    configValue: '请输入参数键值',
+    // 通知相关
+    noticeTitle: '请输入公告标题',
+    selectNoticeType: '请选择公告类型',
+    createBy: '请输入操作人员',
+    enterContent: '请输入内容',
+    // 登录日志相关
+    ipaddr: '请输入登录地址',
+    userName: '请输入用户名称',
+    // 操作日志相关
+    operIp: '请输入操作地址',
+    systemTitle: '请输入系统模块',
+    operName: '请输入操作人员',
+    selectBusinessType: '操作类型',
+    // 在线用户相关
+    loginName: '请输入用户名称',
+    // 定时任务相关
+    jobName: '请输入任务名称',
+    selectJobGroup: '请选择任务组名',
+    selectJobStatus: '请选择任务状态',
+    invokeTarget: '请输入调用目标字符串',
+    cronExpression: '请输入cron执行表达式',
+    // 通用
+    loading: '加载中，请稍候',
   },
   // 提示信息
   message: {

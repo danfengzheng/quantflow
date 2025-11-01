@@ -1,26 +1,26 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="参数名称" prop="configName">
+      <el-form-item :label="$t('field.configName')" prop="configName">
         <el-input
           v-model="queryParams.configName"
-          placeholder="请输入参数名称"
+          :placeholder="$t('placeholder.configName')"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="参数键名" prop="configKey">
+      <el-form-item :label="$t('field.configKey')" prop="configKey">
         <el-input
           v-model="queryParams.configKey"
-          placeholder="请输入参数键名"
+          :placeholder="$t('placeholder.configKey')"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="系统内置" prop="configType">
-        <el-select v-model="queryParams.configType" placeholder="系统内置" clearable>
+      <el-form-item :label="$t('field.configType')" prop="configType">
+        <el-select v-model="queryParams.configType" :placeholder="$t('field.configType')" clearable>
           <el-option
             v-for="dict in dict.type.sys_yes_no"
             :key="dict.value"
@@ -29,15 +29,15 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建时间">
+      <el-form-item :label="$t('field.createTime')">
         <el-date-picker
           v-model="dateRange"
           style="width: 240px"
           value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startDate')"
+          :end-placeholder="$t('common.endDate')"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -104,22 +104,22 @@
 
     <el-table v-loading="loading" :data="configList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="参数主键" align="center" prop="configId" />
-      <el-table-column label="参数名称" align="center" prop="configName" :show-overflow-tooltip="true" />
-      <el-table-column label="参数键名" align="center" prop="configKey" :show-overflow-tooltip="true" />
-      <el-table-column label="参数键值" align="center" prop="configValue" :show-overflow-tooltip="true" />
-      <el-table-column label="系统内置" align="center" prop="configType">
+      <el-table-column :label="$t('field.configId')" align="center" prop="configId" />
+      <el-table-column :label="$t('field.configName')" align="center" prop="configName" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('field.configKey')" align="center" prop="configKey" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('field.configValue')" align="center" prop="configValue" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('field.configType')" align="center" prop="configType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.configType"/>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('field.remark')" align="center" prop="remark" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('field.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('common.operate')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -150,16 +150,16 @@
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="参数名称" prop="configName">
-          <el-input v-model="form.configName" placeholder="请输入参数名称" />
+        <el-form-item :label="$t('field.configName')" prop="configName">
+          <el-input v-model="form.configName" :placeholder="$t('placeholder.configName')" />
         </el-form-item>
-        <el-form-item label="参数键名" prop="configKey">
-          <el-input v-model="form.configKey" placeholder="请输入参数键名" />
+        <el-form-item :label="$t('field.configKey')" prop="configKey">
+          <el-input v-model="form.configKey" :placeholder="$t('placeholder.configKey')" />
         </el-form-item>
-        <el-form-item label="参数键值" prop="configValue">
-          <el-input v-model="form.configValue" type="textarea" placeholder="请输入参数键值" />
+        <el-form-item :label="$t('field.configValue')" prop="configValue">
+          <el-input v-model="form.configValue" type="textarea" :placeholder="$t('placeholder.configValue')" />
         </el-form-item>
-        <el-form-item label="系统内置" prop="configType">
+        <el-form-item :label="$t('field.configType')" prop="configType">
           <el-radio-group v-model="form.configType">
             <el-radio
               v-for="dict in dict.type.sys_yes_no"
@@ -168,8 +168,8 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('field.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('placeholder.enterContent')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -221,13 +221,13 @@ export default {
       // 表单校验
       rules: {
         configName: [
-          { required: true, message: "参数名称不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ],
         configKey: [
-          { required: true, message: "参数键名不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ],
         configValue: [
-          { required: true, message: "参数键值不能为空", trigger: "blur" }
+          { required: true, message: this.$t('message.validate.required'), trigger: "blur" }
         ]
       }
     }
@@ -278,7 +278,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加参数"
+      this.title = this.$t('module.system.config.title') + ' - ' + this.$t('button.add')
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -293,7 +293,7 @@ export default {
       getConfig(configId).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改参数"
+        this.title = this.$t('module.system.config.title') + ' - ' + this.$t('button.edit')
       })
     },
     /** 提交按钮 */
@@ -302,13 +302,13 @@ export default {
         if (valid) {
           if (this.form.configId != undefined) {
             updateConfig(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('message.success.edit'))
               this.open = false
               this.getList()
             })
           } else {
             addConfig(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('message.success.add'))
               this.open = false
               this.getList()
             })
@@ -323,7 +323,7 @@ export default {
         return delConfig(configIds)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('message.success.delete'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */
@@ -335,7 +335,7 @@ export default {
     /** 刷新缓存按钮操作 */
     handleRefreshCache() {
       refreshCache().then(() => {
-        this.$modal.msgSuccess("刷新成功")
+        this.$modal.msgSuccess(this.$t('message.success.operate'))
       })
     }
   }

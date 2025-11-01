@@ -42,6 +42,25 @@
             <artifactId>caffeine</artifactId>
             <version>3.1.8</version> <!-- 查看最新版本 -->
         </dependency>
+        <!-- 删除 XChange 依赖，添加以下内容 -->
+
+        <!-- OkHttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+
+        <!-- Fastjson2 JSON处理 -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
+
+        <!-- Apache Commons Codec（签名加密） -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
