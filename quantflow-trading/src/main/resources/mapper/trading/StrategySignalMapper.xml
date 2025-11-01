@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quantflow.trading.strategy.mapper.StrategySignalMapper">
+
+    <resultMap type="com.quantflow.trading.strategy.domain.StrategySignal" id="StrategySignalResult">
+        <result property="id"           column="id"    />
+        <result property="strategyId"   column="strategy_id"    />
+        <result property="symbol"       column="symbol"    />
+        <result property="signalType"   column="signal_type"    />
+        <result property="price"        column="price"    />
+        <result property="quantity"     column="quantity"    />
+        <result property="reason"       column="reason"    />
+        <result property="confidence"   column="confidence"    />
+        <result property="status"       column="status"    />
+        <result property="createTime"   column="create_time"    />
+    </resultMap>
+
+    <sql id="selectStrategySignalVo">
+        select id, strategy_id, symbol, signal_type, price, quantity, reason, confidence, status, create_time
+        from qf_signal
+    </sql>
+
+    <select id="selectStrategySignalList" parameterType="com.quantflow.trading.strategy.domain.StrategySignal" resultMap="StrategySignalResult">
+        <include refid="selectStrategySignalVo"/>
+        <where>
+            <if test="strategyId != null">
+                and strategy_id = #{strategyId}
+            </if>
+            <if test="symbol != null and symbol != ''">
+                and symbol = #{symbol}
+            </if>
+            <if test="signalType != null and signalType != ''">
+                and signal_type = #{signalType}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectStrategySignalById" parameterType="Long" resultMap="StrategySignalResult">
+        <include refid="selectStrategySignalVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStrategySignal" parameterType="com.quantflow.trading.strategy.domain.StrategySignal" useGeneratedKeys="true" keyProperty="id">
+        insert into qf_signal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="strategyId != null">strategy_id,</if>
+            <if test="symbol != null and symbol != ''">symbol,</if>
+            <if test="signalType != null and signalType != ''">signal_type,</if>
+            <if test="price != null">price,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="reason != null">reason,</if>
+            <if test="confidence != null">confidence,</if>
+            <if test="status != null">status,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="strategyId != null">#{strategyId},</if>
+            <if test="symbol != null and symbol != ''">#{symbol},</if>
+            <if test="signalType != null and signalType != ''">#{signalType},</if>
+            <if test="price != null">#{price},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="confidence != null">#{confidence},</if>
+            <if test="status != null">#{status},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateStrategySignal" parameterType="com.quantflow.trading.strategy.domain.StrategySignal">
+        update qf_signal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStrategySignalById" parameterType="Long">
+        delete from qf_signal where id = #{id}
+    </delete>
+
+</mapper>

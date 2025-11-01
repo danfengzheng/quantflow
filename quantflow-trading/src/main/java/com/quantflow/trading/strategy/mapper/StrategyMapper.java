@@ -1,15 +1,15 @@
-package com.quantflow.trading.strategy.service;
+package com.quantflow.trading.strategy.mapper;
 
 import java.util.List;
 import com.quantflow.trading.strategy.domain.Strategy;
 
 /**
- * 策略Service接口
+ * 策略Mapper接口
  * 
  * @author quantflow
  * @date 2025-11-01
  */
-public interface IStrategyService 
+public interface StrategyMapper 
 {
     /**
      * 查询策略
@@ -37,32 +37,25 @@ public interface IStrategyService
 
     /**
      * 修改策略
-     *
+     * 
      * @param strategy 策略
      * @return 结果
      */
     public int updateStrategy(Strategy strategy);
-    /**
-     * 修改策略
-     *
-     * @param strategy 策略
-     * @return 结果
-     */
-    public int stopStrategy(Strategy strategy);
 
     /**
-     * 批量删除策略
-     * 
-     * @param ids 需要删除的策略主键集合
-     * @return 结果
-     */
-    public int deleteStrategyByIds(Long[] ids);
-
-    /**
-     * 删除策略信息
+     * 删除策略
      * 
      * @param id 策略主键
      * @return 结果
      */
     public int deleteStrategyById(Long id);
+
+    /**
+     * 批量删除策略
+     * 
+     * @param ids 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteStrategyByIds(Long[] ids);
 }
