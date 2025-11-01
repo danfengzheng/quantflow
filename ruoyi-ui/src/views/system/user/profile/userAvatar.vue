@@ -28,7 +28,7 @@
         <el-col :lg="2" :sm="3" :xs="3">
           <el-upload action="#" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
             <el-button size="small">
-              选择
+              {{ $t('button.select') }}
               <i class="el-icon-upload el-icon--right"></i>
             </el-button>
           </el-upload>
@@ -46,7 +46,7 @@
           <el-button icon="el-icon-refresh-right" size="small" @click="rotateRight()"></el-button>
         </el-col>
         <el-col :lg="{span: 2, offset: 6}" :sm="2" :xs="2">
-          <el-button type="primary" size="small" @click="uploadImg()">提 交</el-button>
+          <el-button type="primary" size="small" @click="uploadImg()">{{ $t('button.submit') }}</el-button>
         </el-col>
       </el-row>
     </el-dialog>

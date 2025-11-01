@@ -20,8 +20,8 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -34,7 +34,7 @@
           size="mini"
           @click="openSelectUser"
           v-hasPermi="['system:role:add']"
-        >添加用户</el-button>
+        >{{ $t('button.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -45,7 +45,7 @@
           :disabled="multiple"
           @click="cancelAuthUserAll"
           v-hasPermi="['system:role:remove']"
-        >批量取消授权</el-button>
+        >{{ $t('button.batchCancelAuth') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -54,7 +54,7 @@
           icon="el-icon-close"
           size="mini"
           @click="handleClose"
-        >关闭</el-button>
+        >{{ $t('button.close') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -83,7 +83,7 @@
             icon="el-icon-circle-close"
             @click="cancelAuthUser(scope.row)"
             v-hasPermi="['system:role:remove']"
-          >取消授权</el-button>
+          >{{ $t('button.cancelAuth') }}</el-button>
         </template>
       </el-table-column>
     </el-table>

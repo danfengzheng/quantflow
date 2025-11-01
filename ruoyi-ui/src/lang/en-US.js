@@ -4,7 +4,6 @@ export default {
     confirm: 'Confirm',
     cancel: 'Cancel',
     submit: 'Submit',
-    reset: 'Reset',
     search: 'Search',
     add: 'Add',
     edit: 'Edit',
@@ -76,17 +75,16 @@ export default {
     thisMonth: 'This Month',
     lastMonth: 'Last Month',
     thisYear: 'This Year',
-    lastYear: 'Last Year'
+    lastYear: 'Last Year',
+    hint: 'Hint'
   },
   // Buttons
   button: {
     confirm: 'Confirm',
     cancel: 'Cancel',
     submit: 'Submit',
-    reset: 'Reset',
     search: 'Search',
     add: 'Add',
-    edit: 'Edit',
     delete: 'Delete',
     remove: 'Remove',
     export: 'Export',
@@ -103,7 +101,6 @@ export default {
     close: 'Close',
     open: 'Open',
     view: 'View',
-    detail: 'Detail',
     preview: 'Preview',
     download: 'Download',
     upload: 'Upload',
@@ -145,7 +142,14 @@ export default {
     detail: 'Detail',
     edit: 'Edit',
     copy: 'Copy',
-    link: 'Link'
+    link: 'Link',
+    showSearch: 'Show Search',
+    hiddenSearch: 'Hidden Search',
+    showHiddenField: 'Show Hidden Field',
+    dataScope: 'data scope',
+    assignUser: 'assign user',
+    cancelAuth: 'Cancel Auth',
+    batchCancelAuth: 'Batch Cancel Auth'
   },
   // Modules
   module: {
@@ -306,7 +310,7 @@ export default {
       },
       operLog: {
         title: 'Operation Log',
-        title: 'Title',
+        systemTitle: 'Title',
         businessType: 'Business Type',
         method: 'Method',
         requestMethod: 'Request Method',

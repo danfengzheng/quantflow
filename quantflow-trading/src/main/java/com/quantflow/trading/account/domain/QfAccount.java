@@ -1,5 +1,6 @@
 package com.quantflow.trading.account.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.quantflow.common.annotation.Excel;
 import com.quantflow.common.core.domain.BaseEntity;
 import lombok.Data;
@@ -32,12 +33,15 @@ public class QfAccount extends BaseEntity
     private String exchange;
 
     /** API Key */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 只允许写入，不返回
     private String apiKey;
 
     /** API Secret */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 只允许写入，不返回
     private String apiSecret;
 
     /** Passphrase */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 只允许写入，不返回
     private String passphrase;
 
     /** 是否测试网：0否 1是 */
@@ -48,6 +52,15 @@ public class QfAccount extends BaseEntity
     @Excel(name = "状态：0禁用 1启用")
     private Integer status;
 
+    /**
+     * 获取脱敏后的 API Key（前端展示用）
+     */
+    public String getMaskedApiKey() {
+        if (apiKey == null || apiKey.length() <= 8) {
+            return "****";
+        }
+        return apiKey.substring(0, 4) + "****" + apiKey.substring(apiKey.length() - 4);
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

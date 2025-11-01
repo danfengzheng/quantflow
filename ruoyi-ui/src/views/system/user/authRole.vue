@@ -38,8 +38,8 @@
 
     <el-form label-width="100px">
       <el-form-item style="text-align: center;margin-left:-120px;margin-top:30px;">
-        <el-button type="primary" @click="submitForm()">提交</el-button>
-        <el-button @click="close()">返回</el-button>
+        <el-button type="primary" @click="submitForm()">{{ $t('button.submit') }}</el-button>
+        <el-button @click="close()">{{ $t('button.back') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

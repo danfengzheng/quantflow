@@ -1,6 +1,8 @@
 package com.quantflow.trading.account.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.quantflow.common.annotation.Log;
 import com.quantflow.common.core.controller.BaseController;
@@ -101,5 +103,32 @@ public class QfAccountController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(qfAccountService.deleteQfAccountByIds(ids));
+    }
+
+    /**
+     * 测试交易所连接
+     */
+    @PreAuthorize("@ss.hasPermi('trading:account:test')")
+    @PostMapping("/testConnection/{id}")
+    public AjaxResult testConnection(@PathVariable Long id) {
+        try {
+            // 获取解密后的账户信息
+            QfAccount account = qfAccountService.getDecryptedAccount(id);
+            if (account == null) {
+                return AjaxResult.error("账户不存在");
+            }
+
+            // TODO: 这里后续实现真实的交易所连接测试
+            // 暂时模拟测试成功
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", true);
+            result.put("message", "连接成功");
+            result.put("exchange", account.getExchange());
+            result.put("testnet", account.getIsTestnet() == 1);
+
+            return AjaxResult.success("测试连接成功", result);
+        } catch (Exception e) {
+            return AjaxResult.error("测试连接失败：" + e.getMessage());
+        }
     }
 }

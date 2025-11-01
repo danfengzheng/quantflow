@@ -48,8 +48,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -62,7 +62,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['trading:account:add']"
-        >新增</el-button>
+        >{{ $t('button.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -73,7 +73,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['trading:account:edit']"
-        >修改</el-button>
+        >{{ $t('button.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -84,7 +84,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['trading:account:remove']"
-        >删除</el-button>
+        >{{ $t('button.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -94,7 +94,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['trading:account:export']"
-        >导出</el-button>
+        >{{ $t('button.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -127,14 +127,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['trading:account:edit']"
-          >修改</el-button>
+          >{{ $t('button.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['trading:account:remove']"
-          >删除</el-button>
+          >{{ $t('button.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -176,6 +176,7 @@
           <el-input v-model="form.passphrase" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="是否测试" prop="isTestnet">
+          <el-input v-model="form.isTestnet" type="textarea" placeholder="请输入内容" />
           <el-radio-group v-model="form.isTestnet">
             <el-radio
               v-for="dict in dict.type.sys_yes_no"
@@ -198,8 +199,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="submitForm">{{ $t('button.submit') }}</el-button>
+        <el-button @click="cancel">{{ $t('button.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>

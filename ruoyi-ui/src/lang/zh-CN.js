@@ -4,7 +4,6 @@ export default {
     confirm: '确定',
     cancel: '取消',
     submit: '提交',
-    reset: '重置',
     search: '搜索',
     add: '新增',
     edit: '修改',
@@ -76,7 +75,8 @@ export default {
     thisMonth: '本月',
     lastMonth: '上月',
     thisYear: '今年',
-    lastYear: '去年'
+    lastYear: '去年',
+    hint: '提示'
   },
   // 按钮
   button: {
@@ -93,7 +93,6 @@ export default {
     import: '导入',
     query: '查询',
     refresh: '刷新',
-    reset: '重置',
     expand: '展开',
     collapse: '折叠',
     more: '更多',
@@ -103,7 +102,6 @@ export default {
     close: '关闭',
     open: '打开',
     view: '查看',
-    detail: '详情',
     preview: '预览',
     download: '下载',
     upload: '上传',
@@ -143,9 +141,15 @@ export default {
     restart: '重启',
     viewLog: '查看日志',
     detail: '详情',
-    edit: '编辑',
     copy: '复制',
-    link: '链接'
+    link: '链接',
+    showSearch: '显示搜索',
+    hiddenSearch: '隐藏搜索',
+    showHiddenField: '显隐列',
+    dataScope: '数据权限',
+    assignUser: '分配用户',
+    cancelAuth: '取消授权',
+    batchCancelAuth: '批量取消授权'
   },
   // 模块
   module: {
@@ -306,7 +310,7 @@ export default {
       },
       operLog: {
         title: '操作日志',
-        title: '系统标题',
+        systemTitle: '系统标题',
         businessType: '业务类型',
         method: '方法名称',
         requestMethod: '请求方式',

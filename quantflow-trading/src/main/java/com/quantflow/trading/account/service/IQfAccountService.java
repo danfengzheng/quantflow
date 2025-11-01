@@ -58,4 +58,10 @@ public interface IQfAccountService
      * @return 结果
      */
     public int deleteQfAccountById(Long id);
+
+
+    /**
+     * 获取解密后的账户信息（供内部使用）
+     */
+    public QfAccount getDecryptedAccount(Long id);
 }

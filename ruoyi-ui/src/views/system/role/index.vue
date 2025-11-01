@@ -46,8 +46,8 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -60,7 +60,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:role:add']"
-        >新增</el-button>
+        >{{ $t('button.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -71,7 +71,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:role:edit']"
-        >修改</el-button>
+        >{{ $t('button.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,7 +82,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:role:remove']"
-        >删除</el-button>
+        >{{ $t('button.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -92,7 +92,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:role:export']"
-        >导出</el-button>
+        >{{ $t('button.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -126,21 +126,21 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:role:edit']"
-          >修改</el-button>
+          >{{ $t('button.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:role:remove']"
-          >删除</el-button>
+          >{{ $t('button.delete') }}</el-button>
           <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
-            <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
+            <el-button size="mini" type="text" icon="el-icon-d-arrow-right">{{ $t('button.more') }}</el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="handleDataScope" icon="el-icon-circle-check"
-                v-hasPermi="['system:role:edit']">数据权限</el-dropdown-item>
+                v-hasPermi="['system:role:edit']">{{ $t('button.dataScope') }}</el-dropdown-item>
               <el-dropdown-item command="handleAuthUser" icon="el-icon-user"
-                v-hasPermi="['system:role:edit']">分配用户</el-dropdown-item>
+                v-hasPermi="['system:role:edit']">{{ $t('button.assignUser') }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -156,7 +156,7 @@
     />
 
     <!-- 添加或修改角色配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="form.roleName" placeholder="请输入角色名称" />
@@ -183,8 +183,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="菜单权限">
-          <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">展开/折叠</el-checkbox>
-          <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, 'menu')">全选/全不选</el-checkbox>
+          <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">{{ $t('button.expand') }}/{{ $t('button.collapse') }}</el-checkbox>
+          <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, 'menu')">{{ $t('button.selectAll') }}/{{ $t('button.deselectAll') }}</el-checkbox>
           <el-checkbox v-model="form.menuCheckStrictly" @change="handleCheckedTreeConnect($event, 'menu')">父子联动</el-checkbox>
           <el-tree
             class="tree-border"
@@ -208,7 +208,7 @@
     </el-dialog>
 
     <!-- 分配角色数据权限对话框 -->
-    <el-dialog :title="title" :visible.sync="openDataScope" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="openDataScope" width="600px" append-to-body>
       <el-form :model="form" label-width="80px">
         <el-form-item label="角色名称">
           <el-input v-model="form.roleName" :disabled="true" />
@@ -227,8 +227,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="数据权限" v-show="form.dataScope == 2">
-          <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">展开/折叠</el-checkbox>
-          <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
+          <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">{{ $t('button.expand') }}/{{ $t('button.collapse') }}</el-checkbox>
+          <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">{{ $t('button.selectAll') }}/{{ $t('button.deselectAll') }}</el-checkbox>
           <el-checkbox v-model="form.deptCheckStrictly" @change="handleCheckedTreeConnect($event, 'dept')">父子联动</el-checkbox>
           <el-tree
             class="tree-border"
@@ -244,8 +244,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitDataScope">确 定</el-button>
-        <el-button @click="cancelDataScope">取 消</el-button>
+        <el-button type="primary" @click="submitDataScope">{{ $t('button.submit') }}</el-button>
+        <el-button @click="cancelDataScope">{{ $t('button.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
