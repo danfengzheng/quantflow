@@ -135,6 +135,13 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['trading:account:remove']"
           >{{ $t('button.delete') }}</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-test"
+            @click="handleTestconnect(scope.row)"
+            v-hasPermi="['trading:account:test']"
+          >{{ $t('button.test') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -207,7 +214,7 @@
 </template>
 
 <script>
-import { listAccount, getAccount, delAccount, addAccount, updateAccount } from "@/api/trading/account"
+import { listAccount, getAccount, delAccount, addAccount, updateAccount, testConnection } from "@/api/trading/account"
 
 export default {
   name: "Account",
@@ -360,6 +367,15 @@ export default {
         this.getList()
         this.$modal.msgSuccess("删除成功")
       }).catch(() => {})
+    },
+    /** 删除按钮操作 */
+    handleTestconnect(row) {
+      const ids = row.id || this.ids
+      testConnection(ids).then(response => {
+        this.$modal.msgSuccess("测试连接成功")
+      }).catch(() => {
+        this.$modal.msgError("测试连接失败")
+      })
     },
     /** 导出按钮操作 */
     handleExport() {

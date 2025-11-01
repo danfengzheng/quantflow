@@ -42,3 +42,14 @@ export function delAccount(id) {
     method: 'delete'
   })
 }
+
+// 测试连接
+export function testConnection(id) {
+  return request({
+    url: '/trading/account/testConnection/' + id,
+    method: 'post',
+    data: {
+      id: id
+    }
+  })
+}
