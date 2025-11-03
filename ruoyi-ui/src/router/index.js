@@ -161,6 +161,20 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/trading/backtest/result',
+    component: Layout,
+    hidden: true,
+    permissions: ['trading:backtest:query'],
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/trading/backtest/result'),
+        name: 'BacktestResult',
+        meta: { title: '回测结果', activeMenu: '/trading/backtest' }
+      }
+    ]
   }
 ]
 

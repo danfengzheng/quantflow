@@ -1,15 +1,15 @@
-package com.quantflow.trading.backtest.service;
+package com.quantflow.trading.backtest.mapper;
 
 import java.util.List;
 import com.quantflow.trading.backtest.domain.Backtest;
 
 /**
- * 回测Service接口
+ * 回测Mapper接口
  * 
  * @author quantflow
  * @date 2025-11-03
  */
-public interface IBacktestService 
+public interface BacktestMapper 
 {
     /**
      * 查询回测
@@ -44,18 +44,18 @@ public interface IBacktestService
     public int updateBacktest(Backtest backtest);
 
     /**
-     * 批量删除回测
-     * 
-     * @param ids 需要删除的回测主键集合
-     * @return 结果
-     */
-    public int deleteBacktestByIds(Long[] ids);
-
-    /**
-     * 删除回测信息
+     * 删除回测
      * 
      * @param id 回测主键
      * @return 结果
      */
     public int deleteBacktestById(Long id);
+
+    /**
+     * 批量删除回测
+     * 
+     * @param ids 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteBacktestByIds(Long[] ids);
 }

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quantflow.trading.backtest.mapper.BacktestMapper">
+    
+    <resultMap type="Backtest" id="BacktestResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="strategyId"    column="strategy_id"    />
+        <result property="symbol"    column="symbol"    />
+        <result property="interval"    column="interval"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="initialCapital"    column="initial_capital"    />
+        <result property="commissionRate"    column="commission_rate"    />
+        <result property="slippageRate"    column="slippage_rate"    />
+        <result property="status"    column="status"    />
+        <result property="result"    column="result"    />
+        <result property="totalReturn"    column="total_return"    />
+        <result property="annualReturn"    column="annual_return"    />
+        <result property="maxDrawdown"    column="max_drawdown"    />
+        <result property="sharpeRatio"    column="sharpe_ratio"    />
+        <result property="winRate"    column="win_rate"    />
+        <result property="tradeCount"    column="trade_count"    />
+        <result property="errorMsg"    column="error_msg"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="completeTime"    column="complete_time"    />
+    </resultMap>
+
+    <sql id="selectBacktestVo">
+        select id, name, strategy_id, symbol, `interval`, start_date, end_date, initial_capital, commission_rate, slippage_rate, status, result, total_return, annual_return, max_drawdown, sharpe_ratio, win_rate, trade_count, error_msg, create_by, create_time, complete_time from qf_backtest
+    </sql>
+
+    <select id="selectBacktestList" parameterType="Backtest" resultMap="BacktestResult">
+        <include refid="selectBacktestVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="strategyId != null "> and strategy_id = #{strategyId}</if>
+            <if test="symbol != null  and symbol != ''"> and symbol = #{symbol}</if>
+            <if test="interval != null  and interval != ''"> and `interval` = #{interval}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="initialCapital != null "> and initial_capital = #{initialCapital}</if>
+            <if test="commissionRate != null "> and commission_rate = #{commissionRate}</if>
+            <if test="slippageRate != null "> and slippage_rate = #{slippageRate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="result != null  and result != ''"> and result = #{result}</if>
+            <if test="totalReturn != null "> and total_return = #{totalReturn}</if>
+            <if test="annualReturn != null "> and annual_return = #{annualReturn}</if>
+            <if test="maxDrawdown != null "> and max_drawdown = #{maxDrawdown}</if>
+            <if test="sharpeRatio != null "> and sharpe_ratio = #{sharpeRatio}</if>
+            <if test="winRate != null "> and win_rate = #{winRate}</if>
+            <if test="tradeCount != null "> and trade_count = #{tradeCount}</if>
+            <if test="errorMsg != null  and errorMsg != ''"> and error_msg = #{errorMsg}</if>
+            <if test="completeTime != null "> and complete_time = #{completeTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectBacktestById" parameterType="Long" resultMap="BacktestResult">
+        <include refid="selectBacktestVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBacktest" parameterType="Backtest" useGeneratedKeys="true" keyProperty="id">
+        insert into qf_backtest
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="strategyId != null">strategy_id,</if>
+            <if test="symbol != null and symbol != ''">symbol,</if>
+            <if test="interval != null and interval != ''">`interval`,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="initialCapital != null">initial_capital,</if>
+            <if test="commissionRate != null">commission_rate,</if>
+            <if test="slippageRate != null">slippage_rate,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="result != null">result,</if>
+            <if test="totalReturn != null">total_return,</if>
+            <if test="annualReturn != null">annual_return,</if>
+            <if test="maxDrawdown != null">max_drawdown,</if>
+            <if test="sharpeRatio != null">sharpe_ratio,</if>
+            <if test="winRate != null">win_rate,</if>
+            <if test="tradeCount != null">trade_count,</if>
+            <if test="errorMsg != null">error_msg,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="completeTime != null">complete_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="strategyId != null">#{strategyId},</if>
+            <if test="symbol != null and symbol != ''">#{symbol},</if>
+            <if test="interval != null and interval != ''">#{interval},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="initialCapital != null">#{initialCapital},</if>
+            <if test="commissionRate != null">#{commissionRate},</if>
+            <if test="slippageRate != null">#{slippageRate},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="result != null">#{result},</if>
+            <if test="totalReturn != null">#{totalReturn},</if>
+            <if test="annualReturn != null">#{annualReturn},</if>
+            <if test="maxDrawdown != null">#{maxDrawdown},</if>
+            <if test="sharpeRatio != null">#{sharpeRatio},</if>
+            <if test="winRate != null">#{winRate},</if>
+            <if test="tradeCount != null">#{tradeCount},</if>
+            <if test="errorMsg != null">#{errorMsg},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="completeTime != null">#{completeTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBacktest" parameterType="Backtest">
+        update qf_backtest
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="strategyId != null">strategy_id = #{strategyId},</if>
+            <if test="symbol != null and symbol != ''">symbol = #{symbol},</if>
+            <if test="interval != null and interval != ''">`interval` = #{interval},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="initialCapital != null">initial_capital = #{initialCapital},</if>
+            <if test="commissionRate != null">commission_rate = #{commissionRate},</if>
+            <if test="slippageRate != null">slippage_rate = #{slippageRate},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="result != null">result = #{result},</if>
+            <if test="totalReturn != null">total_return = #{totalReturn},</if>
+            <if test="annualReturn != null">annual_return = #{annualReturn},</if>
+            <if test="maxDrawdown != null">max_drawdown = #{maxDrawdown},</if>
+            <if test="sharpeRatio != null">sharpe_ratio = #{sharpeRatio},</if>
+            <if test="winRate != null">win_rate = #{winRate},</if>
+            <if test="tradeCount != null">trade_count = #{tradeCount},</if>
+            <if test="errorMsg != null">error_msg = #{errorMsg},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="completeTime != null">complete_time = #{completeTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBacktestById" parameterType="Long">
+        delete from qf_backtest where id = #{id}
+    </delete>
+
+    <delete id="deleteBacktestByIds" parameterType="String">
+        delete from qf_backtest where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
