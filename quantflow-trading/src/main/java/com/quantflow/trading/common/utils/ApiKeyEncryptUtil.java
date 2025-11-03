@@ -15,6 +15,9 @@ public class ApiKeyEncryptUtil {
 
     // 加密密钥（16位），生产环境应该从配置文件读取
     private static final String SECRET_KEY = "QuantFlow2025Key";
+    // 建议使用 AES-256
+    // 密钥应该从环境变量或配置中心获取
+//    private static final String SECRET_KEY = System.getenv("QUANTFLOW_SECRET_KEY");
     private static final String ALGORITHM = "AES";
 
     /**

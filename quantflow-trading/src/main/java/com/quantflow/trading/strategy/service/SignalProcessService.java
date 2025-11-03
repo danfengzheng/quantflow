@@ -7,6 +7,7 @@ import com.quantflow.trading.strategy.domain.Strategy;
 import com.quantflow.trading.strategy.domain.StrategySignal;
 import com.quantflow.trading.strategy.mapper.StrategyMapper;
 import com.quantflow.trading.strategy.mapper.StrategySignalMapper;
+import com.quantflow.trading.websocket.WebSocketPushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ public class SignalProcessService {
 
     @Autowired
     private OrderExecuteService orderExecuteService;
+    @Autowired
+    private WebSocketPushService webSocketPushService;
 
     /**
      * 处理待处理的信号
@@ -75,6 +78,11 @@ public class SignalProcessService {
         if (strategy == null) {
             throw new RuntimeException("策略不存在");
         }
+        // 获取策略所属用户
+        if (strategy != null && strategy.getUserId() != null) {
+            // 推送新信号
+            webSocketPushService.pushSignal(signal, strategy.getUserId());
+        }
 
         // 2. 计算下单数量
         BigDecimal quantity = calculateQuantity(signal, strategy);
@@ -109,6 +117,10 @@ public class SignalProcessService {
         signalMapper.updateStrategySignal(signal);
 
         log.info("信号处理完成：signalId={}, orderNo={}", signal.getId(), order.getOrderNo());
+        // 订单创建后推送
+        if (order != null && strategy.getUserId() != null) {
+            webSocketPushService.pushOrder(order, strategy.getUserId());
+        }
     }
 
     /**

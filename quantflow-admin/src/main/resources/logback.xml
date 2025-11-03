@@ -90,4 +90,21 @@
     <logger name="sys-user" level="info">
         <appender-ref ref="sys-user"/>
     </logger>
+    <!-- 量化交易日志 -->
+    <logger name="com.quantflow.trading" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- 策略执行日志 -->
+    <logger name="com.quantflow.trading.strategy" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- 订单执行日志 -->
+    <logger name="com.quantflow.trading.order" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
 </configuration> 

@@ -78,11 +78,33 @@ quantflow:
 # QuantFlow 量化交易系统配置
     # 是否启用模拟交易
     mock-enabled: true
+
     # 默认交易所
     default-exchange: binance
-    # 策略引擎线程池大小
-    strategy-thread-pool-size: 10
-    # 订单超时时间（秒）
-    order-timeout: 60
-    # WebSocket重连间隔（毫秒）
-    ws-reconnect-interval: 5000
+
+    # 策略引擎配置
+    strategy:
+      thread-pool-size: 10
+      signal-timeout: 30
+
+    # 订单执行配置
+    order:
+      default-timeout: 60
+      max-retry-times: 3
+      retry-interval: 1000
+
+    # 风控配置
+    risk:
+      enabled: true
+      check-interval: 60
+      max-order-amount: 10000
+      max-position-ratio: 80
+      max-daily-trades: 100
+      stop-loss-ratio: -5
+      take-profit-ratio: 10
+
+    # 行情配置
+    market:
+      cache-enabled: true
+      cache-ttl: 5
+      ws-reconnect-interval: 5000

@@ -1,12 +1,16 @@
 package com.quantflow.trading.order.service;
 
+import com.quantflow.common.annotation.RateLimiter;
 import com.quantflow.trading.account.domain.Account;
+import com.quantflow.trading.account.mapper.AccountMapper;
 import com.quantflow.trading.account.service.PositionService;
 import com.quantflow.trading.account.service.impl.AccountServiceImpl;
 import com.quantflow.trading.common.exchange.ExchangeFactory;
 import com.quantflow.trading.common.exchange.IExchangeAdapter;
 import com.quantflow.trading.order.domain.Order;
 import com.quantflow.trading.order.mapper.OrderMapper;
+import com.quantflow.trading.risk.service.RiskControlService;
+import com.quantflow.trading.websocket.WebSocketPushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +35,29 @@ public class OrderExecuteService {
     private ExchangeFactory exchangeFactory;
     @Autowired
     private PositionService positionService;
+    @Autowired
+    private RiskControlService riskControlService;
+
+    @Autowired
+    private WebSocketPushService webSocketPushService;
+    @Autowired
+    private AccountMapper accountMapper;
     /**
      * 执行订单
      */
+    @RateLimiter(key = "trading:order:execute", time = 60, count = 10)
     public void executeOrder(Order order) {
         log.info("开始执行订单：orderNo={}, symbol={}, side={}, type={}",
                 order.getOrderNo(), order.getSymbol(), order.getSide(), order.getType());
-
+        // 风控检查
+        RiskControlService.RiskCheckResult riskCheck = riskControlService.checkBeforeOrder(order);
+        if (!riskCheck.isPassed()) {
+            log.warn("订单未通过风控检查：{}", riskCheck.getMessage());
+            order.setStatus("REJECTED");
+            order.setErrorMsg(riskCheck.getMessage());
+            orderMapper.updateOrder(order);
+            return;
+        }
         IExchangeAdapter adapter = null;
         try {
             // 1. 获取账户信息
@@ -80,6 +100,15 @@ public class OrderExecuteService {
                     order.getOrderNo(), exchangeOrderId);
             // 6. 更新持仓
             positionService.updatePositionByOrder(order);
+            if (account != null && account.getUserId() != null) {
+                // 推送订单状态变更
+                webSocketPushService.pushOrderStatusChange(order, account.getUserId());
+
+                // 如果订单成交，推送持仓变化
+                if ("FILLED".equals(order.getStatus())) {
+                    webSocketPushService.pushPositionChange(account.getUserId());
+                }
+            }
 
             log.info("订单执行成功并更新持仓：orderNo={}, exchangeOrderId={}",
                     order.getOrderNo(), exchangeOrderId);
