@@ -1,15 +1,15 @@
-package com.quantflow.trading.order.service;
+package com.quantflow.trading.order.mapper;
 
 import java.util.List;
 import com.quantflow.trading.order.domain.Order;
 
 /**
- * 订单Service接口
+ * 订单Mapper接口
  * 
  * @author quantflow
  * @date 2025-11-03
  */
-public interface IOrderService 
+public interface OrderMapper 
 {
     /**
      * 查询订单
@@ -44,18 +44,18 @@ public interface IOrderService
     public int updateOrder(Order order);
 
     /**
-     * 批量删除订单
-     * 
-     * @param ids 需要删除的订单主键集合
-     * @return 结果
-     */
-    public int deleteOrderByIds(Long[] ids);
-
-    /**
-     * 删除订单信息
+     * 删除订单
      * 
      * @param id 订单主键
      * @return 结果
      */
     public int deleteOrderById(Long id);
+
+    /**
+     * 批量删除订单
+     * 
+     * @param ids 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteOrderByIds(Long[] ids);
 }

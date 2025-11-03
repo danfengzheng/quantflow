@@ -102,6 +102,12 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-build"
+            @click="handleExecute(scope.row)"
+          >手动执行</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -153,8 +159,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="策略参数" prop="params">
-          <el-input v-model="form.params" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="策略参数" prop="paramsConfig">
+          <el-input v-model="form.paramsConfig" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
@@ -266,6 +272,15 @@ export default {
         this.$modal.msgSuccess("停止成功");
       });
     },
+    /** 手动执行策略 */
+    handleExecute(row) {
+      this.$modal.confirm('确认手动执行策略"' + row.name + '"？').then(() => {
+        return executeStrategy(row.id);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("执行成功");
+      });
+    },
     // 取消按钮
     cancel() {
       this.open = false
@@ -282,7 +297,7 @@ export default {
         accountId: null,
         symbol: null,
         interval: null,
-        params: null,
+        paramsConfig: null,
         status: null,
         userId: null,
         createBy: null,

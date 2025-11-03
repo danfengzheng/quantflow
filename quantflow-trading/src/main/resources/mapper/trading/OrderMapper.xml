@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quantflow.trading.order.mapper.OrderMapper">
+    
+    <resultMap type="Order" id="OrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="strategyId"    column="strategy_id"    />
+        <result property="accountId"    column="account_id"    />
+        <result property="symbol"    column="symbol"    />
+        <result property="side"    column="side"    />
+        <result property="type"    column="type"    />
+        <result property="price"    column="price"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="filledQty"    column="filled_qty"    />
+        <result property="avgPrice"    column="avg_price"    />
+        <result property="amount"    column="amount"    />
+        <result property="commission"    column="commission"    />
+        <result property="status"    column="status"    />
+        <result property="exchangeOrderId"    column="exchange_order_id"    />
+        <result property="errorMsg"    column="error_msg"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectOrderVo">
+        select id, order_no, strategy_id, account_id, symbol, side, type, price, quantity, filled_qty, avg_price, amount, commission, status, exchange_order_id, error_msg, create_by, create_time, update_by, update_time from qf_order
+    </sql>
+
+    <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        <where>  
+            <if test="orderNo != null  and orderNo != ''"> and order_no like concat('%', #{orderNo}, '%')</if>
+            <if test="strategyId != null "> and strategy_id = #{strategyId}</if>
+            <if test="accountId != null "> and account_id = #{accountId}</if>
+            <if test="symbol != null  and symbol != ''"> and symbol = #{symbol}</if>
+            <if test="side != null  and side != ''"> and side = #{side}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="quantity != null "> and quantity = #{quantity}</if>
+            <if test="filledQty != null "> and filled_qty = #{filledQty}</if>
+            <if test="avgPrice != null "> and avg_price = #{avgPrice}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="commission != null "> and commission = #{commission}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="exchangeOrderId != null  and exchangeOrderId != ''"> and exchange_order_id = #{exchangeOrderId}</if>
+            <if test="errorMsg != null  and errorMsg != ''"> and error_msg = #{errorMsg}</if>
+        </where>
+    </select>
+    
+    <select id="selectOrderById" parameterType="Long" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+        insert into qf_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="strategyId != null">strategy_id,</if>
+            <if test="accountId != null">account_id,</if>
+            <if test="symbol != null and symbol != ''">symbol,</if>
+            <if test="side != null and side != ''">side,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="price != null">price,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="filledQty != null">filled_qty,</if>
+            <if test="avgPrice != null">avg_price,</if>
+            <if test="amount != null">amount,</if>
+            <if test="commission != null">commission,</if>
+            <if test="status != null">status,</if>
+            <if test="exchangeOrderId != null">exchange_order_id,</if>
+            <if test="errorMsg != null">error_msg,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="strategyId != null">#{strategyId},</if>
+            <if test="accountId != null">#{accountId},</if>
+            <if test="symbol != null and symbol != ''">#{symbol},</if>
+            <if test="side != null and side != ''">#{side},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="price != null">#{price},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="filledQty != null">#{filledQty},</if>
+            <if test="avgPrice != null">#{avgPrice},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="commission != null">#{commission},</if>
+            <if test="status != null">#{status},</if>
+            <if test="exchangeOrderId != null">#{exchangeOrderId},</if>
+            <if test="errorMsg != null">#{errorMsg},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrder" parameterType="Order">
+        update qf_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="strategyId != null">strategy_id = #{strategyId},</if>
+            <if test="accountId != null">account_id = #{accountId},</if>
+            <if test="symbol != null and symbol != ''">symbol = #{symbol},</if>
+            <if test="side != null and side != ''">side = #{side},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="filledQty != null">filled_qty = #{filledQty},</if>
+            <if test="avgPrice != null">avg_price = #{avgPrice},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="commission != null">commission = #{commission},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="exchangeOrderId != null">exchange_order_id = #{exchangeOrderId},</if>
+            <if test="errorMsg != null">error_msg = #{errorMsg},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrderById" parameterType="Long">
+        delete from qf_order where id = #{id}
+    </delete>
+
+    <delete id="deleteOrderByIds" parameterType="String">
+        delete from qf_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
