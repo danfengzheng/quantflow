@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,8 +18,21 @@ import java.util.Map;
 @Component
 public class StrategyFactory {
 
-    @Autowired
-    private MACrossStrategy maCrossStrategy;
+    private final List<IStrategy> strategyList;
+    Map<String, IStrategy> strategyMap = new HashMap<>();
+
+    Map<String, String> strategies = new HashMap<>();
+
+    public StrategyFactory(List<IStrategy> strategyList) {
+        this.strategyList = strategyList;
+        if (strategyMap == null) {
+            strategyList.forEach(v -> {
+                strategyMap.put(v.getStrategyType(), v);
+                strategies.put(v.getStrategyType(),v.getStrategyName());
+            });
+        }
+    }
+
 
     /**
      * 创建策略实例
@@ -26,23 +40,9 @@ public class StrategyFactory {
     public IStrategy createStrategy(Strategy strategy) {
         String type = strategy.getType();
 
-        IStrategy strategyInstance = null;
-
-        switch (type) {
-            case "MA_CROSS":
-                strategyInstance = maCrossStrategy;
-                break;
-
-            case "GRID":
-                // TODO: 实现网格策略
-                throw new UnsupportedOperationException("网格策略暂未实现");
-
-            case "ARBITRAGE":
-                // TODO: 实现套利策略
-                throw new UnsupportedOperationException("套利策略暂未实现");
-
-            default:
-                throw new IllegalArgumentException("不支持的策略类型：" + type);
+        IStrategy strategyInstance = strategyMap.get(type);
+        if (strategyInstance == null) {
+            throw new UnsupportedOperationException("网格策略暂未实现");
         }
 
         // 初始化策略
@@ -57,10 +57,6 @@ public class StrategyFactory {
      * 获取所有支持的策略类型
      */
     public Map<String, String> getSupportedStrategies() {
-        Map<String, String> strategies = new HashMap<>();
-        strategies.put("MA_CROSS", "均线交叉策略");
-        strategies.put("GRID", "网格策略（待实现）");
-        strategies.put("ARBITRAGE", "套利策略（待实现）");
         return strategies;
     }
 }
