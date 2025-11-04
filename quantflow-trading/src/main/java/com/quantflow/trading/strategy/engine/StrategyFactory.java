@@ -1,9 +1,7 @@
 package com.quantflow.trading.strategy.engine;
 
 import com.quantflow.trading.strategy.domain.Strategy;
-import com.quantflow.trading.strategy.engine.strategies.MACrossStrategy;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -25,12 +23,11 @@ public class StrategyFactory {
 
     public StrategyFactory(List<IStrategy> strategyList) {
         this.strategyList = strategyList;
-        if (strategyMap == null) {
-            strategyList.forEach(v -> {
-                strategyMap.put(v.getStrategyType(), v);
-                strategies.put(v.getStrategyType(),v.getStrategyName());
-            });
-        }
+        this.strategyList.forEach(v -> {
+            this.strategyMap.put(v.getStrategyType(), v);
+            this.strategies.put(v.getStrategyType(),v.getStrategyName());
+            log.info("加载策略 :{}",v.getStrategyType());
+        });
     }
 
 
@@ -42,7 +39,8 @@ public class StrategyFactory {
 
         IStrategy strategyInstance = strategyMap.get(type);
         if (strategyInstance == null) {
-            throw new UnsupportedOperationException("网格策略暂未实现");
+            log.warn("策略未实现:{}",type);
+            throw new UnsupportedOperationException("策略暂未实现");
         }
 
         // 初始化策略

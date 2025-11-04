@@ -81,8 +81,4 @@ public class Strategy extends BaseEntity
             .append("remark", getRemark())
             .toString();
     }
-
-    public JSONObject getParamsObject() {
-        return JSONObject.parseObject(this.paramsConfig);
-    }
 }

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quantflow.trading.signal.mapper.MarketSignalMapper">
+    
+    <resultMap type="MarketSignal" id="MarketSignalResult">
+        <result property="signalId"    column="signal_id"    />
+        <result property="symbol"    column="symbol"    />
+        <result property="interval"    column="interval"    />
+        <result property="currentPrice"    column="current_price"    />
+        <result property="support1"    column="support1"    />
+        <result property="support2"    column="support2"    />
+        <result property="support3"    column="support3"    />
+        <result property="resistance1"    column="resistance1"    />
+        <result property="resistance2"    column="resistance2"    />
+        <result property="resistance3"    column="resistance3"    />
+        <result property="nearBreakout"    column="near_breakout"    />
+        <result property="breakoutDirection"    column="breakout_direction"    />
+        <result property="isOverbought"    column="is_overbought"    />
+        <result property="isOversold"    column="is_oversold"    />
+        <result property="rsiValue"    column="rsi_value"    />
+        <result property="macdSignal"    column="macd_signal"    />
+        <result property="bollingerPosition"    column="bollinger_position"    />
+        <result property="volumeStatus"    column="volume_status"    />
+        <result property="trendDirection"    column="trend_direction"    />
+        <result property="trendStrength"    column="trend_strength"    />
+        <result property="signalScore"    column="signal_score"    />
+        <result property="recommendAction"    column="recommend_action"    />
+        <result property="recommendReason"    column="recommend_reason"    />
+        <result property="riskLevel"    column="risk_level"    />
+        <result property="stopLossPrice"    column="stop_loss_price"    />
+        <result property="takeProfitPrice"    column="take_profit_price"    />
+        <result property="signalReliability"    column="signal_reliability"    />
+        <result property="falseSignalRisk"    column="false_signal_risk"    />
+        <result property="analysisTime"    column="analysis_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMarketSignalVo">
+        select signal_id, symbol, `interval`, current_price, support1, support2, support3,
+               resistance1, resistance2, resistance3, near_breakout, breakout_direction, 
+               is_overbought, is_oversold, rsi_value, macd_signal, bollinger_position, 
+               volume_status, trend_direction, trend_strength, signal_score, recommend_action, 
+               recommend_reason, risk_level, stop_loss_price, take_profit_price, 
+               signal_reliability, false_signal_risk, analysis_time, create_time, update_time 
+        from market_signal
+    </sql>
+
+    <select id="selectMarketSignalList" parameterType="MarketSignal" resultMap="MarketSignalResult">
+        <include refid="selectMarketSignalVo"/>
+        <where>  
+            <if test="symbol != null  and symbol != ''"> and symbol = #{symbol}</if>
+            <if test="interval != null  and interval != ''"> and `interval` = #{interval}</if>
+            <if test="recommendAction != null  and recommendAction != ''"> and recommend_action = #{recommendAction}</if>
+            <if test="riskLevel != null  and riskLevel != ''"> and risk_level = #{riskLevel}</if>
+            <if test="trendDirection != null  and trendDirection != ''"> and trend_direction = #{trendDirection}</if>
+        </where>
+        order by analysis_time desc
+    </select>
+    
+    <select id="selectMarketSignalBySignalId" parameterType="Long" resultMap="MarketSignalResult">
+        <include refid="selectMarketSignalVo"/>
+        where signal_id = #{signalId}
+    </select>
+        
+    <insert id="insertMarketSignal" parameterType="MarketSignal" useGeneratedKeys="true" keyProperty="signalId">
+        insert into market_signal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="symbol != null and symbol != ''">symbol,</if>
+            <if test="interval != null and interval != ''">`interval`,</if>
+            <if test="currentPrice != null">current_price,</if>
+            <if test="support1 != null">support1,</if>
+            <if test="support2 != null">support2,</if>
+            <if test="support3 != null">support3,</if>
+            <if test="resistance1 != null">resistance1,</if>
+            <if test="resistance2 != null">resistance2,</if>
+            <if test="resistance3 != null">resistance3,</if>
+            <if test="nearBreakout != null">near_breakout,</if>
+            <if test="breakoutDirection != null">breakout_direction,</if>
+            <if test="isOverbought != null">is_overbought,</if>
+            <if test="isOversold != null">is_oversold,</if>
+            <if test="rsiValue != null">rsi_value,</if>
+            <if test="macdSignal != null">macd_signal,</if>
+            <if test="bollingerPosition != null">bollinger_position,</if>
+            <if test="volumeStatus != null">volume_status,</if>
+            <if test="trendDirection != null">trend_direction,</if>
+            <if test="trendStrength != null">trend_strength,</if>
+            <if test="signalScore != null">signal_score,</if>
+            <if test="recommendAction != null">recommend_action,</if>
+            <if test="recommendReason != null">recommend_reason,</if>
+            <if test="riskLevel != null">risk_level,</if>
+            <if test="stopLossPrice != null">stop_loss_price,</if>
+            <if test="takeProfitPrice != null">take_profit_price,</if>
+            <if test="signalReliability != null">signal_reliability,</if>
+            <if test="falseSignalRisk != null">false_signal_risk,</if>
+            <if test="analysisTime != null">analysis_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="symbol != null and symbol != ''">#{symbol},</if>
+            <if test="interval != null and interval != ''">#{interval},</if>
+            <if test="currentPrice != null">#{currentPrice},</if>
+            <if test="support1 != null">#{support1},</if>
+            <if test="support2 != null">#{support2},</if>
+            <if test="support3 != null">#{support3},</if>
+            <if test="resistance1 != null">#{resistance1},</if>
+            <if test="resistance2 != null">#{resistance2},</if>
+            <if test="resistance3 != null">#{resistance3},</if>
+            <if test="nearBreakout != null">#{nearBreakout},</if>
+            <if test="breakoutDirection != null">#{breakoutDirection},</if>
+            <if test="isOverbought != null">#{isOverbought},</if>
+            <if test="isOversold != null">#{isOversold},</if>
+            <if test="rsiValue != null">#{rsiValue},</if>
+            <if test="macdSignal != null">#{macdSignal},</if>
+            <if test="bollingerPosition != null">#{bollingerPosition},</if>
+            <if test="volumeStatus != null">#{volumeStatus},</if>
+            <if test="trendDirection != null">#{trendDirection},</if>
+            <if test="trendStrength != null">#{trendStrength},</if>
+            <if test="signalScore != null">#{signalScore},</if>
+            <if test="recommendAction != null">#{recommendAction},</if>
+            <if test="recommendReason != null">#{recommendReason},</if>
+            <if test="riskLevel != null">#{riskLevel},</if>
+            <if test="stopLossPrice != null">#{stopLossPrice},</if>
+            <if test="takeProfitPrice != null">#{takeProfitPrice},</if>
+            <if test="signalReliability != null">#{signalReliability},</if>
+            <if test="falseSignalRisk != null">#{falseSignalRisk},</if>
+            <if test="analysisTime != null">#{analysisTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMarketSignal" parameterType="MarketSignal">
+        update market_signal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="symbol != null and symbol != ''">symbol = #{symbol},</if>
+            <if test="interval != null and interval != ''">`interval` = #{interval},</if>
+            <if test="currentPrice != null">current_price = #{currentPrice},</if>
+            <if test="support1 != null">support1 = #{support1},</if>
+            <if test="support2 != null">support2 = #{support2},</if>
+            <if test="support3 != null">support3 = #{support3},</if>
+            <if test="resistance1 != null">resistance1 = #{resistance1},</if>
+            <if test="resistance2 != null">resistance2 = #{resistance2},</if>
+            <if test="resistance3 != null">resistance3 = #{resistance3},</if>
+            <if test="nearBreakout != null">near_breakout = #{nearBreakout},</if>
+            <if test="breakoutDirection != null">breakout_direction = #{breakoutDirection},</if>
+            <if test="isOverbought != null">is_overbought = #{isOverbought},</if>
+            <if test="isOversold != null">is_oversold = #{isOversold},</if>
+            <if test="rsiValue != null">rsi_value = #{rsiValue},</if>
+            <if test="macdSignal != null">macd_signal = #{macdSignal},</if>
+            <if test="bollingerPosition != null">bollinger_position = #{bollingerPosition},</if>
+            <if test="volumeStatus != null">volume_status = #{volumeStatus},</if>
+            <if test="trendDirection != null">trend_direction = #{trendDirection},</if>
+            <if test="trendStrength != null">trend_strength = #{trendStrength},</if>
+            <if test="signalScore != null">signal_score = #{signalScore},</if>
+            <if test="recommendAction != null">recommend_action = #{recommendAction},</if>
+            <if test="recommendReason != null">recommend_reason = #{recommendReason},</if>
+            <if test="riskLevel != null">risk_level = #{riskLevel},</if>
+            <if test="stopLossPrice != null">stop_loss_price = #{stopLossPrice},</if>
+            <if test="takeProfitPrice != null">take_profit_price = #{takeProfitPrice},</if>
+            <if test="signalReliability != null">signal_reliability = #{signalReliability},</if>
+            <if test="falseSignalRisk != null">false_signal_risk = #{falseSignalRisk},</if>
+            <if test="analysisTime != null">analysis_time = #{analysisTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where signal_id = #{signalId}
+    </update>
+
+    <delete id="deleteMarketSignalBySignalId" parameterType="Long">
+        delete from market_signal where signal_id = #{signalId}
+    </delete>
+
+    <delete id="deleteMarketSignalBySignalIds" parameterType="String">
+        delete from market_signal where signal_id in 
+        <foreach item="signalId" collection="array" open="(" separator="," close=")">
+            #{signalId}
+        </foreach>
+    </delete>
+</mapper>

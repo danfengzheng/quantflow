@@ -57,7 +57,7 @@ public class StrategyExecuteService {
             List<KLine> klines = adapter.getKlines(
                     strategy.getSymbol(),
                     strategy.getInterval(),
-                    100  // 获取100根K线
+                    500  // 获取100根K线
             );
 
             if (klines == null || klines.isEmpty()) {
