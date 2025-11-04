@@ -80,6 +80,16 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="风险等级" prop="riskLevel">
+        <el-select v-model="queryParams.recommendAction" placeholder="请选择风险等级" clearable>
+          <el-option
+            v-for="dict in dict.type.market_risk"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -133,9 +143,7 @@
       </el-table-column>
       <el-table-column label="风险等级" align="center" prop="riskLevel" width="100">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.riskLevel === 'HIGH'" type="danger">高</el-tag>
-          <el-tag v-else-if="scope.row.riskLevel === 'MEDIUM'" type="warning">中</el-tag>
-          <el-tag v-else type="success">低</el-tag>
+          <dict-tag :options="dict.type.market_risk" :value="scope.row.riskLevel"/>
         </template>
       </el-table-column>
       <el-table-column label="推荐原因" align="center" prop="recommendReason" :show-overflow-tooltip="true" min-width="200" />
@@ -300,9 +308,7 @@
           <el-tag v-else type="info" size="large">持有</el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="风险等级">
-          <el-tag v-if="detailData.riskLevel === 'HIGH'" type="danger">高风险</el-tag>
-          <el-tag v-else-if="detailData.riskLevel === 'MEDIUM'" type="warning">中等风险</el-tag>
-          <el-tag v-else type="success">低风险</el-tag>
+          <dict-tag :options="dict.type.market_risk" :value="detailData.riskLevel"/>
         </el-descriptions-item>
 
         <el-descriptions-item label="支撑位" :span="2">
@@ -371,11 +377,18 @@
 </template>
 
 <script>
-import { listSignal, getSignal, analyzeSignal, batchAnalyzeSignal, exportSignal } from "@/api/trading/signal";
+import {
+  listSignal,
+  getSignal,
+  analyzeSignal,
+  batchAnalyzeSignal,
+  exportSignal,
+  getRecommendSignals
+} from "@/api/trading/signal";
 
 export default {
   name: "Signal",
-  dicts: ['qf_order_side', 'qf_interval'],
+  dicts: ['qf_order_side', 'qf_interval', 'market_risk'],
   data() {
     return {
       // 遮罩层
@@ -635,12 +648,10 @@ export default {
       });
 
       // 调用推荐接口
-      this.$http.get('/system/signal/recommend').then(response => {
-        if (response.data.code === 200) {
-          this.signalList = response.data.data;
+      getRecommendSignals().then(response => {
+          this.signalList = response.data;
           this.total = this.signalList.length;
           this.$modal.msgSuccess(`发现 ${this.total} 个推荐交易机会`);
-        }
         this.loading = false;
       }).catch(() => {
         this.loading = false;
