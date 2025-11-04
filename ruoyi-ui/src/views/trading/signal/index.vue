@@ -62,19 +62,22 @@
       </el-form-item>
       <el-form-item label="K线周期" prop="interval">
         <el-select v-model="queryParams.interval" placeholder="请选择K线周期" clearable>
-          <el-option label="1分钟" value="1m" />
-          <el-option label="5分钟" value="5m" />
-          <el-option label="15分钟" value="15m" />
-          <el-option label="1小时" value="1h" />
-          <el-option label="4小时" value="4h" />
-          <el-option label="1天" value="1d" />
+          <el-option
+            v-for="dict in dict.type.qf_interval"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="推荐操作" prop="recommendAction">
         <el-select v-model="queryParams.recommendAction" placeholder="请选择推荐操作" clearable>
-          <el-option label="买入" value="BUY" />
-          <el-option label="持有" value="HOLD" />
-          <el-option label="卖出" value="SELL" />
+          <el-option
+            v-for="dict in dict.type.qf_order_side"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -178,13 +181,13 @@
           </el-input>
         </el-form-item>
         <el-form-item label="K线周期" prop="interval">
-          <el-select v-model="analyzeForm.interval" placeholder="请选择K线周期">
-            <el-option label="1分钟" value="1m" />
-            <el-option label="5分钟" value="5m" />
-            <el-option label="15分钟" value="15m" />
-            <el-option label="1小时" value="1h" />
-            <el-option label="4小时" value="4h" />
-            <el-option label="1天" value="1d" />
+          <el-select v-model="analyzeForm.interval" placeholder="请选择K线周期" clearable>
+            <el-option
+              v-for="dict in dict.type.qf_interval"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
           </el-select>
         </el-form-item>
       </el-form>
@@ -198,13 +201,14 @@
     <el-dialog title="批量分析多个交易对" :visible.sync="batchAnalyzeOpen" width="800px" append-to-body>
       <el-form ref="batchAnalyzeForm" :model="batchAnalyzeForm" :rules="batchAnalyzeRules" label-width="100px">
         <el-form-item label="K线周期" prop="interval">
-          <el-select v-model="batchAnalyzeForm.interval" placeholder="请选择K线周期">
-            <el-option label="1分钟" value="1m" />
-            <el-option label="5分钟" value="5m" />
-            <el-option label="15分钟" value="15m" />
-            <el-option label="1小时" value="1h" />
-            <el-option label="4小时" value="4h" />
-            <el-option label="1天" value="1d" />
+
+          <el-select v-model="batchAnalyzeForm.interval" placeholder="请选择K线周期" clearable>
+            <el-option
+              v-for="dict in dict.type.qf_interval"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
           </el-select>
         </el-form-item>
 
@@ -371,6 +375,7 @@ import { listSignal, getSignal, analyzeSignal, batchAnalyzeSignal, exportSignal 
 
 export default {
   name: "Signal",
+  dicts: ['qf_order_side', 'qf_interval'],
   data() {
     return {
       // 遮罩层
