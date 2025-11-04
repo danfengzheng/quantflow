@@ -38,6 +38,15 @@
           v-hasPermi="['system:signal:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          icon="el-icon-setting"
+          size="mini"
+          @click="handleDictManage"
+          v-hasPermi="['system:dict:list']"
+        >交易对配置</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -157,7 +166,16 @@
     <el-dialog title="实时市场分析" :visible.sync="analyzeOpen" width="600px" append-to-body>
       <el-form ref="analyzeForm" :model="analyzeForm" :rules="analyzeRules" label-width="100px">
         <el-form-item label="交易对" prop="symbol">
-          <el-input v-model="analyzeForm.symbol" placeholder="请输入交易对，如BTCUSDT" />
+          <el-input v-model="analyzeForm.symbol" placeholder="请输入交易对，如BTCUSDT">
+            <el-select v-model="analyzeForm.symbol" slot="prepend" placeholder="快速选择" style="width: 150px;" filterable>
+              <el-option
+                v-for="item in availableSymbols"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-input>
         </el-form-item>
         <el-form-item label="K线周期" prop="interval">
           <el-select v-model="analyzeForm.interval" placeholder="请选择K线周期">
@@ -193,9 +211,15 @@
         <el-form-item label="选择交易对" prop="symbols">
           <el-checkbox-group v-model="batchAnalyzeForm.symbols">
             <el-row :gutter="20">
-              <el-col :span="6" v-for="symbol in availableSymbols" :key="symbol">
-                <el-checkbox :label="symbol" style="margin-bottom: 10px;">
-                  {{ symbol }}
+              <el-col :span="6" v-for="symbol in availableSymbols" :key="symbol.value">
+                <el-checkbox :label="symbol.value" style="margin-bottom: 10px;">
+                  <el-tag
+                    :type="symbol.cssClass || 'info'"
+                    size="small"
+                    effect="plain"
+                    style="margin-right: 5px;">
+                    {{ symbol.label }}
+                  </el-tag>
                 </el-checkbox>
               </el-col>
             </el-row>
@@ -203,9 +227,15 @@
         </el-form-item>
 
         <el-form-item label="快捷选择">
-          <el-button size="small" @click="selectMainCoins">主流币</el-button>
-          <el-button size="small" @click="selectTopCoins">Top10</el-button>
-          <el-button size="small" @click="selectAllCoins">全选</el-button>
+          <el-button size="small" type="primary" @click="selectByGroup('mainstream')">
+            主流币 ({{ getGroupCount('mainstream') }})
+          </el-button>
+          <el-button size="small" type="success" @click="selectByGroup('top10')">
+            Top10 ({{ getGroupCount('top10') }})
+          </el-button>
+          <el-button size="small" type="info" @click="selectAllCoins">
+            全选 ({{ availableSymbols.length }})
+          </el-button>
           <el-button size="small" @click="clearSelection">清空</el-button>
         </el-form-item>
 
@@ -214,9 +244,12 @@
             v-model="batchAnalyzeForm.customSymbols"
             type="textarea"
             :rows="3"
-            placeholder="输入其他交易对，用逗号或换行分隔，如：DOGEUSDT,ADAUSDT"
+            placeholder="输入其他交易对，用逗号或换行分隔，如：PEPEUSDT,SHIBUSDT"
           />
-          <span style="color: #999; font-size: 12px;">提示：输入后点击"添加自定义"按钮</span>
+          <span style="color: #999; font-size: 12px;">
+            提示：输入后点击"添加自定义"按钮 |
+            <el-link type="primary" :underline="false" @click="handleDictManage">去字典配置</el-link>
+          </span>
         </el-form-item>
 
         <el-form-item>
@@ -229,6 +262,9 @@
           :closable="false"
           style="margin-bottom: 20px;">
           已选择 <strong style="color: #409EFF;">{{ batchAnalyzeForm.symbols.length }}</strong> 个交易对
+          <span v-if="availableSymbols.length === 0" style="color: #F56C6C; margin-left: 10px;">
+            (未配置交易对，请先在字典中配置)
+          </span>
         </el-alert>
       </el-form>
 
@@ -403,20 +439,55 @@ export default {
           { required: true, message: "请至少选择一个交易对", trigger: "change", type: 'array', min: 1 }
         ]
       },
-      // 可选交易对列表
-      availableSymbols: [
-        'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT',
-        'XRPUSDT', 'ADAUSDT', 'DOGEUSDT', 'MATICUSDT',
-        'DOTUSDT', 'LTCUSDT', 'LINKUSDT', 'UNIUSDT',
-        'AVAXUSDT', 'ATOMUSDT', 'ETCUSDT', 'XLMUSDT',
-        'TRXUSDT', 'NEARUSDT', 'ALGOUSDT', 'VETUSDT'
-      ]
+      // 可选交易对列表（从字典加载）
+      availableSymbols: []
     };
   },
   created() {
     this.getList();
+    this.loadSymbolsFromDict();
   },
   methods: {
+    /** 从字典加载交易对列表 */
+    loadSymbolsFromDict() {
+      this.getDicts("market_symbol").then(response => {
+        this.availableSymbols = response.data.map(item => ({
+          label: item.dictLabel,
+          value: item.dictValue,
+          sort: item.dictSort,
+          cssClass: item.cssClass || 'info',
+          remark: item.remark
+        }));
+        console.log('从字典加载交易对:', this.availableSymbols.length, '个');
+      }).catch(error => {
+        console.error('加载交易对字典失败:', error);
+        this.$message.warning('交易对配置加载失败，请在字典管理中配置"market_symbol"');
+      });
+    },
+
+    /** 根据分组选择交易对 */
+    selectByGroup(groupType) {
+      let count = 0;
+      if (groupType === 'mainstream') {
+        // 主流币：前5个
+        count = 5;
+      } else if (groupType === 'top10') {
+        // Top10：前10个
+        count = 10;
+      }
+
+      this.batchAnalyzeForm.symbols = this.availableSymbols
+        .slice(0, count)
+        .map(item => item.value);
+    },
+
+    /** 获取分组数量 */
+    getGroupCount(groupType) {
+      if (groupType === 'mainstream') return Math.min(5, this.availableSymbols.length);
+      if (groupType === 'top10') return Math.min(10, this.availableSymbols.length);
+      return this.availableSymbols.length;
+    },
+
     /** 查询市场信号分析列表 */
     getList() {
       this.loading = true;
@@ -446,7 +517,7 @@ export default {
     handleAnalyze() {
       this.analyzeOpen = true;
       this.analyzeForm = {
-        symbol: 'BTCUSDT',
+        symbol: this.availableSymbols.length > 0 ? this.availableSymbols[0].value : 'BTCUSDT',
         interval: '1h'
       };
     },
@@ -468,6 +539,10 @@ export default {
     },
     /** 批量分析按钮操作 */
     handleBatchAnalyze() {
+      if (this.availableSymbols.length === 0) {
+        this.$message.warning('请先在字典管理中配置交易对（字典类型：market_symbol）');
+        return;
+      }
       this.batchAnalyzeOpen = true;
       this.batchAnalyzeForm = {
         interval: '1h',
@@ -475,19 +550,9 @@ export default {
         customSymbols: ''
       };
     },
-    /** 选择主流币 */
-    selectMainCoins() {
-      this.batchAnalyzeForm.symbols = [
-        'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'XRPUSDT'
-      ];
-    },
-    /** 选择Top10 */
-    selectTopCoins() {
-      this.batchAnalyzeForm.symbols = this.availableSymbols.slice(0, 10);
-    },
     /** 全选 */
     selectAllCoins() {
-      this.batchAnalyzeForm.symbols = [...this.availableSymbols];
+      this.batchAnalyzeForm.symbols = this.availableSymbols.map(item => item.value);
     },
     /** 清空选择 */
     clearSelection() {
@@ -574,6 +639,14 @@ export default {
         this.loading = false;
       }).catch(() => {
         this.loading = false;
+      });
+    },
+    /** 打开字典管理 */
+    handleDictManage() {
+      // 跳转到字典管理页面
+      this.$router.push({
+        path: '/system/dict',
+        query: { dictType: 'market_symbol' }
       });
     },
     /** 详情按钮操作 */
