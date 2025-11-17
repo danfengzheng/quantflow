@@ -105,6 +105,11 @@
         </template>
       </el-table-column>
       <el-table-column label="当前价格" align="center" prop="currentPrice" width="120" />
+      <el-table-column label="K线周期" align="center" prop="interval" width="100">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.qf_interval" :value="scope.row.interval"/>
+        </template>
+      </el-table-column>
       <el-table-column label="综合评分" align="center" prop="signalScore" width="100">
         <template slot-scope="scope">
           <el-progress :percentage="scope.row.signalScore"

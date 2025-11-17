@@ -1,5 +1,6 @@
 package com.quantflow.trading.signal.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.quantflow.common.annotation.Log;
 import com.quantflow.common.core.controller.BaseController;
 import com.quantflow.common.core.domain.AjaxResult;
