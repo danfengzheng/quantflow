@@ -16,13 +16,16 @@ import com.quantflow.common.core.domain.TreeSelect;
 import com.quantflow.common.core.domain.entity.SysMenu;
 import com.quantflow.common.core.domain.entity.SysRole;
 import com.quantflow.common.core.domain.entity.SysUser;
+import com.quantflow.common.utils.I18nUtils;
 import com.quantflow.common.utils.SecurityUtils;
 import com.quantflow.common.utils.StringUtils;
+import com.quantflow.common.core.domain.entity.SysI18nTranslation;
 import com.quantflow.system.domain.vo.MetaVo;
 import com.quantflow.system.domain.vo.RouterVo;
 import com.quantflow.system.mapper.SysMenuMapper;
 import com.quantflow.system.mapper.SysRoleMapper;
 import com.quantflow.system.mapper.SysRoleMenuMapper;
+import com.quantflow.system.service.ISysI18nTranslationService;
 import com.quantflow.system.service.ISysMenuService;
 
 /**
@@ -43,6 +46,9 @@ public class SysMenuServiceImpl implements ISysMenuService
 
     @Autowired
     private SysRoleMenuMapper roleMenuMapper;
+
+    @Autowired
+    private ISysI18nTranslationService i18nTranslationService;
 
     /**
      * 根据用户查询系统菜单列表
@@ -164,6 +170,7 @@ public class SysMenuServiceImpl implements ISysMenuService
     @Override
     public List<RouterVo> buildMenus(List<SysMenu> menus)
     {
+        String locale = I18nUtils.getCurrentLocale();
         List<RouterVo> routers = new LinkedList<RouterVo>();
         for (SysMenu menu : menus)
         {
@@ -173,7 +180,9 @@ public class SysMenuServiceImpl implements ISysMenuService
             router.setPath(getRouterPath(menu));
             router.setComponent(getComponent(menu));
             router.setQuery(menu.getQuery());
-            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+            // 加载多语言翻译
+            String menuName = loadMenuName(menu.getMenuId(), menu.getMenuName(), locale);
+            router.setMeta(new MetaVo(menuName, menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
             List<SysMenu> cMenus = menu.getChildren();
             if (StringUtils.isNotEmpty(cMenus) && UserConstants.TYPE_DIR.equals(menu.getMenuType()))
             {
@@ -189,14 +198,14 @@ public class SysMenuServiceImpl implements ISysMenuService
                 children.setPath(menu.getPath());
                 children.setComponent(menu.getComponent());
                 children.setName(getRouteName(menu.getRouteName(), menu.getPath()));
-                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+                children.setMeta(new MetaVo(menuName, menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
                 children.setQuery(menu.getQuery());
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
             else if (menu.getParentId().intValue() == 0 && isInnerLink(menu))
             {
-                router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon()));
+                router.setMeta(new MetaVo(menuName, menu.getIcon()));
                 router.setPath("/");
                 List<RouterVo> childrenList = new ArrayList<RouterVo>();
                 RouterVo children = new RouterVo();
@@ -204,13 +213,26 @@ public class SysMenuServiceImpl implements ISysMenuService
                 children.setPath(routerPath);
                 children.setComponent(UserConstants.INNER_LINK);
                 children.setName(getRouteName(menu.getRouteName(), routerPath));
-                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getPath()));
+                children.setMeta(new MetaVo(menuName, menu.getIcon(), menu.getPath()));
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
             routers.add(router);
         }
         return routers;
+    }
+
+    /**
+     * 加载菜单名称（多语言支持）
+     */
+    private String loadMenuName(Long menuId, String defaultName, String locale)
+    {
+        if (menuId == null)
+        {
+            return defaultName;
+        }
+        String translation = i18nTranslationService.getTranslation("menu", menuId, "menu_name", locale);
+        return StringUtils.isNotEmpty(translation) ? translation : defaultName;
     }
 
     /**
@@ -301,7 +323,47 @@ public class SysMenuServiceImpl implements ISysMenuService
     @Override
     public int insertMenu(SysMenu menu)
     {
-        return menuMapper.insertMenu(menu);
+        int result = menuMapper.insertMenu(menu);
+        if (result > 0 && menu.getMenuId() != null)
+        {
+            // 自动保存默认语言（zh-CN）的翻译
+            saveMenuI18n(menu.getMenuId(), menu.getMenuName(), menu.getRemark());
+        }
+        return result;
+    }
+
+    /**
+     * 保存菜单多语言翻译
+     */
+    private void saveMenuI18n(Long menuId, String menuName, String remark)
+    {
+        String defaultLocale = I18nUtils.localeToString(Constants.DEFAULT_LOCALE);
+        
+        // 保存菜单名称翻译
+        if (StringUtils.isNotEmpty(menuName))
+        {
+            SysI18nTranslation translation = new SysI18nTranslation();
+            translation.setEntityType("menu");
+            translation.setEntityId(menuId);
+            translation.setFieldName("menu_name");
+            translation.setLocale(defaultLocale);
+            translation.setTranslation(menuName);
+            translation.setCreateBy(SecurityUtils.getUsername());
+            i18nTranslationService.saveOrUpdateI18nTranslation(translation);
+        }
+        
+        // 保存备注翻译
+        if (StringUtils.isNotEmpty(remark))
+        {
+            SysI18nTranslation translation = new SysI18nTranslation();
+            translation.setEntityType("menu");
+            translation.setEntityId(menuId);
+            translation.setFieldName("remark");
+            translation.setLocale(defaultLocale);
+            translation.setTranslation(remark);
+            translation.setCreateBy(SecurityUtils.getUsername());
+            i18nTranslationService.saveOrUpdateI18nTranslation(translation);
+        }
     }
 
     /**
@@ -313,7 +375,13 @@ public class SysMenuServiceImpl implements ISysMenuService
     @Override
     public int updateMenu(SysMenu menu)
     {
-        return menuMapper.updateMenu(menu);
+        int result = menuMapper.updateMenu(menu);
+        if (result > 0 && menu.getMenuId() != null)
+        {
+            // 自动更新默认语言（zh-CN）的翻译
+            saveMenuI18n(menu.getMenuId(), menu.getMenuName(), menu.getRemark());
+        }
+        return result;
     }
 
     /**
@@ -325,6 +393,8 @@ public class SysMenuServiceImpl implements ISysMenuService
     @Override
     public int deleteMenuById(Long menuId)
     {
+        // 删除菜单的多语言翻译
+        i18nTranslationService.deleteI18nTranslationByEntity("menu", menuId);
         return menuMapper.deleteMenuById(menuId);
     }
 

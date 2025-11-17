@@ -175,6 +175,81 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 多语言设置（折叠面板） -->
+        <el-row>
+          <el-col :span="24">
+            <el-collapse v-model="activeI18nCollapse" style="margin-bottom: 10px;">
+              <el-collapse-item title="多语言设置" name="i18n">
+                <el-tabs v-model="i18nActiveTab" type="border-card">
+                  <el-tab-pane label="菜单名称" name="menu_name">
+                    <el-form :model="i18nForm" label-width="120px" size="small">
+                      <el-row :gutter="20">
+                        <el-col :span="12">
+                          <el-form-item label="简体中文 (zh-CN)">
+                            <el-input v-model="i18nForm.menu_name['zh-CN']" placeholder="请输入简体中文菜单名称" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="繁体中文 (zh-TW)">
+                            <el-input v-model="i18nForm.menu_name['zh-TW']" placeholder="請輸入繁體中文菜單名稱" />
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row :gutter="20">
+                        <el-col :span="12">
+                          <el-form-item label="English (en-US)">
+                            <el-input v-model="i18nForm.menu_name['en-US']" placeholder="Enter English menu name" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="日本語 (ja-JP)">
+                            <el-input v-model="i18nForm.menu_name['ja-JP']" placeholder="メニュー名を入力してください" />
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-form>
+                  </el-tab-pane>
+                  <el-tab-pane label="备注" name="remark">
+                    <el-form :model="i18nForm" label-width="120px" size="small">
+                      <el-row :gutter="20">
+                        <el-col :span="12">
+                          <el-form-item label="简体中文 (zh-CN)">
+                            <el-input v-model="i18nForm.remark['zh-CN']" type="textarea" :rows="3" placeholder="请输入简体中文备注" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="繁体中文 (zh-TW)">
+                            <el-input v-model="i18nForm.remark['zh-TW']" type="textarea" :rows="3" placeholder="請輸入繁體中文備註" />
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row :gutter="20">
+                        <el-col :span="12">
+                          <el-form-item label="English (en-US)">
+                            <el-input v-model="i18nForm.remark['en-US']" type="textarea" :rows="3" placeholder="Enter English remark" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="日本語 (ja-JP)">
+                            <el-input v-model="i18nForm.remark['ja-JP']" type="textarea" :rows="3" placeholder="備考を入力してください" />
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-form>
+                  </el-tab-pane>
+                </el-tabs>
+                <div style="margin-top: 10px; text-align: right;">
+                  <el-button type="primary" size="small" @click="saveI18nTranslationsInline" :disabled="!form.menuId">
+                    {{ $t('button.save') || '保存多语言' }}
+                  </el-button>
+                  <el-button size="small" @click="loadI18nTranslations(form.menuId)" :disabled="!form.menuId">
+                    {{ $t('button.refresh') || '刷新' }}
+                  </el-button>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="12" v-if="form.menuType != 'F'">
             <el-form-item prop="isFrame">
@@ -294,12 +369,55 @@
         <el-button type="primary" @click="submitForm">{{ $t('button.submit')}}</el-button>
         <el-button @click="cancel">{{ $t('button.cancel')}}</el-button>
       </div>
-    </el-dialog>
-  </div>
-</template>
+      </el-dialog>
+
+      <!-- 多语言设置对话框 -->
+      <el-dialog :title="$t('field.multiLanguage') || '多语言设置'" :visible.sync="showI18nDialog" width="600px" append-to-body>
+        <el-tabs v-model="i18nActiveTab">
+          <el-tab-pane label="菜单名称" name="menu_name">
+            <el-form :model="i18nForm" label-width="100px">
+              <el-form-item label="简体中文">
+                <el-input v-model="i18nForm.menu_name['zh-CN']" placeholder="请输入简体中文菜单名称" />
+              </el-form-item>
+              <el-form-item label="繁体中文">
+                <el-input v-model="i18nForm.menu_name['zh-TW']" placeholder="请输入繁体中文菜单名称" />
+              </el-form-item>
+              <el-form-item label="English">
+                <el-input v-model="i18nForm.menu_name['en-US']" placeholder="Enter English menu name" />
+              </el-form-item>
+              <el-form-item label="日本語">
+                <el-input v-model="i18nForm.menu_name['ja-JP']" placeholder="メニュー名を入力してください" />
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="备注" name="remark">
+            <el-form :model="i18nForm" label-width="100px">
+              <el-form-item label="简体中文">
+                <el-input v-model="i18nForm.remark['zh-CN']" type="textarea" :rows="3" placeholder="请输入简体中文备注" />
+              </el-form-item>
+              <el-form-item label="繁体中文">
+                <el-input v-model="i18nForm.remark['zh-TW']" type="textarea" :rows="3" placeholder="請輸入繁體中文備註" />
+              </el-form-item>
+              <el-form-item label="English">
+                <el-input v-model="i18nForm.remark['en-US']" type="textarea" :rows="3" placeholder="Enter English remark" />
+              </el-form-item>
+              <el-form-item label="日本語">
+                <el-input v-model="i18nForm.remark['ja-JP']" type="textarea" :rows="3" placeholder="備考を入力してください" />
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="saveI18nTranslations">{{ $t('button.confirm') }}</el-button>
+          <el-button @click="showI18nDialog = false">{{ $t('button.cancel') }}</el-button>
+        </div>
+      </el-dialog>
+    </div>
+  </template>
 
 <script>
 import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu"
+import { getFieldTranslations, saveFieldTranslations } from "@/api/system/i18n"
 import Treeselect from "@riophae/vue-treeselect"
 import "@riophae/vue-treeselect/dist/vue-treeselect.css"
 import IconSelect from "@/components/IconSelect"
@@ -333,6 +451,25 @@ export default {
       },
       // 表单参数
       form: {},
+      // 多语言设置对话框
+      showI18nDialog: false,
+      // 多语言折叠面板（主表单中）
+      activeI18nCollapse: [],
+      i18nActiveTab: 'menu_name',
+      i18nForm: {
+        menu_name: {
+          'zh-CN': '',
+          'zh-TW': '',
+          'en-US': '',
+          'ja-JP': ''
+        },
+        remark: {
+          'zh-CN': '',
+          'zh-TW': '',
+          'en-US': '',
+          'ja-JP': ''
+        }
+      },
       // 表单校验
       rules: {
         menuName: [
@@ -402,6 +539,22 @@ export default {
         visible: "0",
         status: "0"
       }
+      // 重置多语言表单
+      this.activeI18nCollapse = []
+      this.i18nForm = {
+        menu_name: {
+          'zh-CN': '',
+          'zh-TW': '',
+          'en-US': '',
+          'ja-JP': ''
+        },
+        remark: {
+          'zh-CN': '',
+          'zh-TW': '',
+          'en-US': '',
+          'ja-JP': ''
+        }
+      }
       this.resetForm("form")
     },
     /** 搜索按钮操作 */
@@ -441,6 +594,80 @@ export default {
         this.form = response.data
         this.open = true
         this.title = this.$t('module.system.menu.title') + ' - ' + this.$t('button.edit')
+        // 加载多语言翻译
+        this.loadI18nTranslations(row.menuId)
+        // 自动展开多语言折叠面板（如果已有翻译数据）
+        this.$nextTick(() => {
+          // 延迟检查，确保数据已加载
+          setTimeout(() => {
+            const hasTranslations = Object.values(this.i18nForm.menu_name).some(v => v) || 
+                                   Object.values(this.i18nForm.remark).some(v => v)
+            if (hasTranslations && !this.activeI18nCollapse.includes('i18n')) {
+              this.activeI18nCollapse.push('i18n')
+            }
+          }, 300)
+        })
+      })
+    },
+    /** 加载多语言翻译 */
+    loadI18nTranslations(menuId) {
+      if (!menuId) return
+      
+      // 加载菜单名称的多语言翻译
+      getFieldTranslations('menu', menuId, 'menu_name').then(response => {
+        if (response.data) {
+          Object.assign(this.i18nForm.menu_name, response.data)
+        }
+      }).catch(() => {
+        // 如果加载失败，使用默认值
+      })
+      
+      // 加载备注的多语言翻译
+      getFieldTranslations('menu', menuId, 'remark').then(response => {
+        if (response.data) {
+          Object.assign(this.i18nForm.remark, response.data)
+        }
+      }).catch(() => {
+        // 如果加载失败，使用默认值
+      })
+    },
+    /** 保存多语言翻译（独立对话框） */
+    saveI18nTranslations() {
+      if (!this.form.menuId) {
+        this.$modal.msgError('请先保存菜单基本信息')
+        return
+      }
+      
+      // 保存菜单名称的多语言翻译
+      saveFieldTranslations('menu', this.form.menuId, 'menu_name', this.i18nForm.menu_name).then(() => {
+        // 保存备注的多语言翻译
+        return saveFieldTranslations('menu', this.form.menuId, 'remark', this.i18nForm.remark)
+      }).then(() => {
+        this.$modal.msgSuccess(this.$t('message.success.edit'))
+        this.showI18nDialog = false
+        // 刷新菜单列表
+        this.getList()
+      }).catch(() => {
+        this.$modal.msgError('保存多语言翻译失败')
+      })
+    },
+    /** 保存多语言翻译（主表单中） */
+    saveI18nTranslationsInline() {
+      if (!this.form.menuId) {
+        this.$modal.msgError('请先保存菜单基本信息')
+        return
+      }
+      
+      // 保存菜单名称的多语言翻译
+      saveFieldTranslations('menu', this.form.menuId, 'menu_name', this.i18nForm.menu_name).then(() => {
+        // 保存备注的多语言翻译
+        return saveFieldTranslations('menu', this.form.menuId, 'remark', this.i18nForm.remark)
+      }).then(() => {
+        this.$modal.msgSuccess(this.$t('message.success.edit') || '保存成功')
+        // 刷新菜单列表
+        this.getList()
+      }).catch(() => {
+        this.$modal.msgError('保存多语言翻译失败')
       })
     },
     /** 提交按钮 */
@@ -450,12 +677,44 @@ export default {
           if (this.form.menuId != undefined) {
             updateMenu(this.form).then(response => {
               this.$modal.msgSuccess(this.$t('message.success.edit'))
+              // 如果是编辑，自动保存多语言翻译（如果折叠面板已展开且有数据）
+              if (this.form.menuId && this.activeI18nCollapse.includes('i18n')) {
+                this.saveI18nTranslationsInline()
+              }
               this.open = false
               this.getList()
+              // 重新加载多语言翻译
+              if (this.form.menuId) {
+                this.loadI18nTranslations(this.form.menuId)
+              }
             })
           } else {
             addMenu(this.form).then(response => {
               this.$modal.msgSuccess(this.$t('message.success.add'))
+              // 新增后获取菜单ID并保存多语言翻译
+              if (response.data && response.data.menuId) {
+                this.form.menuId = response.data.menuId
+                // 如果折叠面板已展开，保存多语言翻译
+                if (this.activeI18nCollapse.includes('i18n')) {
+                  // 确保默认语言有值
+                  if (!this.i18nForm.menu_name['zh-CN']) {
+                    this.i18nForm.menu_name['zh-CN'] = this.form.menuName || ''
+                  }
+                  if (!this.i18nForm.remark['zh-CN'] && this.form.remark) {
+                    this.i18nForm.remark['zh-CN'] = this.form.remark
+                  }
+                  this.saveI18nTranslationsInline()
+                } else {
+                  // 否则只保存默认语言（zh-CN）的翻译
+                  const defaultTranslations = {
+                    'zh-CN': this.form.menuName || ''
+                  }
+                  saveFieldTranslations('menu', this.form.menuId, 'menu_name', defaultTranslations).catch(() => {})
+                  if (this.form.remark) {
+                    saveFieldTranslations('menu', this.form.menuId, 'remark', { 'zh-CN': this.form.remark }).catch(() => {})
+                  }
+                }
+              }
               this.open = false
               this.getList()
             })

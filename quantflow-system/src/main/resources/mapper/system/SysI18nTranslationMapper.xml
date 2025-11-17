@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quantflow.system.mapper.SysI18nTranslationMapper">
+
+	<resultMap type="SysI18nTranslation" id="SysI18nTranslationResult">
+		<id     property="id"            column="id"            />
+		<result property="entityType"    column="entity_type"   />
+		<result property="entityId"      column="entity_id"     />
+		<result property="fieldName"     column="field_name"    />
+		<result property="locale"        column="locale"         />
+		<result property="translation"   column="translation"   />
+		<result property="createBy"      column="create_by"     />
+		<result property="createTime"   column="create_time"   />
+		<result property="updateBy"     column="update_by"     />
+		<result property="updateTime"  column="update_time"   />
+	</resultMap>
+
+	<sql id="selectI18nTranslationVo">
+        select id, entity_type, entity_id, field_name, locale, translation, create_by, create_time, update_by, update_time
+		from sys_i18n_translation
+    </sql>
+
+	<select id="selectI18nTranslationList" parameterType="SysI18nTranslation" resultMap="SysI18nTranslationResult">
+		<include refid="selectI18nTranslationVo"/>
+		<where>
+			<if test="entityType != null and entityType != ''">
+				AND entity_type = #{entityType}
+			</if>
+			<if test="entityId != null">
+				AND entity_id = #{entityId}
+			</if>
+			<if test="fieldName != null and fieldName != ''">
+				AND field_name = #{fieldName}
+			</if>
+			<if test="locale != null and locale != ''">
+				AND locale = #{locale}
+			</if>
+		</where>
+		order by entity_type, entity_id, field_name, locale
+	</select>
+
+	<select id="selectI18nTranslation" resultMap="SysI18nTranslationResult">
+		<include refid="selectI18nTranslationVo"/>
+		where entity_type = #{entityType}
+		  and entity_id = #{entityId}
+		  and field_name = #{fieldName}
+		  and locale = #{locale}
+		limit 1
+	</select>
+
+	<select id="selectI18nTranslationsByEntity" resultMap="SysI18nTranslationResult">
+		<include refid="selectI18nTranslationVo"/>
+		where entity_type = #{entityType}
+		  and entity_id = #{entityId}
+		  and locale = #{locale}
+		order by field_name
+	</select>
+
+	<select id="selectI18nTranslationsBatch" resultMap="SysI18nTranslationResult">
+		<include refid="selectI18nTranslationVo"/>
+		where entity_type = #{entityType}
+		  and field_name = #{fieldName}
+		  and locale = #{locale}
+		  and entity_id in
+		<foreach collection="entityIds" item="entityId" open="(" separator="," close=")">
+			#{entityId}
+		</foreach>
+	</select>
+
+	<insert id="insertI18nTranslation" parameterType="SysI18nTranslation" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_i18n_translation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="entityType != null and entityType != ''">entity_type,</if>
+			<if test="entityId != null">entity_id,</if>
+			<if test="fieldName != null and fieldName != ''">field_name,</if>
+			<if test="locale != null and locale != ''">locale,</if>
+			<if test="translation != null and translation != ''">translation,</if>
+			<if test="createBy != null and createBy != ''">create_by,</if>
+			<if test="createTime != null">create_time,</if>
+			<if test="updateBy != null and updateBy != ''">update_by,</if>
+			<if test="updateTime != null">update_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="entityType != null and entityType != ''">#{entityType},</if>
+			<if test="entityId != null">#{entityId},</if>
+			<if test="fieldName != null and fieldName != ''">#{fieldName},</if>
+			<if test="locale != null and locale != ''">#{locale},</if>
+			<if test="translation != null and translation != ''">#{translation},</if>
+			<if test="createBy != null and createBy != ''">#{createBy},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+		</trim>
+	</insert>
+
+	<update id="updateI18nTranslation" parameterType="SysI18nTranslation">
+		update sys_i18n_translation
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="translation != null and translation != ''">translation = #{translation},</if>
+			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+			<if test="updateTime != null">update_time = #{updateTime},</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<delete id="deleteI18nTranslationById" parameterType="Long">
+		delete from sys_i18n_translation where id = #{id}
+	</delete>
+
+	<delete id="deleteI18nTranslationByIds" parameterType="String">
+		delete from sys_i18n_translation where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<delete id="deleteI18nTranslationByEntity">
+		delete from sys_i18n_translation
+		where entity_type = #{entityType} and entity_id = #{entityId}
+	</delete>
+
+	<delete id="deleteI18nTranslationByEntities">
+		delete from sys_i18n_translation
+		where entity_type = #{entityType} and entity_id in
+		<foreach collection="entityIds" item="entityId" open="(" separator="," close=")">
+			#{entityId}
+		</foreach>
+	</delete>
+
+</mapper>
+

@@ -148,6 +148,9 @@
         </el-form-item>
         <el-form-item label="数据标签" prop="dictLabel">
           <el-input v-model="form.dictLabel" placeholder="请输入数据标签" />
+          <el-button v-if="form.dictCode" type="text" icon="el-icon-edit" size="small" style="margin-left: 10px;" @click="showI18nDialog = true">
+            多语言设置
+          </el-button>
         </el-form-item>
         <el-form-item label="数据键值" prop="dictValue">
           <el-input v-model="form.dictValue" placeholder="请输入数据键值" />
@@ -186,12 +189,35 @@
         <el-button @click="cancel">{{ $t('button.cancel')}}</el-button>
       </div>
     </el-dialog>
+
+    <!-- 多语言设置对话框 -->
+    <el-dialog title="多语言设置" :visible.sync="showI18nDialog" width="600px" append-to-body>
+      <el-form :model="i18nForm" label-width="100px">
+        <el-form-item label="简体中文">
+          <el-input v-model="i18nForm.dict_label['zh-CN']" placeholder="请输入简体中文字典标签" />
+        </el-form-item>
+        <el-form-item label="繁体中文">
+          <el-input v-model="i18nForm.dict_label['zh-TW']" placeholder="請輸入繁體中文字典標籤" />
+        </el-form-item>
+        <el-form-item label="English">
+          <el-input v-model="i18nForm.dict_label['en-US']" placeholder="Enter English dict label" />
+        </el-form-item>
+        <el-form-item label="日本語">
+          <el-input v-model="i18nForm.dict_label['ja-JP']" placeholder="辞書ラベルを入力してください" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="saveI18nTranslations">{{ $t('button.confirm') }}</el-button>
+        <el-button @click="showI18nDialog = false">{{ $t('button.cancel') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listData, getData, delData, addData, updateData } from "@/api/system/dict/data"
 import { optionselect as getDictOptionselect, getType } from "@/api/system/dict/type"
+import { getFieldTranslations, saveFieldTranslations } from "@/api/system/i18n"
 
 export default {
   name: "Data",
@@ -218,6 +244,16 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 多语言设置对话框
+      showI18nDialog: false,
+      i18nForm: {
+        dict_label: {
+          'zh-CN': '',
+          'zh-TW': '',
+          'en-US': '',
+          'ja-JP': ''
+        }
+      },
       // 数据标签回显样式
       listClassOptions: [
         {
@@ -356,6 +392,42 @@ export default {
         this.form = response.data
         this.open = true
         this.title = "修改字典数据"
+        // 加载多语言翻译
+        if (this.form.dictCode) {
+          this.loadI18nTranslations(this.form.dictCode)
+        }
+      })
+    },
+    /** 加载多语言翻译 */
+    loadI18nTranslations(dictCode) {
+      if (!dictCode) return
+      
+      // 加载字典标签的多语言翻译
+      getFieldTranslations('dict_data', dictCode, 'dict_label').then(response => {
+        if (response.data) {
+          Object.assign(this.i18nForm.dict_label, response.data)
+        }
+      }).catch(() => {
+        // 如果加载失败，使用默认值
+      })
+    },
+    /** 保存多语言翻译 */
+    saveI18nTranslations() {
+      if (!this.form.dictCode) {
+        this.$modal.msgError('请先保存字典数据基本信息')
+        return
+      }
+      
+      // 保存字典标签的多语言翻译
+      saveFieldTranslations('dict_data', this.form.dictCode, 'dict_label', this.i18nForm.dict_label).then(() => {
+        this.$modal.msgSuccess(this.$t('message.success.edit') || '修改成功')
+        this.showI18nDialog = false
+        // 刷新字典列表
+        this.getList()
+        // 清除字典缓存
+        this.$store.dispatch('dict/removeDict', this.queryParams.dictType)
+      }).catch(() => {
+        this.$modal.msgError('保存多语言翻译失败')
       })
     },
     /** 提交按钮 */
@@ -373,6 +445,15 @@ export default {
             addData(this.form).then(response => {
               this.$store.dispatch('dict/removeDict', this.queryParams.dictType)
               this.$modal.msgSuccess("新增成功")
+              // 新增后获取字典编码并保存默认语言翻译
+              if (response.data && response.data.dictCode) {
+                this.form.dictCode = response.data.dictCode
+                // 保存默认语言（zh-CN）的翻译
+                const defaultTranslations = {
+                  'zh-CN': this.form.dictLabel || ''
+                }
+                saveFieldTranslations('dict_data', this.form.dictCode, 'dict_label', defaultTranslations).catch(() => {})
+              }
               this.open = false
               this.getList()
             })
