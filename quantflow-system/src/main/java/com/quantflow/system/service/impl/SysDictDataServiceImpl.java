@@ -89,7 +89,18 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     @Override
     public SysDictData selectDictDataById(Long dictCode)
     {
-        return dictDataMapper.selectDictDataById(dictCode);
+        SysDictData data = dictDataMapper.selectDictDataById(dictCode);
+        // 加载多语言翻译
+        if (data != null)
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            String translation = i18nTranslationService.getTranslation("dict_data", data.getDictCode(), "dict_label", locale);
+            if (StringUtils.isNotEmpty(translation))
+            {
+                data.setDictLabel(translation);
+            }
+        }
+        return data;
     }
 
     /**

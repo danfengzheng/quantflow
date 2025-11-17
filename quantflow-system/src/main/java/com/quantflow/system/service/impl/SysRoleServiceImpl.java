@@ -16,7 +16,9 @@ import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.SecurityUtils;
 import com.quantflow.common.utils.StringUtils;
+import com.quantflow.common.utils.I18nUtils;
 import com.quantflow.common.utils.spring.SpringUtils;
+import com.quantflow.common.core.domain.entity.SysI18nTranslation;
 import com.quantflow.system.domain.SysRoleDept;
 import com.quantflow.system.domain.SysRoleMenu;
 import com.quantflow.system.domain.SysUserRole;
@@ -25,6 +27,7 @@ import com.quantflow.system.mapper.SysRoleMapper;
 import com.quantflow.system.mapper.SysRoleMenuMapper;
 import com.quantflow.system.mapper.SysUserRoleMapper;
 import com.quantflow.system.service.ISysRoleService;
+import com.quantflow.system.service.ISysI18nTranslationService;
 
 /**
  * 角色 业务层处理
@@ -46,6 +49,9 @@ public class SysRoleServiceImpl implements ISysRoleService
     @Autowired
     private SysRoleDeptMapper roleDeptMapper;
 
+    @Autowired
+    private ISysI18nTranslationService i18nTranslationService;
+
     /**
      * 根据条件分页查询角色数据
      * 
@@ -56,7 +62,21 @@ public class SysRoleServiceImpl implements ISysRoleService
     @DataScope(deptAlias = "d")
     public List<SysRole> selectRoleList(SysRole role)
     {
-        return roleMapper.selectRoleList(role);
+        List<SysRole> roleList = roleMapper.selectRoleList(role);
+        // 加载多语言翻译
+        if (StringUtils.isNotEmpty(roleList))
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            for (SysRole r : roleList)
+            {
+                String translation = i18nTranslationService.getTranslation("role", r.getRoleId(), "role_name", locale);
+                if (StringUtils.isNotEmpty(translation))
+                {
+                    r.setRoleName(translation);
+                }
+            }
+        }
+        return roleList;
     }
 
     /**
@@ -69,6 +89,19 @@ public class SysRoleServiceImpl implements ISysRoleService
     public List<SysRole> selectRolesByUserId(Long userId)
     {
         List<SysRole> userRoles = roleMapper.selectRolePermissionByUserId(userId);
+        // 加载多语言翻译
+        if (StringUtils.isNotEmpty(userRoles))
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            for (SysRole r : userRoles)
+            {
+                String translation = i18nTranslationService.getTranslation("role", r.getRoleId(), "role_name", locale);
+                if (StringUtils.isNotEmpty(translation))
+                {
+                    r.setRoleName(translation);
+                }
+            }
+        }
         List<SysRole> roles = selectRoleAll();
         for (SysRole role : roles)
         {
@@ -94,6 +127,22 @@ public class SysRoleServiceImpl implements ISysRoleService
     public Set<String> selectRolePermissionByUserId(Long userId)
     {
         List<SysRole> perms = roleMapper.selectRolePermissionByUserId(userId);
+        // 加载多语言翻译（虽然这里主要用 roleKey，但为了保持一致性也加载 roleName）
+        if (StringUtils.isNotEmpty(perms))
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            for (SysRole perm : perms)
+            {
+                if (StringUtils.isNotNull(perm) && perm.getRoleId() != null)
+                {
+                    String translation = i18nTranslationService.getTranslation("role", perm.getRoleId(), "role_name", locale);
+                    if (StringUtils.isNotEmpty(translation))
+                    {
+                        perm.setRoleName(translation);
+                    }
+                }
+            }
+        }
         Set<String> permsSet = new HashSet<>();
         for (SysRole perm : perms)
         {
@@ -137,7 +186,18 @@ public class SysRoleServiceImpl implements ISysRoleService
     @Override
     public SysRole selectRoleById(Long roleId)
     {
-        return roleMapper.selectRoleById(roleId);
+        SysRole role = roleMapper.selectRoleById(roleId);
+        // 加载多语言翻译
+        if (role != null)
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            String translation = i18nTranslationService.getTranslation("role", role.getRoleId(), "role_name", locale);
+            if (StringUtils.isNotEmpty(translation))
+            {
+                role.setRoleName(translation);
+            }
+        }
+        return role;
     }
 
     /**
@@ -237,6 +297,11 @@ public class SysRoleServiceImpl implements ISysRoleService
     {
         // 新增角色信息
         roleMapper.insertRole(role);
+        // 自动保存默认语言（zh-CN）的翻译
+        if (role.getRoleId() != null)
+        {
+            saveRoleI18n(role.getRoleId(), role.getRoleName());
+        }
         return insertRoleMenu(role);
     }
 
@@ -252,6 +317,11 @@ public class SysRoleServiceImpl implements ISysRoleService
     {
         // 修改角色信息
         roleMapper.updateRole(role);
+        // 自动更新默认语言（zh-CN）的翻译
+        if (role.getRoleId() != null)
+        {
+            saveRoleI18n(role.getRoleId(), role.getRoleName());
+        }
         // 删除角色与菜单关联
         roleMenuMapper.deleteRoleMenuByRoleId(role.getRoleId());
         return insertRoleMenu(role);
@@ -372,11 +442,38 @@ public class SysRoleServiceImpl implements ISysRoleService
                 throw new ServiceException(MessageKeys.ROLE_ASSIGNED_CANNOT_DELETE, role.getRoleName());
             }
         }
+        // 删除角色的多语言翻译
+        for (Long roleId : roleIds)
+        {
+            i18nTranslationService.deleteI18nTranslationByEntity("role", roleId);
+        }
         // 删除角色与菜单关联
         roleMenuMapper.deleteRoleMenu(roleIds);
         // 删除角色与部门关联
         roleDeptMapper.deleteRoleDept(roleIds);
         return roleMapper.deleteRoleByIds(roleIds);
+    }
+
+    /**
+     * 保存角色多语言翻译
+     */
+    private void saveRoleI18n(Long roleId, String roleName)
+    {
+        if (roleId == null || StringUtils.isEmpty(roleName))
+        {
+            return;
+        }
+        
+        String defaultLocale = I18nUtils.localeToString(com.quantflow.common.constant.Constants.DEFAULT_LOCALE);
+        
+        SysI18nTranslation translation = new SysI18nTranslation();
+        translation.setEntityType("role");
+        translation.setEntityId(roleId);
+        translation.setFieldName("role_name");
+        translation.setLocale(defaultLocale);
+        translation.setTranslation(roleName);
+        translation.setCreateBy(SecurityUtils.getUsername());
+        i18nTranslationService.saveOrUpdateI18nTranslation(translation);
     }
 
     /**

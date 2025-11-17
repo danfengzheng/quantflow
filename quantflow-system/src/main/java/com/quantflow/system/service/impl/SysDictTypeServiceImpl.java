@@ -14,10 +14,13 @@ import com.quantflow.common.core.domain.entity.SysDictType;
 import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.DictUtils;
+import com.quantflow.common.utils.I18nUtils;
 import com.quantflow.common.utils.StringUtils;
+import com.quantflow.common.core.domain.entity.SysI18nTranslation;
 import com.quantflow.system.mapper.SysDictDataMapper;
 import com.quantflow.system.mapper.SysDictTypeMapper;
 import com.quantflow.system.service.ISysDictTypeService;
+import com.quantflow.system.service.ISysI18nTranslationService;
 
 /**
  * 字典 业务层处理
@@ -32,6 +35,9 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
 
     @Autowired
     private SysDictDataMapper dictDataMapper;
+
+    @Autowired
+    private ISysI18nTranslationService i18nTranslationService;
 
     /**
      * 项目启动时，初始化字典到缓存
@@ -51,7 +57,21 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     @Override
     public List<SysDictType> selectDictTypeList(SysDictType dictType)
     {
-        return dictTypeMapper.selectDictTypeList(dictType);
+        List<SysDictType> dictTypeList = dictTypeMapper.selectDictTypeList(dictType);
+        // 加载多语言翻译
+        if (StringUtils.isNotEmpty(dictTypeList))
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            for (SysDictType type : dictTypeList)
+            {
+                String translation = i18nTranslationService.getTranslation("dict_type", type.getDictId(), "dict_name", locale);
+                if (StringUtils.isNotEmpty(translation))
+                {
+                    type.setDictName(translation);
+                }
+            }
+        }
+        return dictTypeList;
     }
 
     /**
@@ -62,7 +82,21 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     @Override
     public List<SysDictType> selectDictTypeAll()
     {
-        return dictTypeMapper.selectDictTypeAll();
+        List<SysDictType> dictTypeList = dictTypeMapper.selectDictTypeAll();
+        // 加载多语言翻译
+        if (StringUtils.isNotEmpty(dictTypeList))
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            for (SysDictType type : dictTypeList)
+            {
+                String translation = i18nTranslationService.getTranslation("dict_type", type.getDictId(), "dict_name", locale);
+                if (StringUtils.isNotEmpty(translation))
+                {
+                    type.setDictName(translation);
+                }
+            }
+        }
+        return dictTypeList;
     }
 
     /**
@@ -75,17 +109,30 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     public List<SysDictData> selectDictDataByType(String dictType)
     {
         List<SysDictData> dictDatas = DictUtils.getDictCache(dictType);
+        if (StringUtils.isEmpty(dictDatas))
+        {
+            dictDatas = dictDataMapper.selectDictDataByType(dictType);
+            if (StringUtils.isNotEmpty(dictDatas))
+            {
+                DictUtils.setDictCache(dictType, dictDatas);
+            }
+        }
+        
+        // 加载多语言翻译（从缓存或数据库获取的数据都需要加载多语言）
         if (StringUtils.isNotEmpty(dictDatas))
         {
-            return dictDatas;
+            String locale = I18nUtils.getCurrentLocale();
+            for (SysDictData data : dictDatas)
+            {
+                String translation = i18nTranslationService.getTranslation("dict_data", data.getDictCode(), "dict_label", locale);
+                if (StringUtils.isNotEmpty(translation))
+                {
+                    data.setDictLabel(translation);
+                }
+            }
         }
-        dictDatas = dictDataMapper.selectDictDataByType(dictType);
-        if (StringUtils.isNotEmpty(dictDatas))
-        {
-            DictUtils.setDictCache(dictType, dictDatas);
-            return dictDatas;
-        }
-        return null;
+        
+        return dictDatas;
     }
 
     /**
@@ -97,7 +144,18 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     @Override
     public SysDictType selectDictTypeById(Long dictId)
     {
-        return dictTypeMapper.selectDictTypeById(dictId);
+        SysDictType dictType = dictTypeMapper.selectDictTypeById(dictId);
+        // 加载多语言翻译
+        if (dictType != null)
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            String translation = i18nTranslationService.getTranslation("dict_type", dictType.getDictId(), "dict_name", locale);
+            if (StringUtils.isNotEmpty(translation))
+            {
+                dictType.setDictName(translation);
+            }
+        }
+        return dictType;
     }
 
     /**
@@ -109,7 +167,18 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     @Override
     public SysDictType selectDictTypeByType(String dictType)
     {
-        return dictTypeMapper.selectDictTypeByType(dictType);
+        SysDictType dictTypeObj = dictTypeMapper.selectDictTypeByType(dictType);
+        // 加载多语言翻译
+        if (dictTypeObj != null)
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            String translation = i18nTranslationService.getTranslation("dict_type", dictTypeObj.getDictId(), "dict_name", locale);
+            if (StringUtils.isNotEmpty(translation))
+            {
+                dictTypeObj.setDictName(translation);
+            }
+        }
+        return dictTypeObj;
     }
 
     /**
@@ -127,6 +196,8 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
             {
                 throw new ServiceException(MessageKeys.DICT_ASSIGNED_CANNOT_DELETE, dictType.getDictName());
             }
+            // 删除字典类型的多语言翻译
+            i18nTranslationService.deleteI18nTranslationByEntity("dict_type", dictId);
             dictTypeMapper.deleteDictTypeById(dictId);
             DictUtils.removeDictCache(dictType.getDictType());
         }
@@ -176,11 +247,35 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     public int insertDictType(SysDictType dict)
     {
         int row = dictTypeMapper.insertDictType(dict);
-        if (row > 0)
+        if (row > 0 && dict.getDictId() != null)
         {
+            // 自动保存默认语言（zh-CN）的翻译
+            saveDictTypeI18n(dict.getDictId(), dict.getDictName());
             DictUtils.setDictCache(dict.getDictType(), null);
         }
         return row;
+    }
+
+    /**
+     * 保存字典类型多语言翻译
+     */
+    private void saveDictTypeI18n(Long dictId, String dictName)
+    {
+        if (dictId == null || StringUtils.isEmpty(dictName))
+        {
+            return;
+        }
+        
+        String defaultLocale = I18nUtils.localeToString(com.quantflow.common.constant.Constants.DEFAULT_LOCALE);
+        
+        SysI18nTranslation translation = new SysI18nTranslation();
+        translation.setEntityType("dict_type");
+        translation.setEntityId(dictId);
+        translation.setFieldName("dict_name");
+        translation.setLocale(defaultLocale);
+        translation.setTranslation(dictName);
+        translation.setCreateBy(com.quantflow.common.utils.SecurityUtils.getUsername());
+        i18nTranslationService.saveOrUpdateI18nTranslation(translation);
     }
 
     /**
@@ -196,8 +291,10 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
         SysDictType oldDict = dictTypeMapper.selectDictTypeById(dict.getDictId());
         dictDataMapper.updateDictDataType(oldDict.getDictType(), dict.getDictType());
         int row = dictTypeMapper.updateDictType(dict);
-        if (row > 0)
+        if (row > 0 && dict.getDictId() != null)
         {
+            // 自动更新默认语言（zh-CN）的翻译
+            saveDictTypeI18n(dict.getDictId(), dict.getDictName());
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dict.getDictType());
             DictUtils.setDictCache(dict.getDictType(), dictDatas);
         }

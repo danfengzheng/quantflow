@@ -82,6 +82,21 @@ public class SysMenuServiceImpl implements ISysMenuService
             menu.getParams().put("userId", userId);
             menuList = menuMapper.selectMenuListByUserId(menu);
         }
+        
+        // 加载多语言翻译
+        if (StringUtils.isNotEmpty(menuList))
+        {
+            String locale = I18nUtils.getCurrentLocale();
+            for (SysMenu menuItem : menuList)
+            {
+                String translation = i18nTranslationService.getTranslation("menu", menuItem.getMenuId(), "menu_name", locale);
+                if (StringUtils.isNotEmpty(translation))
+                {
+                    menuItem.setMenuName(translation);
+                }
+            }
+        }
+        
         return menuList;
     }
 
@@ -145,7 +160,41 @@ public class SysMenuServiceImpl implements ISysMenuService
         {
             menus = menuMapper.selectMenuTreeByUserId(userId);
         }
+        
+        // 加载多语言翻译（递归处理所有菜单项）
+        if (StringUtils.isNotEmpty(menus))
+        {
+            loadMenuI18nRecursive(menus);
+        }
+        
         return getChildPerms(menus, 0);
+    }
+
+    /**
+     * 递归加载菜单多语言翻译
+     */
+    private void loadMenuI18nRecursive(List<SysMenu> menus)
+    {
+        if (StringUtils.isEmpty(menus))
+        {
+            return;
+        }
+        
+        String locale = I18nUtils.getCurrentLocale();
+        for (SysMenu menu : menus)
+        {
+            String translation = i18nTranslationService.getTranslation("menu", menu.getMenuId(), "menu_name", locale);
+            if (StringUtils.isNotEmpty(translation))
+            {
+                menu.setMenuName(translation);
+            }
+            
+            // 递归处理子菜单
+            if (StringUtils.isNotEmpty(menu.getChildren()))
+            {
+                loadMenuI18nRecursive(menu.getChildren());
+            }
+        }
     }
 
     /**
