@@ -451,5 +451,84 @@ public class SysI18nTranslationServiceImpl implements ISysI18nTranslationService
             // 忽略异常，继续执行
         }
     }
+
+    /**
+     * 根据实体类型和字段名查询实体的某个字段的多语言翻译
+     */
+    @Override
+    public Map<String, String> getTranslationsByEntityAndField(String entityType, Long entityId, String fieldName)
+    {
+        Map<String, String> result = new HashMap<>();
+        if (StringUtils.isEmpty(entityType) || entityId == null || StringUtils.isEmpty(fieldName))
+        {
+            return result;
+        }
+
+        String[] locales = {"zh-CN", "zh-TW", "en-US", "ja-JP"};
+        for (String locale : locales)
+        {
+            String translation = getTranslation(entityType, entityId, fieldName, locale);
+            if (StringUtils.isNotEmpty(translation))
+            {
+                result.put(locale, translation);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 清空所有多语言翻译的Redis缓存
+     */
+    @Override
+    public void clearAllI18nCache()
+    {
+        try
+        {
+            java.util.Collection<String> keys = redisCache.keys(CacheConstants.SYS_I18N_KEY + "*");
+            if (keys != null && !keys.isEmpty())
+            {
+                redisCache.deleteObject(keys);
+            }
+        }
+        catch (Exception e)
+        {
+            // 忽略异常，继续执行
+        }
+    }
+
+    /**
+     * 根据实体类型清空该类型的所有多语言翻译缓存
+     */
+    @Override
+    public void clearI18nCacheByEntityType(String entityType)
+    {
+        if (StringUtils.isEmpty(entityType))
+        {
+            return;
+        }
+
+        try
+        {
+            // 清除实体级别的缓存
+            String entityPattern = CacheConstants.SYS_I18N_KEY + "entity:" + entityType + ":*";
+            java.util.Collection<String> entityKeys = redisCache.keys(entityPattern);
+            if (entityKeys != null && !entityKeys.isEmpty())
+            {
+                redisCache.deleteObject(entityKeys);
+            }
+
+            // 清除单个翻译的缓存
+            String singlePattern = CacheConstants.SYS_I18N_KEY + entityType + ":*";
+            java.util.Collection<String> singleKeys = redisCache.keys(singlePattern);
+            if (singleKeys != null && !singleKeys.isEmpty())
+            {
+                redisCache.deleteObject(singleKeys);
+            }
+        }
+        catch (Exception e)
+        {
+            // 忽略异常，继续执行
+        }
+    }
 }
 

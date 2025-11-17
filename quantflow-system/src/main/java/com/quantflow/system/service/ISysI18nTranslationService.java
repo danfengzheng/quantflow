@@ -101,5 +101,27 @@ public interface ISysI18nTranslationService
      * @return 结果
      */
     public int saveOrUpdateI18nTranslation(SysI18nTranslation translation);
+
+    /**
+     * 根据实体类型和字段名查询实体的某个字段的多语言翻译
+     * 
+     * @param entityType 实体类型
+     * @param entityId 实体ID
+     * @param fieldName 字段名
+     * @return 语言代码 -> 翻译文本的映射
+     */
+    public Map<String, String> getTranslationsByEntityAndField(String entityType, Long entityId, String fieldName);
+
+    /**
+     * 清空所有多语言翻译的Redis缓存
+     */
+    public void clearAllI18nCache();
+
+    /**
+     * 根据实体类型清空该类型的所有多语言翻译缓存
+     * 
+     * @param entityType 实体类型
+     */
+    public void clearI18nCacheByEntityType(String entityType);
 }
 
