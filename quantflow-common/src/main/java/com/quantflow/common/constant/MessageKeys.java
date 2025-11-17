@@ -53,6 +53,10 @@ public enum MessageKeys implements I18nMessageKey {
     LOGIN_BLOCKED("1011", "很遗憾，访问IP已被列入系统黑名单"),
     /** 退出成功 */
     USER_LOGOUT_SUCCESS("1012", "退出成功"),
+    /** 操作成功 */
+    OPERATION_SUCCESS("1013", "操作成功"),
+    /** 操作失败 */
+    OPERATION_FAILED("1014", "操作失败"),
     
     // ========== 验证消息 (2000-2999) ==========
     /** 长度必须在{min}到{max}个字符之间 */

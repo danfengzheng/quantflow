@@ -2,6 +2,9 @@ package com.quantflow.common.core.domain;
 
 import java.io.Serializable;
 import com.quantflow.common.constant.HttpStatus;
+import com.quantflow.common.constant.I18nMessageKey;
+import com.quantflow.common.constant.MessageKeys;
+import com.quantflow.common.utils.MessageUtils;
 
 /**
  * 响应信息主体
@@ -26,12 +29,12 @@ public class R<T> implements Serializable
 
     public static <T> R<T> ok()
     {
-        return restResult(null, SUCCESS, "操作成功");
+        return restResult(null, SUCCESS, MessageUtils.message(MessageKeys.OPERATION_SUCCESS));
     }
 
     public static <T> R<T> ok(T data)
     {
-        return restResult(data, SUCCESS, "操作成功");
+        return restResult(data, SUCCESS, MessageUtils.message(MessageKeys.OPERATION_SUCCESS));
     }
 
     public static <T> R<T> ok(T data, String msg)
@@ -41,7 +44,7 @@ public class R<T> implements Serializable
 
     public static <T> R<T> fail()
     {
-        return restResult(null, FAIL, "操作失败");
+        return restResult(null, FAIL, MessageUtils.message(MessageKeys.OPERATION_FAILED));
     }
 
     public static <T> R<T> fail(String msg)
@@ -51,7 +54,7 @@ public class R<T> implements Serializable
 
     public static <T> R<T> fail(T data)
     {
-        return restResult(data, FAIL, "操作失败");
+        return restResult(data, FAIL, MessageUtils.message(MessageKeys.OPERATION_FAILED));
     }
 
     public static <T> R<T> fail(T data, String msg)
@@ -61,6 +64,77 @@ public class R<T> implements Serializable
 
     public static <T> R<T> fail(int code, String msg)
     {
+        return restResult(null, code, msg);
+    }
+
+    /**
+     * 返回成功消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @return 成功消息
+     */
+    public static <T> R<T> ok(I18nMessageKey messageKey)
+    {
+        return ok(null, messageKey);
+    }
+
+    /**
+     * 返回成功消息（支持多语言）
+     * 
+     * @param data 数据对象
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 成功消息
+     */
+    public static <T> R<T> ok(T data, I18nMessageKey messageKey, Object... args)
+    {
+        String msg = args != null && args.length > 0 
+            ? MessageUtils.message(messageKey, args) 
+            : MessageUtils.message(messageKey);
+        return restResult(data, SUCCESS, msg);
+    }
+
+    /**
+     * 返回错误消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 错误消息
+     */
+    public static <T> R<T> fail(I18nMessageKey messageKey, Object... args)
+    {
+        return fail(null, messageKey, args);
+    }
+
+    /**
+     * 返回错误消息（支持多语言）
+     * 
+     * @param data 数据对象
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 错误消息
+     */
+    public static <T> R<T> fail(T data, I18nMessageKey messageKey, Object... args)
+    {
+        String msg = args != null && args.length > 0 
+            ? MessageUtils.message(messageKey, args) 
+            : MessageUtils.message(messageKey);
+        return restResult(data, FAIL, msg);
+    }
+
+    /**
+     * 返回错误消息（支持多语言）
+     * 
+     * @param code 状态码
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 错误消息
+     */
+    public static <T> R<T> fail(int code, I18nMessageKey messageKey, Object... args)
+    {
+        String msg = args != null && args.length > 0 
+            ? MessageUtils.message(messageKey, args) 
+            : MessageUtils.message(messageKey);
         return restResult(null, code, msg);
     }
 

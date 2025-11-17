@@ -3,6 +3,9 @@ package com.quantflow.common.core.domain;
 import java.util.HashMap;
 import java.util.Objects;
 import com.quantflow.common.constant.HttpStatus;
+import com.quantflow.common.constant.I18nMessageKey;
+import com.quantflow.common.constant.MessageKeys;
+import com.quantflow.common.utils.MessageUtils;
 import com.quantflow.common.utils.StringUtils;
 
 /**
@@ -66,7 +69,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult success()
     {
-        return AjaxResult.success("操作成功");
+        return AjaxResult.success(MessageKeys.OPERATION_SUCCESS);
     }
 
     /**
@@ -76,7 +79,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult success(Object data)
     {
-        return AjaxResult.success("操作成功", data);
+        return AjaxResult.success(MessageKeys.OPERATION_SUCCESS, data, (Object[]) null);
     }
 
     /**
@@ -99,6 +102,45 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult success(String msg, Object data)
     {
+        return new AjaxResult(HttpStatus.SUCCESS, msg, data);
+    }
+
+    /**
+     * 返回成功消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @return 成功消息
+     */
+    public static AjaxResult success(I18nMessageKey messageKey)
+    {
+        return AjaxResult.success(messageKey, null, (Object[]) null);
+    }
+
+    /**
+     * 返回成功消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 成功消息
+     */
+    public static AjaxResult success(I18nMessageKey messageKey, Object... args)
+    {
+        return AjaxResult.success(messageKey, null, args);
+    }
+
+    /**
+     * 返回成功消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @param data 数据对象
+     * @param args 消息参数
+     * @return 成功消息
+     */
+    public static AjaxResult success(I18nMessageKey messageKey, Object data, Object[] args)
+    {
+        String msg = args != null && args.length > 0 
+            ? MessageUtils.message(messageKey, args) 
+            : MessageUtils.message(messageKey);
         return new AjaxResult(HttpStatus.SUCCESS, msg, data);
     }
 
@@ -132,7 +174,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult error()
     {
-        return AjaxResult.error("操作失败");
+        return AjaxResult.error(MessageKeys.OPERATION_FAILED);
     }
 
     /**
@@ -168,6 +210,97 @@ public class AjaxResult extends HashMap<String, Object>
     public static AjaxResult error(int code, String msg)
     {
         return new AjaxResult(code, msg, null);
+    }
+
+    /**
+     * 返回错误消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @return 错误消息
+     */
+    public static AjaxResult error(I18nMessageKey messageKey)
+    {
+        return AjaxResult.error(messageKey, null, (Object[]) null);
+    }
+
+    /**
+     * 返回错误消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 错误消息
+     */
+    public static AjaxResult error(I18nMessageKey messageKey, Object... args)
+    {
+        return AjaxResult.error(messageKey, null, args);
+    }
+
+    /**
+     * 返回错误消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @param data 数据对象
+     * @param args 消息参数
+     * @return 错误消息
+     */
+    public static AjaxResult error(I18nMessageKey messageKey, Object data, Object[] args)
+    {
+        String msg = args != null && args.length > 0 
+            ? MessageUtils.message(messageKey, args) 
+            : MessageUtils.message(messageKey);
+        return new AjaxResult(HttpStatus.ERROR, msg, data);
+    }
+
+    /**
+     * 返回错误消息（支持多语言）
+     * 
+     * @param code 状态码
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 错误消息
+     */
+    public static AjaxResult error(int code, I18nMessageKey messageKey, Object... args)
+    {
+        return new AjaxResult(code, MessageUtils.message(messageKey, args), null);
+    }
+
+    /**
+     * 返回警告消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @return 警告消息
+     */
+    public static AjaxResult warn(I18nMessageKey messageKey)
+    {
+        return AjaxResult.warn(messageKey, null, (Object[]) null);
+    }
+
+    /**
+     * 返回警告消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @param args 消息参数
+     * @return 警告消息
+     */
+    public static AjaxResult warn(I18nMessageKey messageKey, Object... args)
+    {
+        return AjaxResult.warn(messageKey, null, args);
+    }
+
+    /**
+     * 返回警告消息（支持多语言）
+     * 
+     * @param messageKey 消息键
+     * @param data 数据对象
+     * @param args 消息参数
+     * @return 警告消息
+     */
+    public static AjaxResult warn(I18nMessageKey messageKey, Object data, Object[] args)
+    {
+        String msg = args != null && args.length > 0 
+            ? MessageUtils.message(messageKey, args) 
+            : MessageUtils.message(messageKey);
+        return new AjaxResult(HttpStatus.WARN, msg, data);
     }
 
     /**
