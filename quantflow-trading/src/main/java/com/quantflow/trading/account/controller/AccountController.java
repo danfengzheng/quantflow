@@ -7,6 +7,7 @@ import java.util.Map;
 import com.quantflow.common.annotation.Log;
 import com.quantflow.common.core.controller.BaseController;
 import com.quantflow.common.core.domain.AjaxResult;
+import com.quantflow.common.constant.TradingMessageKeys;
 import com.quantflow.common.core.page.TableDataInfo;
 import com.quantflow.common.enums.BusinessType;
 import com.quantflow.common.utils.poi.ExcelUtil;
@@ -119,13 +120,13 @@ public class AccountController extends BaseController
         try {
             Map<String, Object> result = accountTestService.testConnection(id);
             if ((Boolean) result.get("success")) {
-                return AjaxResult.success("测试连接成功", result);
+                return AjaxResult.success(TradingMessageKeys.ACCOUNT_TEST_CONNECTION_SUCCESS, result);
             } else {
                 return AjaxResult.error((String) result.get("message"));
             }
         } catch (Exception e) {
             log.error("测试连接失败", e);
-            return AjaxResult.error("测试连接失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.ACCOUNT_TEST_CONNECTION_FAILED, e.getMessage());
         }
     }
 
@@ -144,7 +145,7 @@ public class AccountController extends BaseController
             }
         } catch (Exception e) {
             log.error("获取余额失败", e);
-            return AjaxResult.error("获取余额失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.ACCOUNT_GET_BALANCE_FAILED, e.getMessage());
         }
     }
 }

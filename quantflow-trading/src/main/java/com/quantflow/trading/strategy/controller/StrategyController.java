@@ -5,6 +5,7 @@ import java.util.List;
 import com.quantflow.common.annotation.Log;
 import com.quantflow.common.core.controller.BaseController;
 import com.quantflow.common.core.domain.AjaxResult;
+import com.quantflow.common.constant.TradingMessageKeys;
 import com.quantflow.common.core.page.TableDataInfo;
 import com.quantflow.common.enums.BusinessType;
 import com.quantflow.common.utils.poi.ExcelUtil;
@@ -120,11 +121,11 @@ public class StrategyController extends BaseController
     public AjaxResult startStrategy(@PathVariable Long id) {
         Strategy strategy = strategyService.selectStrategyById(id);
         if (strategy == null) {
-            return AjaxResult.error("策略不存在");
+            return AjaxResult.error(TradingMessageKeys.STRATEGY_NOT_FOUND);
         }
 
         if (strategy.getStatus() == 2) {
-            return AjaxResult.error("策略已在运行中");
+            return AjaxResult.error(TradingMessageKeys.STRATEGY_ALREADY_RUNNING);
         }
 
         // 更新状态为运行中
@@ -132,7 +133,7 @@ public class StrategyController extends BaseController
         strategyService.updateStrategy(strategy);
 
         log.info("启动策略：id={}, name={}", id, strategy.getName());
-        return AjaxResult.success("策略已启动");
+        return AjaxResult.success(TradingMessageKeys.STRATEGY_STARTED);
     }
 
     /**
@@ -143,11 +144,11 @@ public class StrategyController extends BaseController
     public AjaxResult stopStrategy(@PathVariable Long id) {
         Strategy strategy = strategyService.selectStrategyById(id);
         if (strategy == null) {
-            return AjaxResult.error("策略不存在");
+            return AjaxResult.error(TradingMessageKeys.STRATEGY_NOT_FOUND);
         }
 
         if (strategy.getStatus() != 2) {
-            return AjaxResult.error("策略未在运行");
+            return AjaxResult.error(TradingMessageKeys.STRATEGY_NOT_RUNNING);
         }
 
         // 更新状态为停用
@@ -155,7 +156,7 @@ public class StrategyController extends BaseController
         strategyService.stopStrategy(strategy);
 
         log.info("停止策略：id={}, name={}", id, strategy.getName());
-        return AjaxResult.success("策略已停止");
+        return AjaxResult.success(TradingMessageKeys.STRATEGY_STOPPED);
     }
 
     @PreAuthorize("@ss.hasPermi('trading:strategy:execute')")
@@ -163,15 +164,15 @@ public class StrategyController extends BaseController
     public AjaxResult executeStrategy(@PathVariable Long id) {
         Strategy strategy = strategyService.selectStrategyById(id);
         if (strategy == null) {
-            return AjaxResult.error("策略不存在");
+            return AjaxResult.error(TradingMessageKeys.STRATEGY_NOT_FOUND);
         }
 
         try {
             strategyExecuteService.executeStrategy(strategy);
-            return AjaxResult.success("策略执行完成");
+            return AjaxResult.success(TradingMessageKeys.STRATEGY_EXECUTE_COMPLETED);
         } catch (Exception e) {
             log.error("执行策略失败", e);
-            return AjaxResult.error("执行策略失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.STRATEGY_EXECUTE_FAILED_WITH_MSG, e.getMessage());
         }
     }
 }

@@ -84,7 +84,7 @@ public class BaseController
     {
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(HttpStatus.SUCCESS);
-        rspData.setMsg("查询成功");
+        rspData.setMsg(com.quantflow.common.utils.MessageUtils.message(com.quantflow.common.constant.MessageKeys.QUERY_SUCCESS));
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());
         return rspData;

@@ -2,6 +2,7 @@ package com.quantflow.trading.market.controller;
 
 import com.quantflow.common.core.controller.BaseController;
 import com.quantflow.common.core.domain.AjaxResult;
+import com.quantflow.common.constant.TradingMessageKeys;
 import com.quantflow.trading.market.domain.KLine;
 import com.quantflow.trading.market.domain.MarketTicker;
 import com.quantflow.trading.market.service.MarketDataService;
@@ -36,7 +37,7 @@ public class MarketController extends BaseController {
             return AjaxResult.success(ticker);
         } catch (Exception e) {
             log.error("获取行情失败", e);
-            return AjaxResult.error("获取行情失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.MARKET_GET_TICKER_FAILED, e.getMessage());
         }
     }
 
@@ -52,7 +53,7 @@ public class MarketController extends BaseController {
             return AjaxResult.success(tickers);
         } catch (Exception e) {
             log.error("批量获取行情失败", e);
-            return AjaxResult.error("批量获取行情失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.MARKET_GET_TICKERS_FAILED, e.getMessage());
         }
     }
 
@@ -71,7 +72,7 @@ public class MarketController extends BaseController {
             return AjaxResult.success(klines);
         } catch (Exception e) {
             log.error("获取K线数据失败", e);
-            return AjaxResult.error("获取K线数据失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.MARKET_GET_KLINES_FAILED, e.getMessage());
         }
     }
 }

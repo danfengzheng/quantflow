@@ -2,6 +2,7 @@ package com.quantflow.trading.statistics.controller;
 
 import com.quantflow.common.core.controller.BaseController;
 import com.quantflow.common.core.domain.AjaxResult;
+import com.quantflow.common.constant.TradingMessageKeys;
 import com.quantflow.trading.statistics.service.StatisticsService;
 import com.quantflow.trading.statistics.vo.TradingStatisticsVO;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class StatisticsController extends BaseController {
             return AjaxResult.success(statistics);
         } catch (Exception e) {
             log.error("获取交易统计失败", e);
-            return AjaxResult.error("获取交易统计失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.STATISTICS_GET_TRADING_STATISTICS_FAILED, e.getMessage());
         }
     }
 }

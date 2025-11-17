@@ -57,6 +57,8 @@ public enum MessageKeys implements I18nMessageKey {
     OPERATION_SUCCESS("1013", "操作成功"),
     /** 操作失败 */
     OPERATION_FAILED("1014", "操作失败"),
+    /** 查询成功 */
+    QUERY_SUCCESS("1015", "查询成功"),
     
     // ========== 验证消息 (2000-2999) ==========
     /** 长度必须在{min}到{max}个字符之间 */

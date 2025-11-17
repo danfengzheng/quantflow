@@ -6,6 +6,7 @@ import errorCode from '@/utils/errorCode'
 import { tansParams, blobValidate } from "@/utils/ruoyi"
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
+import i18n from '@/lang'
 
 let downloadLoadingInstance
 // 是否显示重新登录
@@ -29,6 +30,9 @@ service.interceptors.request.use(config => {
   if (getToken() && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
+  // 设置 Accept-Language 请求头，从 i18n 或 localStorage 获取当前语言
+  const currentLang = i18n.locale || localStorage.getItem('lang') || 'zh-CN'
+  config.headers['Accept-Language'] = currentLang
   // get请求映射params参数
   if (config.method === 'get' && config.params) {
     let url = config.url + '?' + tansParams(config.params)

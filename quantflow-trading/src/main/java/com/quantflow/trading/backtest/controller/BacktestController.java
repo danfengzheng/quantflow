@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quantflow.common.annotation.Log;
 import com.quantflow.common.core.controller.BaseController;
 import com.quantflow.common.core.domain.AjaxResult;
+import com.quantflow.common.constant.TradingMessageKeys;
 import com.quantflow.common.enums.BusinessType;
 import com.quantflow.trading.backtest.domain.Backtest;
 import com.quantflow.trading.backtest.service.IBacktestService;
@@ -119,10 +120,10 @@ public class BacktestController extends BaseController
         try {
             // 异步执行回测
             backtestExecuteService.executeBacktest(id);
-            return AjaxResult.success("回测任务已启动");
+            return AjaxResult.success(TradingMessageKeys.BACKTEST_STARTED);
         } catch (Exception e) {
             log.error("启动回测失败", e);
-            return AjaxResult.error("启动回测失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.BACKTEST_START_FAILED, e.getMessage());
         }
     }
 
@@ -135,18 +136,18 @@ public class BacktestController extends BaseController
         try {
             Backtest backtest = backtestService.selectBacktestById(id);
             if (backtest == null) {
-                return AjaxResult.error("回测任务不存在");
+                return AjaxResult.error(TradingMessageKeys.BACKTEST_NOT_FOUND);
             }
 
             if (backtest.getResult() == null || backtest.getResult().isEmpty()) {
-                return AjaxResult.error("回测结果不存在");
+                return AjaxResult.error(TradingMessageKeys.BACKTEST_RESULT_NOT_FOUND);
             }
 
             BacktestResultVO result = JSON.parseObject(backtest.getResult(), BacktestResultVO.class);
             return AjaxResult.success(result);
         } catch (Exception e) {
             log.error("获取回测结果失败", e);
-            return AjaxResult.error("获取回测结果失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.BACKTEST_GET_RESULT_FAILED, e.getMessage());
         }
     }
 }

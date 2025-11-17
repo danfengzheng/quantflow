@@ -2,6 +2,7 @@ package com.quantflow.trading.dashboard.controller;
 
 import com.quantflow.common.core.controller.BaseController;
 import com.quantflow.common.core.domain.AjaxResult;
+import com.quantflow.common.constant.TradingMessageKeys;
 import com.quantflow.trading.dashboard.service.DashboardService;
 import com.quantflow.trading.dashboard.vo.DashboardVO;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class DashboardController extends BaseController {
             return AjaxResult.success(data);
         } catch (Exception e) {
             log.error("获取仪表盘数据失败", e);
-            return AjaxResult.error("获取仪表盘数据失败：" + e.getMessage());
+            return AjaxResult.error(TradingMessageKeys.DASHBOARD_GET_DATA_FAILED, e.getMessage());
         }
     }
 }
