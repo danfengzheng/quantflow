@@ -148,6 +148,49 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 多语言设置（折叠面板） -->
+        <el-row>
+          <el-col :span="24">
+            <el-collapse v-model="activeI18nCollapse" style="margin-bottom: 10px;">
+              <el-collapse-item title="多语言设置" name="i18n">
+                <el-form :model="i18nForm" label-width="120px" size="small">
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="简体中文 (zh-CN)">
+                        <el-input v-model="i18nForm.dept_name['zh-CN']" placeholder="请输入简体中文部门名称" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="繁体中文 (zh-TW)">
+                        <el-input v-model="i18nForm.dept_name['zh-TW']" placeholder="請輸入繁體中文部門名稱" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="English (en-US)">
+                        <el-input v-model="i18nForm.dept_name['en-US']" placeholder="Enter English dept name" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="日本語 (ja-JP)">
+                        <el-input v-model="i18nForm.dept_name['ja-JP']" placeholder="部門名を入力してください" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+                <div style="margin-top: 10px; text-align: right;">
+                  <el-button type="primary" size="small" @click="saveI18nTranslationsInline" :disabled="!form.deptId">
+                    {{ $t('button.save') || '保存多语言' }}
+                  </el-button>
+                  <el-button size="small" @click="loadI18nTranslations(form.deptId)" :disabled="!form.deptId">
+                    {{ $t('button.refresh') || '刷新' }}
+                  </el-button>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">{{ $t('button.submit')}}</el-button>
@@ -159,6 +202,7 @@
 
 <script>
 import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from "@/api/system/dept"
+import { getFieldTranslations, saveFieldTranslations } from "@/api/system/i18n"
 import Treeselect from "@riophae/vue-treeselect"
 import "@riophae/vue-treeselect/dist/vue-treeselect.css"
 
@@ -191,6 +235,16 @@ export default {
       },
       // 表单参数
       form: {},
+      // 多语言折叠面板（主表单中）
+      activeI18nCollapse: [],
+      i18nForm: {
+        dept_name: {
+          'zh-CN': '',
+          'zh-TW': '',
+          'en-US': '',
+          'ja-JP': ''
+        }
+      },
       // 表单校验
       rules: {
         parentId: [
@@ -259,6 +313,16 @@ export default {
         email: undefined,
         status: "0"
       }
+      // 重置多语言表单
+      this.activeI18nCollapse = []
+      this.i18nForm = {
+        dept_name: {
+          'zh-CN': '',
+          'zh-TW': '',
+          'en-US': '',
+          'ja-JP': ''
+        }
+      }
       this.resetForm("form")
     },
     /** 搜索按钮操作 */
@@ -297,6 +361,17 @@ export default {
         this.form = response.data
         this.open = true
         this.title = this.$t('module.system.dept.title') + ' - ' + this.$t('button.edit')
+        // 加载多语言翻译
+        this.loadI18nTranslations(row.deptId)
+        // 自动展开多语言折叠面板（如果已有翻译数据）
+        this.$nextTick(() => {
+          setTimeout(() => {
+            const hasTranslations = Object.values(this.i18nForm.dept_name).some(v => v)
+            if (hasTranslations && !this.activeI18nCollapse.includes('i18n')) {
+              this.activeI18nCollapse.push('i18n')
+            }
+          }, 300)
+        })
         listDeptExcludeChild(row.deptId).then(response => {
           this.deptOptions = this.handleTree(response.data, "deptId")
           if (this.deptOptions.length == 0) {
@@ -306,6 +381,35 @@ export default {
         })
       })
     },
+    /** 加载多语言翻译 */
+    loadI18nTranslations(deptId) {
+      if (!deptId) return
+      
+      // 加载部门名称的多语言翻译
+      getFieldTranslations('dept', deptId, 'dept_name').then(response => {
+        if (response.data) {
+          Object.assign(this.i18nForm.dept_name, response.data)
+        }
+      }).catch(() => {
+        // 如果加载失败，使用默认值
+      })
+    },
+    /** 保存多语言翻译（主表单中） */
+    saveI18nTranslationsInline() {
+      if (!this.form.deptId) {
+        this.$modal.msgError('请先保存部门基本信息')
+        return
+      }
+      
+      // 保存部门名称的多语言翻译
+      saveFieldTranslations('dept', this.form.deptId, 'dept_name', this.i18nForm.dept_name).then(() => {
+        this.$modal.msgSuccess(this.$t('message.success.edit') || '保存成功')
+        // 刷新部门列表
+        this.getList()
+      }).catch(() => {
+        this.$modal.msgError('保存多语言翻译失败')
+      })
+    },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
@@ -313,12 +417,38 @@ export default {
           if (this.form.deptId != undefined) {
             updateDept(this.form).then(response => {
               this.$modal.msgSuccess(this.$t('message.success.edit'))
+              // 如果是编辑，自动保存多语言翻译（如果折叠面板已展开且有数据）
+              if (this.form.deptId && this.activeI18nCollapse.includes('i18n')) {
+                this.saveI18nTranslationsInline()
+              }
               this.open = false
               this.getList()
+              // 重新加载多语言翻译
+              if (this.form.deptId) {
+                this.loadI18nTranslations(this.form.deptId)
+              }
             })
           } else {
             addDept(this.form).then(response => {
               this.$modal.msgSuccess(this.$t('message.success.add'))
+              // 新增后获取部门ID并保存多语言翻译
+              if (response.data && response.data.deptId) {
+                this.form.deptId = response.data.deptId
+                // 如果折叠面板已展开，保存多语言翻译
+                if (this.activeI18nCollapse.includes('i18n')) {
+                  // 确保默认语言有值
+                  if (!this.i18nForm.dept_name['zh-CN']) {
+                    this.i18nForm.dept_name['zh-CN'] = this.form.deptName || ''
+                  }
+                  this.saveI18nTranslationsInline()
+                } else {
+                  // 否则只保存默认语言（zh-CN）的翻译
+                  const defaultTranslations = {
+                    'zh-CN': this.form.deptName || ''
+                  }
+                  saveFieldTranslations('dept', this.form.deptId, 'dept_name', defaultTranslations).catch(() => {})
+                }
+              }
               this.open = false
               this.getList()
             })

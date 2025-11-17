@@ -15,12 +15,15 @@ import com.quantflow.common.core.domain.entity.SysUser;
 import com.quantflow.common.core.text.Convert;
 import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
+import com.quantflow.common.utils.I18nUtils;
 import com.quantflow.common.utils.SecurityUtils;
 import com.quantflow.common.utils.StringUtils;
 import com.quantflow.common.utils.spring.SpringUtils;
+import com.quantflow.common.core.domain.entity.SysI18nTranslation;
 import com.quantflow.system.mapper.SysDeptMapper;
 import com.quantflow.system.mapper.SysRoleMapper;
 import com.quantflow.system.service.ISysDeptService;
+import com.quantflow.system.service.ISysI18nTranslationService;
 
 /**
  * 部门管理 服务实现
@@ -36,6 +39,9 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Autowired
     private SysRoleMapper roleMapper;
 
+    @Autowired
+    private ISysI18nTranslationService i18nTranslationService;
+
     /**
      * 查询部门管理数据
      * 
@@ -46,7 +52,18 @@ public class SysDeptServiceImpl implements ISysDeptService
     @DataScope(deptAlias = "d")
     public List<SysDept> selectDeptList(SysDept dept)
     {
-        return deptMapper.selectDeptList(dept);
+        List<SysDept> deptList = deptMapper.selectDeptList(dept);
+        // 加载多语言翻译
+        String locale = I18nUtils.getCurrentLocale();
+        for (SysDept deptItem : deptList)
+        {
+            String translation = i18nTranslationService.getTranslation("dept", deptItem.getDeptId(), "dept_name", locale);
+            if (StringUtils.isNotEmpty(translation))
+            {
+                deptItem.setDeptName(translation);
+            }
+        }
+        return deptList;
     }
 
     /**
@@ -219,7 +236,35 @@ public class SysDeptServiceImpl implements ISysDeptService
             throw new ServiceException(MessageKeys.DEPT_DISABLED_CANNOT_ADD);
         }
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
-        return deptMapper.insertDept(dept);
+        int result = deptMapper.insertDept(dept);
+        if (result > 0 && dept.getDeptId() != null)
+        {
+            // 自动保存默认语言（zh-CN）的翻译
+            saveDeptI18n(dept.getDeptId(), dept.getDeptName());
+        }
+        return result;
+    }
+
+    /**
+     * 保存部门多语言翻译
+     */
+    private void saveDeptI18n(Long deptId, String deptName)
+    {
+        if (deptId == null || StringUtils.isEmpty(deptName))
+        {
+            return;
+        }
+        
+        String defaultLocale = I18nUtils.localeToString(com.quantflow.common.constant.Constants.DEFAULT_LOCALE);
+        
+        SysI18nTranslation translation = new SysI18nTranslation();
+        translation.setEntityType("dept");
+        translation.setEntityId(deptId);
+        translation.setFieldName("dept_name");
+        translation.setLocale(defaultLocale);
+        translation.setTranslation(deptName);
+        translation.setCreateBy(SecurityUtils.getUsername());
+        i18nTranslationService.saveOrUpdateI18nTranslation(translation);
     }
 
     /**
@@ -241,6 +286,11 @@ public class SysDeptServiceImpl implements ISysDeptService
             updateDeptChildren(dept.getDeptId(), newAncestors, oldAncestors);
         }
         int result = deptMapper.updateDept(dept);
+        if (result > 0 && dept.getDeptId() != null)
+        {
+            // 自动更新默认语言（zh-CN）的翻译
+            saveDeptI18n(dept.getDeptId(), dept.getDeptName());
+        }
         if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()) && StringUtils.isNotEmpty(dept.getAncestors())
                 && !StringUtils.equals("0", dept.getAncestors()))
         {
@@ -291,6 +341,8 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Override
     public int deleteDeptById(Long deptId)
     {
+        // 删除部门的多语言翻译
+        i18nTranslationService.deleteI18nTranslationByEntity("dept", deptId);
         return deptMapper.deleteDeptById(deptId);
     }
 
