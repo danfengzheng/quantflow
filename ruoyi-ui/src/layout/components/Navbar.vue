@@ -28,8 +28,10 @@
             {{ currentLangLabel }}
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="zh-CN">中文</el-dropdown-item>
+            <el-dropdown-item command="zh-CN">简体中文</el-dropdown-item>
+            <el-dropdown-item command="zh-TW">繁體中文</el-dropdown-item>
             <el-dropdown-item command="en-US">English</el-dropdown-item>
+            <el-dropdown-item command="ja-JP">日本語</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -97,7 +99,14 @@ export default {
       }
     },
     currentLangLabel() {
-      return this.$i18n && this.$i18n.locale === 'en-US' ? 'EN' : '中文'
+      const locale = this.$i18n && this.$i18n.locale
+      const langMap = {
+        'zh-CN': '简体',
+        'zh-TW': '繁體',
+        'en-US': 'EN',
+        'ja-JP': '日本語'
+      }
+      return langMap[locale] || '简体'
     }
   },
   methods: {

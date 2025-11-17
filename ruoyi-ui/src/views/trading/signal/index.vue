@@ -9,7 +9,7 @@
           size="mini"
           @click="handleAnalyze"
           v-hasPermi="['system:signal:analyze']"
-        >实时分析</el-button>
+        >{{ $t('field.realtimeAnalyze') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -18,7 +18,7 @@
           size="mini"
           @click="handleBatchAnalyze"
           v-hasPermi="['system:signal:analyze']"
-        >批量分析</el-button>
+        >{{ $t('field.batchAnalyze') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -27,7 +27,7 @@
           size="mini"
           @click="handleRecommend"
           v-hasPermi="['system:signal:analyze']"
-        >推荐交易</el-button>
+        >{{ $t('field.recommendTrade') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -36,7 +36,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:signal:export']"
-        >导出</el-button>
+        >{{ $t('button.export') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -45,23 +45,23 @@
           size="mini"
           @click="handleDictManage"
           v-hasPermi="['system:dict:list']"
-        >交易对配置</el-button>
+        >{{ $t('field.symbolConfig') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <!-- 搜索栏 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
-      <el-form-item label="交易对" prop="symbol">
+      <el-form-item :label="$t('field.symbol')" prop="symbol">
         <el-input
           v-model="queryParams.symbol"
-          placeholder="请输入交易对"
+          :placeholder="$t('placeholder.symbol')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="K线周期" prop="interval">
-        <el-select v-model="queryParams.interval" placeholder="请选择K线周期" clearable>
+      <el-form-item :label="$t('field.interval')" prop="interval">
+        <el-select v-model="queryParams.interval" :placeholder="$t('placeholder.selectInterval')" clearable>
           <el-option
             v-for="dict in dict.type.qf_interval"
             :key="dict.value"
@@ -70,8 +70,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="推荐操作" prop="recommendAction">
-        <el-select v-model="queryParams.recommendAction" placeholder="请选择推荐操作" clearable>
+      <el-form-item :label="$t('field.recommendAction')" prop="recommendAction">
+        <el-select v-model="queryParams.recommendAction" :placeholder="$t('placeholder.selectRecommendAction')" clearable>
           <el-option
             v-for="dict in dict.type.qf_order_side"
             :key="dict.value"
@@ -80,8 +80,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="风险等级" prop="riskLevel">
-        <el-select v-model="queryParams.recommendAction" placeholder="请选择风险等级" clearable>
+      <el-form-item :label="$t('field.riskLevel')" prop="riskLevel">
+        <el-select v-model="queryParams.recommendAction" :placeholder="$t('placeholder.selectRiskLevel')" clearable>
           <el-option
             v-for="dict in dict.type.market_risk"
             :key="dict.value"
@@ -91,26 +91,26 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
     <!-- 数据表格 -->
     <el-table v-loading="loading" :data="signalList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="交易对" align="center" prop="symbol" width="120">
+      <el-table-column :label="$t('field.symbol')" align="center" prop="symbol" width="120">
         <template slot-scope="scope">
           <el-tag type="info">{{ scope.row.symbol }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="当前价格" align="center" prop="currentPrice" width="120" />
-      <el-table-column label="K线周期" align="center" prop="interval" width="100">
+      <el-table-column :label="$t('field.currentPrice')" align="center" prop="currentPrice" width="120" />
+      <el-table-column :label="$t('field.interval')" align="center" prop="interval" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.qf_interval" :value="scope.row.interval"/>
         </template>
       </el-table-column>
-      <el-table-column label="综合评分" align="center" prop="signalScore" width="100">
+      <el-table-column :label="$t('field.signalScore')" align="center" prop="signalScore" width="100">
         <template slot-scope="scope">
           <el-progress :percentage="scope.row.signalScore"
                        :color="getScoreColor(scope.row.signalScore)"
@@ -118,14 +118,14 @@
                        :stroke-width="22"></el-progress>
         </template>
       </el-table-column>
-      <el-table-column label="推荐操作" align="center" prop="recommendAction" width="100">
+      <el-table-column :label="$t('field.recommendAction')" align="center" prop="recommendAction" width="100">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.recommendAction === 'BUY'" type="success">买入</el-tag>
-          <el-tag v-else-if="scope.row.recommendAction === 'SELL'" type="danger">卖出</el-tag>
+          <el-tag v-if="scope.row.recommendAction === 'BUY'" type="success">{{ $t('field.buySignal') }}</el-tag>
+          <el-tag v-else-if="scope.row.recommendAction === 'SELL'" type="danger">{{ $t('field.sellSignal') }}</el-tag>
           <el-tag v-else type="info">持有</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="趋势" align="center" prop="trendDirection" width="80">
+      <el-table-column :label="$t('field.trend')" align="center" prop="trendDirection" width="80">
         <template slot-scope="scope">
           <i v-if="scope.row.trendDirection === 'UP'" class="el-icon-top" style="color: #67C23A; font-size: 20px;"></i>
           <i v-else-if="scope.row.trendDirection === 'DOWN'" class="el-icon-bottom" style="color: #F56C6C; font-size: 20px;"></i>
@@ -139,25 +139,25 @@
           <el-tag v-else type="info">{{ scope.row.rsiValue }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="MACD信号" align="center" prop="macdSignal" width="100">
+      <el-table-column :label="$t('field.macdSignal')" align="center" prop="macdSignal" width="100">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.macdSignal === '金叉'" type="success">金叉</el-tag>
-          <el-tag v-else-if="scope.row.macdSignal === '死叉'" type="danger">死叉</el-tag>
+          <el-tag v-if="scope.row.macdSignal === '金叉'" type="success">{{ $t('field.goldenCross') }}</el-tag>
+          <el-tag v-else-if="scope.row.macdSignal === '死叉'" type="danger">{{ $t('field.deathCross') }}</el-tag>
           <el-tag v-else type="info">{{ scope.row.macdSignal }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="风险等级" align="center" prop="riskLevel" width="100">
+      <el-table-column :label="$t('field.riskLevel')" align="center" prop="riskLevel" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.market_risk" :value="scope.row.riskLevel"/>
         </template>
       </el-table-column>
-      <el-table-column label="推荐原因" align="center" prop="recommendReason" :show-overflow-tooltip="true" min-width="200" />
-      <el-table-column label="分析时间" align="center" prop="analysisTime" width="160">
+      <el-table-column :label="$t('field.recommendReason')" align="center" prop="recommendReason" :show-overflow-tooltip="true" min-width="200" />
+      <el-table-column :label="$t('field.analysisTime')" align="center" prop="analysisTime" width="160">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.analysisTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120">
+      <el-table-column :label="$t('field.operate')" align="center" class-name="small-padding fixed-width" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -165,7 +165,7 @@
             icon="el-icon-view"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:signal:query']"
-          >详情</el-button>
+          >{{ $t('button.detail') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -179,11 +179,11 @@
     />
 
     <!-- 单个分析对话框 -->
-    <el-dialog title="实时市场分析" :visible.sync="analyzeOpen" width="600px" append-to-body>
+    <el-dialog :title="$t('field.realtimeMarketAnalyze')" :visible.sync="analyzeOpen" width="600px" append-to-body>
       <el-form ref="analyzeForm" :model="analyzeForm" :rules="analyzeRules" label-width="100px">
-        <el-form-item label="交易对" prop="symbol">
-          <el-input v-model="analyzeForm.symbol" placeholder="请输入交易对，如BTCUSDT">
-            <el-select v-model="analyzeForm.symbol" slot="prepend" placeholder="快速选择" style="width: 150px;" filterable>
+        <el-form-item :label="$t('field.symbol')" prop="symbol">
+          <el-input v-model="analyzeForm.symbol" :placeholder="$t('placeholder.enterSymbol')">
+            <el-select v-model="analyzeForm.symbol" slot="prepend" :placeholder="$t('field.quickSelect')" style="width: 150px;" filterable>
               <el-option
                 v-for="item in availableSymbols"
                 :key="item.value"
@@ -193,8 +193,8 @@
             </el-select>
           </el-input>
         </el-form-item>
-        <el-form-item label="K线周期" prop="interval">
-          <el-select v-model="analyzeForm.interval" placeholder="请选择K线周期" clearable>
+        <el-form-item :label="$t('field.interval')" prop="interval">
+          <el-select v-model="analyzeForm.interval" :placeholder="$t('placeholder.selectInterval')" clearable>
             <el-option
               v-for="dict in dict.type.qf_interval"
               :key="dict.value"
@@ -205,17 +205,17 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitAnalyze" :loading="analyzeLoading">开始分析</el-button>
-        <el-button @click="analyzeOpen = false">取 消</el-button>
+        <el-button type="primary" @click="submitAnalyze" :loading="analyzeLoading">{{ $t('field.startAnalyze') }}</el-button>
+        <el-button @click="analyzeOpen = false">{{ $t('button.cancel') }}</el-button>
       </div>
     </el-dialog>
 
     <!-- 批量分析对话框 -->
-    <el-dialog title="批量分析多个交易对" :visible.sync="batchAnalyzeOpen" width="800px" append-to-body>
+    <el-dialog :title="$t('field.batchAnalyzeTitle')" :visible.sync="batchAnalyzeOpen" width="800px" append-to-body>
       <el-form ref="batchAnalyzeForm" :model="batchAnalyzeForm" :rules="batchAnalyzeRules" label-width="100px">
-        <el-form-item label="K线周期" prop="interval">
+        <el-form-item :label="$t('field.interval')" prop="interval">
 
-          <el-select v-model="batchAnalyzeForm.interval" placeholder="请选择K线周期" clearable>
+          <el-select v-model="batchAnalyzeForm.interval" :placeholder="$t('placeholder.selectInterval')" clearable>
             <el-option
               v-for="dict in dict.type.qf_interval"
               :key="dict.value"
@@ -225,7 +225,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="选择交易对" prop="symbols">
+        <el-form-item :label="$t('field.selectSymbols')" prop="symbols">
           <el-checkbox-group v-model="batchAnalyzeForm.symbols">
             <el-row :gutter="20">
               <el-col :span="6" v-for="symbol in availableSymbols" :key="symbol.value">
@@ -243,76 +243,76 @@
           </el-checkbox-group>
         </el-form-item>
 
-        <el-form-item label="快捷选择">
+        <el-form-item :label="$t('field.quickSelectLabel')">
           <el-button size="small" type="primary" @click="selectByGroup('mainstream')">
-            主流币 ({{ getGroupCount('mainstream') }})
+            {{ $t('field.mainstream') }} ({{ getGroupCount('mainstream') }})
           </el-button>
           <el-button size="small" type="success" @click="selectByGroup('top10')">
-            Top10 ({{ getGroupCount('top10') }})
+            {{ $t('field.top10') }} ({{ getGroupCount('top10') }})
           </el-button>
           <el-button size="small" type="info" @click="selectAllCoins">
-            全选 ({{ availableSymbols.length }})
+            {{ $t('common.selectAll') }} ({{ availableSymbols.length }})
           </el-button>
-          <el-button size="small" @click="clearSelection">清空</el-button>
+          <el-button size="small" @click="clearSelection">{{ $t('button.clear') }}</el-button>
         </el-form-item>
 
-        <el-form-item label="自定义" prop="customSymbols">
+        <el-form-item :label="$t('field.custom')" prop="customSymbols">
           <el-input
             v-model="batchAnalyzeForm.customSymbols"
             type="textarea"
             :rows="3"
-            placeholder="输入其他交易对，用逗号或换行分隔，如：PEPEUSDT,SHIBUSDT"
+            :placeholder="$t('field.customSymbolsPlaceholder')"
           />
           <span style="color: #999; font-size: 12px;">
-            提示：输入后点击"添加自定义"按钮 |
-            <el-link type="primary" :underline="false" @click="handleDictManage">去字典配置</el-link>
+            {{ $t('field.customSymbolsTip') }} |
+            <el-link type="primary" :underline="false" @click="handleDictManage">{{ $t('field.goToDict') }}</el-link>
           </span>
         </el-form-item>
 
         <el-form-item>
-          <el-button size="small" @click="addCustomSymbols">添加自定义交易对</el-button>
+          <el-button size="small" @click="addCustomSymbols">{{ $t('field.addCustomSymbols') }}</el-button>
         </el-form-item>
 
         <el-alert
-          title="提示信息"
+          :title="$t('field.tipInfo')"
           type="info"
           :closable="false"
           style="margin-bottom: 20px;">
-          已选择 <strong style="color: #409EFF;">{{ batchAnalyzeForm.symbols.length }}</strong> 个交易对
+          {{ $t('field.selectedCount', [batchAnalyzeForm.symbols.length]) }}
           <span v-if="availableSymbols.length === 0" style="color: #F56C6C; margin-left: 10px;">
-            (未配置交易对，请先在字典中配置)
+            {{ $t('field.noSymbolsConfig') }}
           </span>
         </el-alert>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitBatchAnalyze" :loading="batchAnalyzeLoading">
-          开始批量分析
+          {{ $t('field.startAnalyze') }}
         </el-button>
-        <el-button @click="batchAnalyzeOpen = false">取 消</el-button>
+        <el-button @click="batchAnalyzeOpen = false">{{ $t('button.cancel') }}</el-button>
       </div>
     </el-dialog>
 
     <!-- 详情对话框 -->
     <el-dialog title="信号详情" :visible.sync="detailOpen" width="900px" append-to-body>
       <el-descriptions :column="2" border v-if="detailData">
-        <el-descriptions-item label="交易对">
+        <el-descriptions-item :label="$t('field.symbol')">
           <el-tag type="info" size="medium">{{ detailData.symbol }}</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="K线周期">{{ detailData.interval }}</el-descriptions-item>
-        <el-descriptions-item label="当前价格">
+        <el-descriptions-item :label="$t('field.interval')">{{ detailData.interval }}</el-descriptions-item>
+        <el-descriptions-item :label="$t('field.currentPrice')">
           <span style="font-size: 18px; font-weight: bold; color: #409EFF;">{{ detailData.currentPrice }}</span>
         </el-descriptions-item>
-        <el-descriptions-item label="综合评分">
+        <el-descriptions-item :label="$t('field.signalScore')">
           <el-progress :percentage="detailData.signalScore" :color="getScoreColor(detailData.signalScore)"></el-progress>
         </el-descriptions-item>
 
-        <el-descriptions-item label="推荐操作">
-          <el-tag v-if="detailData.recommendAction === 'BUY'" type="success" size="large">买入</el-tag>
-          <el-tag v-else-if="detailData.recommendAction === 'SELL'" type="danger" size="large">卖出</el-tag>
+        <el-descriptions-item :label="$t('field.recommendAction')">
+          <el-tag v-if="detailData.recommendAction === 'BUY'" type="success" size="large">{{ $t('field.buySignal') }}</el-tag>
+          <el-tag v-else-if="detailData.recommendAction === 'SELL'" type="danger" size="large">{{ $t('field.sellSignal') }}</el-tag>
           <el-tag v-else type="info" size="large">持有</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="风险等级">
+        <el-descriptions-item :label="$t('field.riskLevel')">
           <dict-tag :options="dict.type.market_risk" :value="detailData.riskLevel"/>
         </el-descriptions-item>
 
@@ -335,10 +335,10 @@
           <el-tag v-else type="info">正常</el-tag>
         </el-descriptions-item>
 
-        <el-descriptions-item label="MACD信号">{{ detailData.macdSignal }}</el-descriptions-item>
+        <el-descriptions-item :label="$t('field.macdSignal')">{{ detailData.macdSignal }}</el-descriptions-item>
         <el-descriptions-item label="布林带位置">{{ detailData.bollingerPosition }}</el-descriptions-item>
 
-        <el-descriptions-item label="趋势方向">
+        <el-descriptions-item :label="$t('field.trend')">
           <el-tag v-if="detailData.trendDirection === 'UP'" type="success">上涨</el-tag>
           <el-tag v-else-if="detailData.trendDirection === 'DOWN'" type="danger">下跌</el-tag>
           <el-tag v-else type="info">震荡</el-tag>
@@ -369,11 +369,11 @@
           <el-tag v-else type="success">低</el-tag>
         </el-descriptions-item>
 
-        <el-descriptions-item label="推荐原因" :span="2">
+        <el-descriptions-item :label="$t('field.recommendReason')" :span="2">
           <div style="line-height: 1.8;">{{ detailData.recommendReason }}</div>
         </el-descriptions-item>
 
-        <el-descriptions-item label="分析时间" :span="2">
+        <el-descriptions-item :label="$t('field.analysisTime')" :span="2">
           {{ parseTime(detailData.analysisTime) }}
         </el-descriptions-item>
       </el-descriptions>

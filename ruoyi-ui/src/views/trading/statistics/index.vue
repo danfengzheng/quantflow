@@ -2,9 +2,9 @@
   <div class="app-container">
     <el-card>
       <div slot="header">
-        <span>交易统计分析</span>
+        <span>{{ $t('module.trading.statistics.title') }}</span>
         <el-button style="float: right; padding: 3px 10px" type="primary" size="small" @click="loadData">
-          刷新
+          {{ $t('button.refresh') }}
         </el-button>
       </div>
 
@@ -12,13 +12,13 @@
       <el-row :gutter="20" style="margin-bottom: 30px;">
         <el-col :span="6">
           <div class="stat-box">
-            <div class="stat-title">总交易次数</div>
+            <div class="stat-title">{{ $t('field.totalTrades') }}</div>
             <div class="stat-value">{{ statistics.totalTrades || 0 }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="stat-box">
-            <div class="stat-title">胜率</div>
+            <div class="stat-title">{{ $t('field.winRate') }}</div>
             <div class="stat-value" :class="getWinRateClass()">
               {{ statistics.winRate || '0.00' }}%
             </div>
@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="6">
           <div class="stat-box">
-            <div class="stat-title">净盈利</div>
+            <div class="stat-title">{{ $t('field.netProfit') }}</div>
             <div class="stat-value" :class="getPnlClass()">
               {{ statistics.netProfit || '0.00' }}
             </div>
@@ -34,7 +34,7 @@
         </el-col>
         <el-col :span="6">
           <div class="stat-box">
-            <div class="stat-title">盈亏比</div>
+            <div class="stat-title">{{ $t('field.profitLossRatio') }}</div>
             <div class="stat-value">
               {{ statistics.profitLossRatio || '0.00' }}
             </div>
@@ -46,18 +46,18 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-card shadow="hover">
-            <div slot="header">盈利统计</div>
+            <div slot="header">{{ $t('field.profitStats') }}</div>
             <el-descriptions :column="2" border>
-              <el-descriptions-item label="盈利次数">
+              <el-descriptions-item :label="$t('field.profitTrades')">
                 {{ statistics.profitTrades || 0 }}
               </el-descriptions-item>
-              <el-descriptions-item label="总盈利">
+              <el-descriptions-item :label="$t('field.totalProfit')">
                 <span class="text-success">{{ statistics.totalProfit || '0.00' }}</span>
               </el-descriptions-item>
-              <el-descriptions-item label="平均盈利">
+              <el-descriptions-item :label="$t('field.avgProfit')">
                 <span class="text-success">{{ statistics.avgProfit || '0.00' }}</span>
               </el-descriptions-item>
-              <el-descriptions-item label="最大盈利">
+              <el-descriptions-item :label="$t('field.maxProfit')">
                 <span class="text-success">{{ statistics.maxProfit || '0.00' }}</span>
               </el-descriptions-item>
             </el-descriptions>
@@ -66,18 +66,18 @@
 
         <el-col :span="12">
           <el-card shadow="hover">
-            <div slot="header">亏损统计</div>
+            <div slot="header">{{ $t('field.lossStats') }}</div>
             <el-descriptions :column="2" border>
-              <el-descriptions-item label="亏损次数">
+              <el-descriptions-item :label="$t('field.lossTrades')">
                 {{ statistics.lossTrades || 0 }}
               </el-descriptions-item>
-              <el-descriptions-item label="总亏损">
+              <el-descriptions-item :label="$t('field.totalLoss')">
                 <span class="text-danger">{{ statistics.totalLoss || '0.00' }}</span>
               </el-descriptions-item>
-              <el-descriptions-item label="平均亏损">
+              <el-descriptions-item :label="$t('field.avgLoss')">
                 <span class="text-danger">{{ statistics.avgLoss || '0.00' }}</span>
               </el-descriptions-item>
-              <el-descriptions-item label="最大亏损">
+              <el-descriptions-item :label="$t('field.maxLoss')">
                 <span class="text-danger">{{ statistics.maxLoss || '0.00' }}</span>
               </el-descriptions-item>
             </el-descriptions>

@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="订单号" prop="orderNo">
+      <el-form-item :label="$t('field.orderNo')" prop="orderNo">
         <el-input
           v-model="queryParams.orderNo"
-          placeholder="请输入订单号"
+          :placeholder="$t('placeholder.orderNo')"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -17,24 +17,24 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="账户ID" prop="accountId">
+      <el-form-item :label="$t('field.accountId')" prop="accountId">
         <el-input
           v-model="queryParams.accountId"
-          placeholder="请输入账户ID"
+          :placeholder="$t('placeholder.accountId')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="交易对" prop="symbol">
+      <el-form-item :label="$t('field.symbol')" prop="symbol">
         <el-input
           v-model="queryParams.symbol"
-          placeholder="请输入交易对"
+          :placeholder="$t('placeholder.symbol')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="方向" prop="side">
-        <el-select v-model="queryParams.side" placeholder="请选择方向" clearable>
+      <el-form-item :label="$t('field.direction')" prop="side">
+        <el-select v-model="queryParams.side" :placeholder="$t('placeholder.selectDirection')" clearable>
           <el-option
             v-for="dict in dict.type.qf_order_side"
             :key="dict.value"
@@ -43,8 +43,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="类型" prop="type">
-        <el-select v-model="queryParams.type" placeholder="请选择类型" clearable>
+      <el-form-item :label="$t('field.orderType')" prop="type">
+        <el-select v-model="queryParams.type" :placeholder="$t('placeholder.selectOrderType')" clearable>
           <el-option
             v-for="dict in dict.type.qf_order_type"
             :key="dict.value"
@@ -53,18 +53,18 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="价格" prop="price">
+      <el-form-item :label="$t('field.price')" prop="price">
         <el-input
           v-model="queryParams.price"
-          placeholder="请输入价格"
+          :placeholder="$t('placeholder.price')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="数量" prop="quantity">
+      <el-form-item :label="$t('field.quantity')" prop="quantity">
         <el-input
           v-model="queryParams.quantity"
-          placeholder="请输入数量"
+          :placeholder="$t('placeholder.quantity')"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -77,7 +77,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="成交均价" prop="avgPrice">
+      <el-form-item :label="$t('field.avgPrice')" prop="avgPrice">
         <el-input
           v-model="queryParams.avgPrice"
           placeholder="请输入成交均价"
@@ -101,8 +101,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+      <el-form-item :label="$t('field.status')" prop="status">
+        <el-select v-model="queryParams.status" :placeholder="$t('placeholder.selectStatus')" clearable>
           <el-option
             v-for="dict in dict.type.qf_order_status"
             :key="dict.value"
@@ -120,8 +120,8 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -134,7 +134,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['trading:order:add']"
-        >新增</el-button>
+        >{{ $t('button.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -145,7 +145,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['trading:order:edit']"
-        >修改</el-button>
+        >{{ $t('button.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button

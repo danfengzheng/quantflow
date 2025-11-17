@@ -265,6 +265,106 @@ export default {
     // 通用
     operate: '操作',
     sort: '排序',
+    // 交易相关通用字段
+    symbol: '交易对',
+    quantity: '数量',
+    price: '价格',
+    direction: '方向',
+    buy: '买',
+    sell: '卖',
+    avgPrice: '成本价',
+    currentPrice: '当前价',
+    orderNo: '订单号',
+    side: '方向',
+    name: '名称',
+    code: '代码',
+    description: '描述',
+    accountId: '账户ID',
+    interval: 'K线周期',
+    paramsConfig: '参数配置',
+    unrealizedPnl: '未实现盈亏',
+    pnlRatio: '盈亏率',
+    reason: '原因',
+    time: '时间',
+    exchange: '交易所',
+    apiKey: 'API密钥',
+    strategyName: '策略名称',
+    strategyType: '策略类型',
+    orderType: '订单类型',
+    recommendAction: '推荐操作',
+    riskLevel: '风险等级',
+    signalType: '信号类型',
+    buySignal: '买入',
+    sellSignal: '卖出',
+    signalScore: '综合评分',
+    trend: '趋势',
+    macdSignal: 'MACD信号',
+    goldenCross: '金叉',
+    deathCross: '死叉',
+    recommendReason: '推荐原因',
+    analysisTime: '分析时间',
+    totalAsset: '总资产',
+    positionValue: '持仓市值',
+    totalPnl: '总盈亏',
+    runningStrategy: '运行策略',
+    todayStats: '今日统计',
+    tradeCount: '交易次数',
+    signalCount: '信号数量',
+    dailyPnl: '今日盈亏',
+    positionOverview: '持仓概览',
+    recentOrders: '最近订单',
+    recentSignals: '最近信号',
+    newSignal: '新信号',
+    newOrder: '新订单',
+    orderCreated: '订单 {0} 已创建',
+    orderStatus: '订单状态',
+    orderStatusChange: '订单 {0} 状态：{1}',
+    positionChange: '持仓变化',
+    positionUpdated: '您的持仓已更新',
+    riskAlert: '风控告警',
+    totalTrades: '总交易次数',
+    winRate: '胜率',
+    netProfit: '净盈利',
+    profitLossRatio: '盈亏比',
+    profitStats: '盈利统计',
+    lossStats: '亏损统计',
+    profitTrades: '盈利次数',
+    totalProfit: '总盈利',
+    avgProfit: '平均盈利',
+    maxProfit: '最大盈利',
+    lossTrades: '亏损次数',
+    totalLoss: '总亏损',
+    avgLoss: '平均亏损',
+    maxLoss: '最大亏损',
+    realtimeAnalyze: '实时分析',
+    batchAnalyze: '批量分析',
+    recommendTrade: '推荐交易',
+    symbolConfig: '交易对配置',
+    realtimeMarketAnalyze: '实时市场分析',
+    quickSelect: '快速选择',
+    startAnalyze: '开始分析',
+    batchAnalyzeTitle: '批量分析多个交易对',
+    selectSymbols: '选择交易对',
+    quickSelectLabel: '快捷选择',
+    mainstream: '主流币',
+    top10: 'Top10',
+    custom: '自定义',
+    customSymbolsPlaceholder: '输入其他交易对，用逗号或换行分隔，如：PEPEUSDT,SHIBUSDT',
+    customSymbolsTip: '提示：输入后点击"添加自定义"按钮',
+    goToDict: '去字典配置',
+    addCustomSymbols: '添加自定义交易对',
+    selectedCount: '已选择 {0} 个交易对',
+    noSymbolsConfig: '(未配置交易对，请先在字典中配置)',
+    tipInfo: '提示信息',
+    disabled: '停用',
+    enabled: '启用',
+    running: '运行中',
+    viewResult: '查看结果',
+    result: '回测结果',
+    totalReturn: '总收益率',
+    sharpeRatio: '夏普比率',
+    maxDrawdown: '最大回撤',
+    accountName: '账户名称'
   },
   // 模块
   module: {
@@ -299,146 +399,70 @@ export default {
     },
     system: {
       user: {
-        title: '用户管理',
-        username: '用户名称',
-        nickname: '用户昵称',
-        sex: '用户性别',
-        dept: '部门',
-        post: '岗位',
-        role: '角色',
-        password: '密码',
-        confirmPassword: '确认密码',
-        oldPassword: '旧密码',
-        newPassword: '新密码',
+        title: '用户管理'
       },
       role: {
         title: '角色管理',
-        roleName: '角色名称',
         roleKey: '角色权限',
         roleSort: '角色排序',
-        status: '状态',
-        remark: '备注',
         menuPerms: '菜单权限',
         dataScope: '数据权限'
       },
       menu: {
         title: '菜单管理',
-        menuName: '菜单名称',
         parentId: '上级菜单',
-        orderNum: '显示排序',
-        path: '路由地址',
-        component: '组件路径',
-        query: '路由参数',
-        isFrame: '是否外链',
-        isCache: '是否缓存',
         menuType: '菜单类型',
         menuTypeDirectory: '目录',
         menuTypeMenu: '菜单',
-        menuTypeButton: '按钮',
-        visible: '显示状态',
-        status: '菜单状态',
-        perms: '权限字符',
-        icon: '菜单图标',
-        routeName: '路由名称',
-        remark: '备注'
+        menuTypeButton: '按钮'
       },
       dept: {
         title: '部门管理',
-        deptName: '部门名称',
-        orderNum: '显示排序',
-        status: '部门状态',
         parentId: '上级部门',
-        leader: '负责人',
-        phone: '联系电话',
-        email: '邮箱',
+        leader: '负责人'
       },
       post: {
         title: '岗位管理',
         postCode: '岗位编码',
-        postName: '岗位名称',
-        postSort: '岗位排序',
-        status: '状态',
-        remark: '备注'
+        postSort: '岗位排序'
       },
       dict: {
         title: '字典管理',
-        dictType: '字典类型',
-        dictName: '字典名称',
-        dictLabel: '字典标签',
-        dictValue: '字典键值',
         dictSort: '字典排序',
-        status: '状态',
-        remark: '备注',
         cssClass: '样式属性',
         listClass: '表格回显样式'
       },
       config: {
         title: '参数设置',
-        configName: '参数名称',
-        configKey: '参数键名',
-        configValue: '参数键值',
-        configType: '系统内置',
-        remark: '备注'
+        configType: '系统内置'
       },
       notice: {
         title: '通知公告',
-        noticeTitle: '公告标题',
-        noticeType: '公告类型',
-        noticeContent: '公告内容',
-        status: '公告状态',
-        createBy: '创建者'
+        noticeContent: '公告内容'
       }
     },
     monitor: {
       online: {
         title: '在线用户',
-        loginName: '登录账号',
-        deptName: '部门',
-        ipaddr: '主机',
-        loginLocation: '登录地点',
-        browser: '浏览器类型',
-        os: '操作系统',
-        loginTime: '登录时间'
+        browser: '浏览器类型'
       },
       job: {
         title: '定时任务',
-        jobName: '任务名称',
-        jobGroup: '任务组名',
-        invokeTarget: '调用目标字符串',
-        cronExpression: 'cron执行表达式',
-        misfirePolicy: '计划执行错误策略',
-        concurrent: '是否并发执行',
-        status: '状态',
-        remark: '备注'
+        misfirePolicy: '计划执行错误策略'
       },
       loginLog: {
         title: '登录日志',
-        loginName: '登录账号',
-        ipaddr: '登录地址',
-        loginLocation: '登录地点',
-        browser: '浏览器',
-        os: '操作系统',
-        status: '登录状态',
-        msg: '操作消息',
-        loginTime: '登录时间'
+        msg: '操作消息'
       },
       operLog: {
         title: '操作日志',
-        systemTitle: '系统标题',
-        businessType: '业务类型',
         method: '方法名称',
         requestMethod: '请求方式',
         operatorType: '操作类别',
-        operName: '操作人员',
-        deptName: '部门名称',
         operUrl: '请求URL',
-        operIp: '主机地址',
-        operLocation: '操作地点',
         operParam: '请求参数',
         jsonResult: '返回参数',
-        status: '操作状态',
-        errorMsg: '错误消息',
-        operTime: '操作时间'
+        errorMsg: '错误消息'
       },
       server: {
         title: '服务监控',
@@ -449,30 +473,17 @@ export default {
         disk: '磁盘状态'
       },
       cache: {
-        title: '缓存监控',
-        cacheName: '缓存名称',
-        cacheKey: '缓存键名',
-        cacheValue: '缓存内容',
-        remark: '备注'
+        title: '缓存监控'
       }
     },
     tool: {
       build: {
         title: '表单构建',
-        tableName: '表名称',
-        tableComment: '表描述',
-        className: '实体类名称',
-        functionAuthor: '作者',
-        remark: '备注',
         generateType: '生成类型',
-        fileName: '文件名'
+        functionAuthor: '作者'
       },
       gen: {
         title: '代码生成',
-        tableName: '表名称',
-        tableComment: '表描述',
-        className: '实体类名称',
-        functionAuthor: '作者',
         packageName: '生成包路径',
         moduleName: '生成模块名',
         businessName: '生成业务名',
@@ -482,12 +493,37 @@ export default {
         treeCode: '树编码字段',
         treeParentCode: '树父编码字段',
         treeName: '树名称字段',
-        parentMenuId: '上级菜单',
-        remark: '备注'
+        parentMenuId: '上级菜单'
       },
       swagger: {
         title: '系统接口',
         description: '系统接口文档'
+      }
+    },
+    trading: {
+      dashboard: {
+        title: '交易仪表盘'
+      },
+      statistics: {
+        title: '交易统计分析'
+      },
+      signal: {
+        title: '信号分析'
+      },
+      strategy: {
+        title: '策略管理'
+      },
+      order: {
+        title: '订单管理'
+      },
+      position: {
+        title: '持仓管理'
+      },
+      account: {
+        title: '账户管理'
+      },
+      backtest: {
+        title: '回测管理'
       }
     }
   },
@@ -556,6 +592,29 @@ export default {
     cronExpression: '请输入cron执行表达式',
     // 通用
     loading: '加载中，请稍候',
+    // 交易相关通用占位符
+    name: '请输入名称',
+    code: '请输入代码',
+    content: '请输入内容',
+    symbol: '请输入交易对',
+    enterSymbol: '请输入交易对，如BTCUSDT',
+    selectType: '请选择类型',
+    selectStatus: '请选择状态',
+    selectDirection: '请选择方向',
+    selectInterval: '请选择K线周期',
+    selectStrategyType: '请选择策略类型',
+    selectOrderType: '请选择订单类型',
+    selectRecommendAction: '请选择推荐操作',
+    selectRiskLevel: '请选择风险等级',
+    orderNo: '请输入订单号',
+    accountId: '请输入账户ID',
+    accountName: '请输入账户名称',
+    selectExchange: '请选择交易所',
+    strategyName: '请输入策略名称',
+    strategyCode: '请输入策略代码',
+    strategyDescription: '请输入策略描述',
+    strategyParams: '请输入策略参数',
+    selectKlineInterval: '请选择Kline周期'
   },
   // 提示信息
   message: {

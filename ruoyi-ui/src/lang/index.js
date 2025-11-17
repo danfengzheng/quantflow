@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import settings from '@/settings'
 import zhCN from './zh-CN'
+import zhTW from './zh-TW'
 import enUS from './en-US'
+import jaJP from './ja-JP'
 
 Vue.use(VueI18n)
 
@@ -13,7 +15,9 @@ const locale = saved || envLocale || configDefault || 'zh-CN'
 
 const messages = {
   'zh-CN': zhCN,
-  'en-US': enUS
+  'zh-TW': zhTW,
+  'en-US': enUS,
+  'ja-JP': jaJP
 }
 
 const i18n = new VueI18n({

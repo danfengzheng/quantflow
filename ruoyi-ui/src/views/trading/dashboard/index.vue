@@ -9,7 +9,7 @@
               <i class="el-icon-wallet"></i>
             </div>
             <div class="stat-content">
-              <div class="stat-label">总资产</div>
+              <div class="stat-label">{{ $t('field.totalAsset') }}</div>
               <div class="stat-value">{{ accountOverview.totalAsset || '0.00' }}</div>
             </div>
           </div>
@@ -23,7 +23,7 @@
               <i class="el-icon-money"></i>
             </div>
             <div class="stat-content">
-              <div class="stat-label">持仓市值</div>
+              <div class="stat-label">{{ $t('field.positionValue') }}</div>
               <div class="stat-value">{{ accountOverview.positionValue || '0.00' }}</div>
             </div>
           </div>
@@ -37,7 +37,7 @@
               <i class="el-icon-data-line"></i>
             </div>
             <div class="stat-content">
-              <div class="stat-label">总盈亏</div>
+              <div class="stat-label">{{ $t('field.totalPnl') }}</div>
               <div class="stat-value" :class="accountOverview.totalPnl >= 0 ? 'text-success' : 'text-danger'">
                 {{ accountOverview.totalPnl || '0.00' }}
               </div>
@@ -56,7 +56,7 @@
               <i class="el-icon-s-data"></i>
             </div>
             <div class="stat-content">
-              <div class="stat-label">运行策略</div>
+              <div class="stat-label">{{ $t('field.runningStrategy') }}</div>
               <div class="stat-value">{{ todayStats.runningStrategyCount || 0 }}</div>
             </div>
           </div>
@@ -67,24 +67,24 @@
     <!-- 今日统计 -->
     <el-card style="margin-bottom: 20px;">
       <div slot="header">
-        <span>今日统计</span>
+        <span>{{ $t('field.todayStats') }}</span>
       </div>
       <el-row :gutter="20">
         <el-col :span="6">
           <div class="today-stat">
-            <div class="today-stat-label">交易次数</div>
+            <div class="today-stat-label">{{ $t('field.tradeCount') }}</div>
             <div class="today-stat-value">{{ todayStats.tradeCount || 0 }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="today-stat">
-            <div class="today-stat-label">信号数量</div>
+            <div class="today-stat-label">{{ $t('field.signalCount') }}</div>
             <div class="today-stat-value">{{ todayStats.signalCount || 0 }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="today-stat">
-            <div class="today-stat-label">今日盈亏</div>
+            <div class="today-stat-label">{{ $t('field.dailyPnl') }}</div>
             <div class="today-stat-value" :class="todayStats.dailyPnl >= 0 ? 'text-success' : 'text-danger'">
               {{ todayStats.dailyPnl || '0.00' }}
             </div>
@@ -92,7 +92,7 @@
         </el-col>
         <el-col :span="6">
           <div class="today-stat">
-            <div class="today-stat-label">盈亏率</div>
+            <div class="today-stat-label">{{ $t('field.pnlRatio') }}</div>
             <div class="today-stat-value" :class="todayStats.dailyPnlRatio >= 0 ? 'text-success' : 'text-danger'">
               {{ todayStats.dailyPnlRatio || '0.00' }}%
             </div>
@@ -106,17 +106,17 @@
       <el-col :span="12">
         <el-card>
           <div slot="header">
-            <span>持仓概览</span>
+            <span>{{ $t('field.positionOverview') }}</span>
             <el-button style="float: right; padding: 3px 10px" type="text" @click="gotoPosition">
-              更多
+              {{ $t('common.more') }}
             </el-button>
           </div>
           <el-table :data="positions" size="small" max-height="300">
-            <el-table-column prop="symbol" label="交易对" width="100" />
-            <el-table-column prop="quantity" label="数量" />
-            <el-table-column prop="avgPrice" label="成本价" />
-            <el-table-column prop="currentPrice" label="当前价" />
-            <el-table-column prop="unrealizedPnl" label="盈亏">
+            <el-table-column prop="symbol" :label="$t('field.symbol')" width="100" />
+            <el-table-column prop="quantity" :label="$t('field.quantity')" />
+            <el-table-column prop="avgPrice" :label="$t('field.avgPrice')" />
+            <el-table-column prop="currentPrice" :label="$t('field.currentPrice')" />
+            <el-table-column prop="unrealizedPnl" :label="$t('field.unrealizedPnl')">
               <template slot-scope="scope">
                 <span :class="scope.row.unrealizedPnl >= 0 ? 'text-success' : 'text-danger'">
                   {{ scope.row.unrealizedPnl }}
@@ -131,23 +131,23 @@
       <el-col :span="12">
         <el-card>
           <div slot="header">
-            <span>最近订单</span>
+            <span>{{ $t('field.recentOrders') }}</span>
             <el-button style="float: right; padding: 3px 10px" type="text" @click="gotoOrder">
-              更多
+              {{ $t('common.more') }}
             </el-button>
           </div>
           <el-table :data="recentOrders" size="small" max-height="300">
-            <el-table-column prop="symbol" label="交易对" width="100" />
-            <el-table-column prop="side" label="方向" width="60">
+            <el-table-column prop="symbol" :label="$t('field.symbol')" width="100" />
+            <el-table-column prop="side" :label="$t('field.direction')" width="60">
               <template slot-scope="scope">
                 <el-tag :type="scope.row.side === 'BUY' ? 'success' : 'danger'" size="mini">
-                  {{ scope.row.side === 'BUY' ? '买' : '卖' }}
+                  {{ scope.row.side === 'BUY' ? $t('field.buy') : $t('field.sell') }}
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="quantity" label="数量" />
-            <el-table-column prop="price" label="价格" />
-            <el-table-column prop="status" label="状态" width="80">
+            <el-table-column prop="quantity" :label="$t('field.quantity')" />
+            <el-table-column prop="price" :label="$t('field.price')" />
+            <el-table-column prop="status" :label="$t('field.status')" width="80">
               <template slot-scope="scope">
                 <el-tag size="mini">{{ scope.row.status }}</el-tag>
               </template>
@@ -160,23 +160,23 @@
     <!-- 最近信号 -->
     <el-card style="margin-top: 20px;">
       <div slot="header">
-        <span>最近信号</span>
+        <span>{{ $t('field.recentSignals') }}</span>
         <el-button style="float: right; padding: 3px 10px" type="text" @click="gotoStrategy">
-          更多
+          {{ $t('common.more') }}
         </el-button>
       </div>
       <el-table :data="recentSignals" size="small">
-        <el-table-column prop="symbol" label="交易对" width="120" />
-        <el-table-column prop="signalType" label="信号类型" width="100">
+        <el-table-column prop="symbol" :label="$t('field.symbol')" width="120" />
+        <el-table-column prop="signalType" :label="$t('field.signalType')" width="100">
           <template slot-scope="scope">
             <el-tag :type="scope.row.signalType === 'BUY' ? 'success' : 'danger'" size="mini">
-              {{ scope.row.signalType === 'BUY' ? '买入' : '卖出' }}
+              {{ scope.row.signalType === 'BUY' ? $t('field.buySignal') : $t('field.sellSignal') }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="价格" width="150" />
-        <el-table-column prop="reason" label="原因" />
-        <el-table-column prop="createTime" label="时间" width="180" />
+        <el-table-column prop="price" :label="$t('field.price')" width="150" />
+        <el-table-column prop="reason" :label="$t('field.reason')" />
+        <el-table-column prop="createTime" :label="$t('field.time')" width="180" />
       </el-table>
     </el-card>
   </div>
@@ -234,8 +234,8 @@ export default {
       // 注册消息处理器
       websocket.on('new_signal', (data) => {
         this.$notify({
-          title: '新信号',
-          message: `${data.symbol} ${data.signalType === 'BUY' ? '买入' : '卖出'}信号`,
+          title: this.$t('field.newSignal'),
+          message: `${data.symbol} ${data.signalType === 'BUY' ? this.$t('field.buySignal') : this.$t('field.sellSignal')}${this.$t('field.signalType')}`,
           type: 'info',
           duration: 5000
         });
@@ -246,8 +246,8 @@ export default {
 
       websocket.on('new_order', (data) => {
         this.$notify({
-          title: '新订单',
-          message: `订单 ${data.orderNo} 已创建`,
+          title: this.$t('field.newOrder'),
+          message: this.$t('field.orderCreated', [data.orderNo]),
           type: 'success',
           duration: 3000
         });
@@ -257,8 +257,8 @@ export default {
 
       websocket.on('order_status_change', (data) => {
         this.$notify({
-          title: '订单状态',
-          message: `订单 ${data.orderNo} 状态：${data.status}`,
+          title: this.$t('field.orderStatus'),
+          message: this.$t('field.orderStatusChange', [data.orderNo, data.status]),
           type: 'info',
           duration: 3000
         });
@@ -268,8 +268,8 @@ export default {
 
       websocket.on('position_change', () => {
         this.$notify({
-          title: '持仓变化',
-          message: '您的持仓已更新',
+          title: this.$t('field.positionChange'),
+          message: this.$t('field.positionUpdated'),
           type: 'info',
           duration: 2000
         });
@@ -279,7 +279,7 @@ export default {
 
       websocket.on('risk_alert', (message) => {
         this.$notify({
-          title: '风控告警',
+          title: this.$t('field.riskAlert'),
           message: message,
           type: 'warning',
           duration: 10000

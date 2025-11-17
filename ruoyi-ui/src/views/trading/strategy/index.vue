@@ -2,16 +2,16 @@
   <div class="app-container">
     <!-- 查询表单 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true">
-      <el-form-item label="策略名称" prop="name">
+      <el-form-item :label="$t('field.strategyName')" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入策略名称"
+          :placeholder="$t('placeholder.strategyName')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="策略类型" prop="type">
-        <el-select v-model="queryParams.type" placeholder="请选择策略类型" clearable>
+      <el-form-item :label="$t('field.strategyType')" prop="type">
+        <el-select v-model="queryParams.type" :placeholder="$t('placeholder.selectStrategyType')" clearable>
           <el-option
             v-for="dict in dict.type.qf_strategy_type"
             :key="dict.value"
@@ -20,16 +20,16 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-          <el-option label="停用" :value="0" />
-          <el-option label="启用" :value="1" />
-          <el-option label="运行中" :value="2" />
+      <el-form-item :label="$t('field.status')" prop="status">
+        <el-select v-model="queryParams.status" :placeholder="$t('placeholder.selectStatus')" clearable>
+          <el-option :label="$t('field.disabled')" :value="0" />
+          <el-option :label="$t('field.enabled')" :value="1" />
+          <el-option :label="$t('field.running')" :value="2" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -42,39 +42,39 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-        >新增</el-button>
+        >{{ $t('button.add') }}</el-button>
       </el-col>
     </el-row>
 
     <!-- 数据表格 -->
     <el-table v-loading="loading" :data="strategyList">
-      <el-table-column label="策略ID" align="center" prop="id" width="80" />
-      <el-table-column label="策略名称" align="center" prop="name" />
-      <el-table-column label="策略代码" align="center" prop="code" />
-      <el-table-column label="策略类型" align="center" prop="type">
+      <el-table-column :label="$t('field.id')" align="center" prop="id" width="80" />
+      <el-table-column :label="$t('field.strategyName')" align="center" prop="name" />
+      <el-table-column :label="$t('field.code')" align="center" prop="code" />
+      <el-table-column :label="$t('field.strategyType')" align="center" prop="type">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.qf_strategy_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
-      <el-table-column label="交易对" align="center" prop="symbol" />
-      <el-table-column label="K线周期" align="center" prop="interval">
+      <el-table-column :label="$t('field.symbol')" align="center" prop="symbol" />
+      <el-table-column :label="$t('field.interval')" align="center" prop="interval">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.qf_interval" :value="scope.row.interval"/>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column :label="$t('field.status')" align="center" prop="status">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" type="info">停用</el-tag>
-          <el-tag v-else-if="scope.row.status === 1" type="success">启用</el-tag>
-          <el-tag v-else-if="scope.row.status === 2" type="warning">运行中</el-tag>
+          <el-tag v-if="scope.row.status === 0" type="info">{{ $t('field.disabled') }}</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" type="success">{{ $t('field.enabled') }}</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" type="warning">{{ $t('field.running') }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('field.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('field.operate')" align="center" width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status !== 2"
@@ -82,26 +82,26 @@
             type="success"
             icon="el-icon-video-play"
             @click="handleStart(scope.row)"
-          >启动</el-button>
+          >{{ $t('button.start') }}</el-button>
           <el-button
             v-if="scope.row.status === 2"
             size="mini"
             type="warning"
             icon="el-icon-video-pause"
             @click="handleStop(scope.row)"
-          >停止</el-button>
+          >{{ $t('button.stop') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-          >修改</el-button>
+          >{{ $t('button.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-          >删除</el-button>
+          >{{ $t('button.delete') }}</el-button>
           <el-button
             size="mini"
             type="text"
@@ -124,14 +124,14 @@
     <!-- 添加或修改策略对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="策略名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入策略名称" />
+        <el-form-item :label="$t('field.strategyName')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('placeholder.strategyName')" />
         </el-form-item>
-        <el-form-item label="策略代码" prop="code">
-          <el-input v-model="form.code" placeholder="请输入策略代码" />
+        <el-form-item :label="$t('field.code')" prop="code">
+          <el-input v-model="form.code" :placeholder="$t('placeholder.strategyCode')" />
         </el-form-item>
-        <el-form-item label="策略类型" prop="type">
-          <el-select v-model="form.type" placeholder="请选择策略类型">
+        <el-form-item :label="$t('field.strategyType')" prop="type">
+          <el-select v-model="form.type" :placeholder="$t('placeholder.selectStrategyType')">
             <el-option
               v-for="dict in dict.type.qf_strategy_type"
               :key="dict.value"
@@ -140,17 +140,17 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="策略描述" prop="description">
-          <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('field.description')" prop="description">
+          <el-input v-model="form.description" type="textarea" :placeholder="$t('placeholder.content')" />
         </el-form-item>
-        <el-form-item label="交易账户ID" prop="accountId">
-          <el-input v-model="form.accountId" placeholder="请输入交易账户ID" />
+        <el-form-item :label="$t('field.accountId')" prop="accountId">
+          <el-input v-model="form.accountId" :placeholder="$t('placeholder.accountId')" />
         </el-form-item>
-        <el-form-item label="交易对" prop="symbol">
-          <el-input v-model="form.symbol" placeholder="请输入交易对" />
+        <el-form-item :label="$t('field.symbol')" prop="symbol">
+          <el-input v-model="form.symbol" :placeholder="$t('placeholder.symbol')" />
         </el-form-item>
-        <el-form-item label="K线周期" prop="interval">
-          <el-select v-model="form.interval" placeholder="请选择Kline周期">
+        <el-form-item :label="$t('field.interval')" prop="interval">
+          <el-select v-model="form.interval" :placeholder="$t('placeholder.selectKlineInterval')">
             <el-option
               v-for="dict in dict.type.qf_interval"
               :key="dict.value"
@@ -159,10 +159,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="策略参数" prop="paramsConfig">
-          <el-input v-model="form.paramsConfig" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('field.paramsConfig')" prop="paramsConfig">
+          <el-input v-model="form.paramsConfig" type="textarea" :placeholder="$t('placeholder.strategyParams')" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="$t('field.status')" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.strategy_status"
@@ -174,13 +174,13 @@
         <el-form-item label="创建用户ID" prop="userId">
           <el-input v-model="form.userId" placeholder="请输入创建用户ID" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('field.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('placeholder.content')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="submitForm">{{ $t('button.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('button.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>

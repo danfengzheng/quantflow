@@ -39,7 +39,7 @@ public class GlobalExceptionHandler
     {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',权限校验失败'{}'", requestURI, e.getMessage());
-        return AjaxResult.error(HttpStatus.FORBIDDEN, MessageUtils.message(MessageKeys.ACCESS_DENIED.getKey()));
+        return AjaxResult.error(HttpStatus.FORBIDDEN, MessageUtils.message(MessageKeys.ACCESS_DENIED));
     }
 
     /**
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler
     {
         String requestURI = request.getRequestURI();
         log.error("请求路径中缺少必需的路径变量'{}',发生系统异常.", requestURI, e);
-        return AjaxResult.error(MessageUtils.message(MessageKeys.MISSING_PATH_VARIABLE.getKey(), e.getVariableName()));
+        return AjaxResult.error(MessageUtils.message(MessageKeys.MISSING_PATH_VARIABLE, e.getVariableName()));
     }
 
     /**
@@ -89,7 +89,7 @@ public class GlobalExceptionHandler
             value = EscapeUtil.clean(value);
         }
         log.error("请求参数类型不匹配'{}',发生系统异常.", requestURI, e);
-        return AjaxResult.error(MessageUtils.message(MessageKeys.METHOD_ARGUMENT_TYPE_MISMATCH.getKey(), 
+        return AjaxResult.error(MessageUtils.message(MessageKeys.METHOD_ARGUMENT_TYPE_MISMATCH, 
             e.getName(), e.getRequiredType().getName(), value));
     }
 
@@ -143,6 +143,6 @@ public class GlobalExceptionHandler
     @ExceptionHandler(DemoModeException.class)
     public AjaxResult handleDemoModeException(DemoModeException e)
     {
-        return AjaxResult.error(MessageUtils.message(MessageKeys.DEMO_MODE_NOT_ALLOWED.getKey()));
+        return AjaxResult.error(MessageUtils.message(MessageKeys.DEMO_MODE_NOT_ALLOWED));
     }
 }

@@ -2,6 +2,7 @@ package com.quantflow.framework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -53,6 +54,29 @@ public class I18nConfig implements WebMvcConfigurer
         // 参数名
         lci.setParamName("lang");
         return lci;
+    }
+
+    /**
+     * 配置MessageSource Bean
+     * 确保消息文件能够正确加载
+     * 使用 @Primary 注解确保此Bean优先于Spring Boot自动配置的MessageSource
+     */
+    @Bean
+    @org.springframework.context.annotation.Primary
+    public ResourceBundleMessageSource messageSource()
+    {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        // 设置消息文件的基础名称（不包含语言代码和.properties扩展名）
+        messageSource.setBasename("i18n/messages");
+        // 设置默认编码
+        messageSource.setDefaultEncoding("UTF-8");
+        // 设置缓存时间（秒），-1表示永久缓存
+        messageSource.setCacheSeconds(-1);
+        // 如果找不到消息，返回消息键本身（避免抛出异常）
+        messageSource.setUseCodeAsDefaultMessage(true);
+        // 设置回退到系统Locale
+        messageSource.setFallbackToSystemLocale(true);
+        return messageSource;
     }
 
     @Override

@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 查询表单 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true">
-      <el-form-item label="策略名称" prop="strategyId">
+      <el-form-item :label="$t('field.strategyName')" prop="strategyId">
         <el-select v-model="queryParams.strategyId" placeholder="请选择策略" clearable>
           <el-option
             v-for="strategy in strategyList"
@@ -12,17 +12,17 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+      <el-form-item :label="$t('field.status')" prop="status">
+        <el-select v-model="queryParams.status" :placeholder="$t('placeholder.selectStatus')" clearable>
           <el-option label="待执行" value="PENDING" />
-          <el-option label="运行中" value="RUNNING" />
+          <el-option :label="$t('field.running')" value="RUNNING" />
           <el-option label="已完成" value="COMPLETED" />
           <el-option label="失败" value="FAILED" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('button.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('button.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -40,9 +40,9 @@
     </el-row>
     <!-- 数据表格 -->
     <el-table v-loading="loading" :data="backtestList">
-      <el-table-column label="回测ID" align="center" prop="id" width="80" />
+      <el-table-column :label="$t('field.id')" align="center" prop="id" width="80" />
       <el-table-column label="任务名称" align="center" prop="name" min-width="150" show-overflow-tooltip />
-      <el-table-column label="交易对" align="center" prop="symbol" width="100" />
+      <el-table-column :label="$t('field.symbol')" align="center" prop="symbol" width="100" />
       <el-table-column label="周期" align="center" prop="interval" width="80" />
       <el-table-column label="回测期间" align="center" width="200">
         <template slot-scope="scope">
@@ -53,7 +53,7 @@
         </template>
       </el-table-column>
       <el-table-column label="初始资金" align="center" prop="initialCapital" width="100" />
-      <el-table-column label="总收益率" align="center" prop="totalReturn" width="100">
+      <el-table-column :label="$t('field.totalReturn')" align="center" prop="totalReturn" width="100">
         <template slot-scope="scope">
       <span v-if="scope.row.totalReturn" :class="scope.row.totalReturn >= 0 ? 'text-success' : 'text-danger'">
         {{ scope.row.totalReturn }}%
@@ -61,33 +61,33 @@
           <span v-else>-</span>
         </template>
       </el-table-column>
-      <el-table-column label="胜率" align="center" prop="winRate" width="80">
+      <el-table-column :label="$t('field.winRate')" align="center" prop="winRate" width="80">
         <template slot-scope="scope">
           <span v-if="scope.row.winRate">{{ scope.row.winRate }}%</span>
           <span v-else>-</span>
         </template>
       </el-table-column>
-      <el-table-column label="交易次数" align="center" prop="tradeCount" width="90">
+      <el-table-column :label="$t('field.tradeCount')" align="center" prop="tradeCount" width="90">
         <template slot-scope="scope">
           <span>{{ scope.row.tradeCount || '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status" width="100">
+      <el-table-column :label="$t('field.status')" align="center" prop="status" width="100">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 'PENDING'" type="info" size="small">待执行</el-tag>
           <el-tag v-else-if="scope.row.status === 'RUNNING'" type="warning" size="small">
-            <i class="el-icon-loading"></i> 运行中
+            <i class="el-icon-loading"></i> {{ $t('field.running') }}
           </el-tag>
           <el-tag v-else-if="scope.row.status === 'COMPLETED'" type="success" size="small">已完成</el-tag>
           <el-tag v-else-if="scope.row.status === 'FAILED'" type="danger" size="small">失败</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160">
+      <el-table-column :label="$t('field.createTime')" align="center" prop="createTime" width="160">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="220" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('field.operate')" align="center" width="220" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status === 'PENDING'"
@@ -102,7 +102,7 @@
             type="primary"
             icon="el-icon-view"
             @click="handleViewResult(scope.row)"
-          >查看</el-button>
+          >{{ $t('field.viewResult') }}</el-button>
           <el-button
             v-if="scope.row.status === 'FAILED'"
             size="mini"
@@ -116,7 +116,7 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             style="color: #F56C6C;"
-          >删除</el-button>
+          >{{ $t('button.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -124,7 +124,7 @@
     <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="任务名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入任务名称" />
+          <el-input v-model="form.name" :placeholder="$t('placeholder.name')" />
         </el-form-item>
 
         <el-form-item label="策略" prop="strategyId">
@@ -143,11 +143,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="交易对" prop="symbol">
+        <el-form-item :label="$t('field.symbol')" prop="symbol">
           <el-input v-model="form.symbol" placeholder="从策略自动获取" :disabled="true" />
         </el-form-item>
 
-        <el-form-item label="K线周期" prop="interval">
+        <el-form-item :label="$t('field.interval')" prop="interval">
           <el-input v-model="form.interval" placeholder="从策略自动获取" :disabled="true" />
         </el-form-item>
 
@@ -216,8 +216,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="submitForm">{{ $t('button.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('button.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>

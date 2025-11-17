@@ -9,16 +9,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="账户名称" prop="accountName">
+      <el-form-item :label="$t('field.accountName')" prop="accountName">
         <el-input
           v-model="queryParams.accountName"
-          placeholder="请输入账户名称"
+          :placeholder="$t('placeholder.accountName')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="交易所" prop="exchange">
-        <el-select v-model="queryParams.exchange" placeholder="请选择交易所" clearable>
+      <el-form-item :label="$t('field.exchange')" prop="exchange">
+        <el-select v-model="queryParams.exchange" :placeholder="$t('placeholder.selectExchange')" clearable>
           <el-option
             v-for="dict in dict.type.qf_exchange_type"
             :key="dict.value"
@@ -37,8 +37,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+      <el-form-item :label="$t('field.status')" prop="status">
+        <el-select v-model="queryParams.status" :placeholder="$t('placeholder.selectStatus')" clearable>
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
             :key="dict.value"

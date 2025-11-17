@@ -61,16 +61,21 @@ public class CustomLocaleResolver implements LocaleResolver {
         // 1. 优先从请求头Accept-Language读取
         String acceptLanguage = request.getHeader(ACCEPT_LANGUAGE_HEADER);
         
+        Locale locale = null;
         if (StringUtils.hasText(acceptLanguage)) {
             // 解析Accept-Language头，格式如：zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
-            Locale locale = parseAcceptLanguage(acceptLanguage);
-            if (locale != null) {
-                return locale;
-            }
+            locale = parseAcceptLanguage(acceptLanguage);
         }
 
         // 2. 如果没有Accept-Language或解析失败，使用配置的默认语言
-        return defaultLocale != null ? defaultLocale : Constants.DEFAULT_LOCALE;
+        if (locale == null) {
+            locale = defaultLocale != null ? defaultLocale : Constants.DEFAULT_LOCALE;
+        }
+        
+        // 3. 确保LocaleContextHolder也被设置，以便MessageUtils能够正确获取Locale
+        org.springframework.context.i18n.LocaleContextHolder.setLocale(locale);
+        
+        return locale;
     }
 
     @Override

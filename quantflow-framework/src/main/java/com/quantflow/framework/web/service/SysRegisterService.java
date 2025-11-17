@@ -11,6 +11,7 @@ import com.quantflow.common.core.redis.RedisCache;
 import com.quantflow.common.exception.user.CaptchaException;
 import com.quantflow.common.exception.user.CaptchaExpireException;
 import com.quantflow.common.utils.DateUtils;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.utils.MessageUtils;
 import com.quantflow.common.utils.SecurityUtils;
 import com.quantflow.common.utils.StringUtils;
@@ -86,7 +87,7 @@ public class SysRegisterService
             }
             else
             {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success")));
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message(MessageKeys.USER_REGISTER_SUCCESS)));
             }
         }
         return msg;

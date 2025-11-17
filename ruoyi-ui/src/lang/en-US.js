@@ -265,6 +265,106 @@ export default {
     // 通用
     operate: 'Operation',
     sort: 'Sort',
+    // Trading related common fields
+    symbol: 'Trading Pair',
+    quantity: 'Quantity',
+    price: 'Price',
+    direction: 'Direction',
+    buy: 'Buy',
+    sell: 'Sell',
+    avgPrice: 'Average Price',
+    currentPrice: 'Current Price',
+    orderNo: 'Order No',
+    side: 'Side',
+    name: 'Name',
+    code: 'Code',
+    description: 'Description',
+    accountId: 'Account ID',
+    interval: 'K-line Interval',
+    paramsConfig: 'Parameters Config',
+    unrealizedPnl: 'Unrealized P&L',
+    pnlRatio: 'P&L Ratio',
+    reason: 'Reason',
+    time: 'Time',
+    exchange: 'Exchange',
+    apiKey: 'API Key',
+    strategyName: 'Strategy Name',
+    strategyType: 'Strategy Type',
+    orderType: 'Order Type',
+    recommendAction: 'Recommend Action',
+    riskLevel: 'Risk Level',
+    signalType: 'Signal Type',
+    buySignal: 'Buy',
+    sellSignal: 'Sell',
+    signalScore: 'Signal Score',
+    trend: 'Trend',
+    macdSignal: 'MACD Signal',
+    goldenCross: 'Golden Cross',
+    deathCross: 'Death Cross',
+    recommendReason: 'Recommend Reason',
+    analysisTime: 'Analysis Time',
+    totalAsset: 'Total Asset',
+    positionValue: 'Position Value',
+    totalPnl: 'Total P&L',
+    runningStrategy: 'Running Strategy',
+    todayStats: 'Today Stats',
+    tradeCount: 'Trade Count',
+    signalCount: 'Signal Count',
+    dailyPnl: 'Daily P&L',
+    positionOverview: 'Position Overview',
+    recentOrders: 'Recent Orders',
+    recentSignals: 'Recent Signals',
+    newSignal: 'New Signal',
+    newOrder: 'New Order',
+    orderCreated: 'Order {0} created',
+    orderStatus: 'Order Status',
+    orderStatusChange: 'Order {0} status: {1}',
+    positionChange: 'Position Change',
+    positionUpdated: 'Your position has been updated',
+    riskAlert: 'Risk Alert',
+    totalTrades: 'Total Trades',
+    winRate: 'Win Rate',
+    netProfit: 'Net Profit',
+    profitLossRatio: 'Profit/Loss Ratio',
+    profitStats: 'Profit Stats',
+    lossStats: 'Loss Stats',
+    profitTrades: 'Profit Trades',
+    totalProfit: 'Total Profit',
+    avgProfit: 'Average Profit',
+    maxProfit: 'Max Profit',
+    lossTrades: 'Loss Trades',
+    totalLoss: 'Total Loss',
+    avgLoss: 'Average Loss',
+    maxLoss: 'Max Loss',
+    realtimeAnalyze: 'Realtime Analyze',
+    batchAnalyze: 'Batch Analyze',
+    recommendTrade: 'Recommend Trade',
+    symbolConfig: 'Symbol Config',
+    realtimeMarketAnalyze: 'Realtime Market Analyze',
+    quickSelect: 'Quick Select',
+    startAnalyze: 'Start Analyze',
+    batchAnalyzeTitle: 'Batch Analyze Multiple Trading Pairs',
+    selectSymbols: 'Select Trading Pairs',
+    quickSelectLabel: 'Quick Select',
+    mainstream: 'Mainstream',
+    top10: 'Top10',
+    custom: 'Custom',
+    customSymbolsPlaceholder: 'Enter other trading pairs, separated by comma or newline, e.g.: PEPEUSDT,SHIBUSDT',
+    customSymbolsTip: 'Tip: Click "Add Custom" button after entering',
+    goToDict: 'Go to Dict Config',
+    addCustomSymbols: 'Add Custom Trading Pairs',
+    selectedCount: 'Selected {0} trading pairs',
+    noSymbolsConfig: '(No trading pairs configured, please configure in dict first)',
+    tipInfo: 'Tip Info',
+    disabled: 'Disabled',
+    enabled: 'Enabled',
+    running: 'Running',
+    viewResult: 'View Result',
+    result: 'Backtest Result',
+    totalReturn: 'Total Return',
+    sharpeRatio: 'Sharpe Ratio',
+    maxDrawdown: 'Max Drawdown',
+    accountName: 'Account Name'
   },
   // Modules
   module: {
@@ -303,132 +403,66 @@ export default {
       },
       role: {
         title: 'Role Management',
-        roleName: 'Role Name',
         roleKey: 'Role Key',
         roleSort: 'Role Sort',
-        status: 'Status',
-        remark: 'Remark',
         menuPerms: 'Menu Permissions',
         dataScope: 'Data Scope'
       },
       menu: {
         title: 'Menu Management',
-        menuName: 'Menu Name',
         parentId: 'Parent Menu',
-        orderNum: 'Order',
-        path: 'Route Path',
-        component: 'Component Path',
-        query: 'Route Params',
-        isFrame: 'Is External Link',
-        isCache: 'Is Cache',
         menuType: 'Menu Type',
         menuTypeDirectory: 'Directory',
         menuTypeMenu: 'Menu',
-        menuTypeButton: 'Button',
-        visible: 'Visible',
-        status: 'Status',
-        perms: 'Permission',
-        icon: 'Icon',
-        routeName: 'Route Name',
-        remark: 'Remark'
+        menuTypeButton: 'Button'
       },
       dept: {
         title: 'Department Management',
-        deptName: 'Department Name',
-        orderNum: 'Order',
-        status: 'Status',
         parentId: 'Parent Department',
-        leader: 'Leader',
-        phone: 'Phone',
-        email: 'Email',
+        leader: 'Leader'
       },
       post: {
         title: 'Post Management',
         postCode: 'Post Code',
-        postName: 'Post Name',
-        postSort: 'Post Sort',
-        status: 'Status',
-        remark: 'Remark'
+        postSort: 'Post Sort'
       },
       dict: {
         title: 'Dictionary Management',
-        dictType: 'Dict Type',
-        dictName: 'Dict Name',
-        dictLabel: 'Dict Label',
-        dictValue: 'Dict Value',
         dictSort: 'Dict Sort',
-        status: 'Status',
-        remark: 'Remark',
         cssClass: 'CSS Class',
         listClass: 'List Class'
       },
       config: {
         title: 'Parameter Settings',
-        configName: 'Config Name',
-        configKey: 'Config Key',
-        configValue: 'Config Value',
-        configType: 'System Built-in',
-        remark: 'Remark'
+        configType: 'System Built-in'
       },
       notice: {
         title: 'Notice',
-        noticeTitle: 'Notice Title',
-        noticeType: 'Notice Type',
-        noticeContent: 'Notice Content',
-        status: 'Status',
-        createBy: 'Creator'
+        noticeContent: 'Notice Content'
       }
     },
     monitor: {
       online: {
         title: 'Online Users',
-        loginName: 'Login Name',
-        deptName: 'Department',
-        ipaddr: 'IP Address',
-        loginLocation: 'Location',
-        browser: 'Browser',
-        os: 'OS',
-        loginTime: 'Login Time'
+        browser: 'Browser'
       },
       job: {
         title: 'Scheduled Tasks',
-        jobName: 'Job Name',
-        jobGroup: 'Job Group',
-        invokeTarget: 'Invoke Target',
-        cronExpression: 'Cron Expression',
-        misfirePolicy: 'Misfire Policy',
-        concurrent: 'Concurrent',
-        status: 'Status',
-        remark: 'Remark'
+        misfirePolicy: 'Misfire Policy'
       },
       loginLog: {
         title: 'Login Log',
-        loginName: 'Login Name',
-        ipaddr: 'IP Address',
-        loginLocation: 'Location',
-        browser: 'Browser',
-        os: 'OS',
-        status: 'Status',
-        msg: 'Message',
-        loginTime: 'Login Time'
+        msg: 'Message'
       },
       operLog: {
         title: 'Operation Log',
-        systemTitle: 'Title',
-        businessType: 'Business Type',
         method: 'Method',
         requestMethod: 'Request Method',
         operatorType: 'Operator Type',
-        operName: 'Operator',
-        deptName: 'Department',
         operUrl: 'URL',
-        operIp: 'IP Address',
-        operLocation: 'Location',
         operParam: 'Parameters',
         jsonResult: 'Result',
-        status: 'Status',
-        errorMsg: 'Error Message',
-        operTime: 'Operation Time'
+        errorMsg: 'Error Message'
       },
       server: {
         title: 'Server Monitor',
@@ -439,30 +473,17 @@ export default {
         disk: 'Disk Status'
       },
       cache: {
-        title: 'Cache Monitor',
-        cacheName: 'Cache Name',
-        cacheKey: 'Cache Key',
-        cacheValue: 'Cache Value',
-        remark: 'Remark'
+        title: 'Cache Monitor'
       }
     },
     tool: {
       build: {
         title: 'Form Builder',
-        tableName: 'Table Name',
-        tableComment: 'Table Comment',
-        className: 'Entity Class',
-        functionAuthor: 'Author',
-        remark: 'Remark',
         generateType: 'Generate Type',
-        fileName: 'File Name'
+        functionAuthor: 'Author'
       },
       gen: {
         title: 'Code Generator',
-        tableName: 'Table Name',
-        tableComment: 'Table Comment',
-        className: 'Entity Class',
-        functionAuthor: 'Author',
         packageName: 'Package Path',
         moduleName: 'Module Name',
         businessName: 'Business Name',
@@ -472,12 +493,37 @@ export default {
         treeCode: 'Tree Code Field',
         treeParentCode: 'Tree Parent Code Field',
         treeName: 'Tree Name Field',
-        parentMenuId: 'Parent Menu',
-        remark: 'Remark'
+        parentMenuId: 'Parent Menu'
       },
       swagger: {
         title: 'System API',
         description: 'System API Documentation'
+      }
+    },
+    trading: {
+      dashboard: {
+        title: 'Trading Dashboard'
+      },
+      statistics: {
+        title: 'Trading Statistics'
+      },
+      signal: {
+        title: 'Signal Analysis'
+      },
+      strategy: {
+        title: 'Strategy Management'
+      },
+      order: {
+        title: 'Order Management'
+      },
+      position: {
+        title: 'Position Management'
+      },
+      account: {
+        title: 'Account Management'
+      },
+      backtest: {
+        title: 'Backtest Management'
       }
     }
   },
@@ -546,6 +592,29 @@ export default {
     cronExpression: 'Please enter cron expression',
     // 通用
     loading: 'Loading, please wait...',
+    // Trading related common placeholders
+    name: 'Please enter name',
+    code: 'Please enter code',
+    content: 'Please enter content',
+    symbol: 'Please enter trading pair',
+    enterSymbol: 'Please enter trading pair, e.g. BTCUSDT',
+    selectType: 'Please select type',
+    selectStatus: 'Please select status',
+    selectDirection: 'Please select direction',
+    selectInterval: 'Please select K-line interval',
+    selectStrategyType: 'Please select strategy type',
+    selectOrderType: 'Please select order type',
+    selectRecommendAction: 'Please select recommend action',
+    selectRiskLevel: 'Please select risk level',
+    orderNo: 'Please enter order number',
+    accountId: 'Please enter account ID',
+    accountName: 'Please enter account name',
+    selectExchange: 'Please select exchange',
+    strategyName: 'Please enter strategy name',
+    strategyCode: 'Please enter strategy code',
+    strategyDescription: 'Please enter strategy description',
+    strategyParams: 'Please enter strategy parameters',
+    selectKlineInterval: 'Please select Kline interval'
   },
   // Messages
   message: {
