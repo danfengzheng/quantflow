@@ -12,6 +12,7 @@ import com.quantflow.common.annotation.DataScope;
 import com.quantflow.common.constant.UserConstants;
 import com.quantflow.common.core.domain.entity.SysRole;
 import com.quantflow.common.core.domain.entity.SysUser;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.SecurityUtils;
 import com.quantflow.common.utils.StringUtils;
@@ -185,7 +186,7 @@ public class SysRoleServiceImpl implements ISysRoleService
     {
         if (StringUtils.isNotNull(role.getRoleId()) && role.isAdmin())
         {
-            throw new ServiceException("不允许操作超级管理员角色");
+            throw new ServiceException(MessageKeys.ROLE_NOT_ALLOW_OPERATE_ADMIN);
         }
     }
 
@@ -206,7 +207,7 @@ public class SysRoleServiceImpl implements ISysRoleService
                 List<SysRole> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
                 if (StringUtils.isEmpty(roles))
                 {
-                    throw new ServiceException("没有权限访问角色数据！");
+                    throw new ServiceException(MessageKeys.ROLE_NO_DATA_PERMISSION);
                 }
             }
         }
@@ -368,7 +369,7 @@ public class SysRoleServiceImpl implements ISysRoleService
             SysRole role = selectRoleById(roleId);
             if (countUserRoleByRoleId(roleId) > 0)
             {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
+                throw new ServiceException(MessageKeys.ROLE_ASSIGNED_CANNOT_DELETE, role.getRoleName());
             }
         }
         // 删除角色与菜单关联

@@ -15,6 +15,7 @@ import com.quantflow.common.annotation.DataScope;
 import com.quantflow.common.constant.UserConstants;
 import com.quantflow.common.core.domain.entity.SysRole;
 import com.quantflow.common.core.domain.entity.SysUser;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.SecurityUtils;
 import com.quantflow.common.utils.StringUtils;
@@ -227,7 +228,7 @@ public class SysUserServiceImpl implements ISysUserService
     {
         if (StringUtils.isNotNull(user.getUserId()) && user.isAdmin())
         {
-            throw new ServiceException("不允许操作超级管理员用户");
+            throw new ServiceException(MessageKeys.USER_NOT_ALLOW_OPERATE_ADMIN);
         }
     }
 
@@ -246,7 +247,7 @@ public class SysUserServiceImpl implements ISysUserService
             List<SysUser> users = SpringUtils.getAopProxy(this).selectUserList(user);
             if (StringUtils.isEmpty(users))
             {
-                throw new ServiceException("没有权限访问用户数据！");
+                throw new ServiceException(MessageKeys.USER_NO_DATA_PERMISSION);
             }
         }
     }
@@ -501,7 +502,7 @@ public class SysUserServiceImpl implements ISysUserService
     {
         if (StringUtils.isNull(userList) || userList.size() == 0)
         {
-            throw new ServiceException("导入用户数据不能为空！");
+            throw new ServiceException(MessageKeys.USER_IMPORT_DATA_EMPTY);
         }
         int successNum = 0;
         int failureNum = 0;
@@ -553,8 +554,7 @@ public class SysUserServiceImpl implements ISysUserService
         }
         if (failureNum > 0)
         {
-            failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
-            throw new ServiceException(failureMsg.toString());
+            throw new ServiceException(MessageKeys.USER_IMPORT_FAILED, failureNum, failureMsg.toString());
         }
         else
         {

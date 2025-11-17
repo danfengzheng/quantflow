@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.quantflow.common.constant.UserConstants;
 import com.quantflow.common.core.domain.entity.SysDictData;
 import com.quantflow.common.core.domain.entity.SysDictType;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.DictUtils;
 import com.quantflow.common.utils.StringUtils;
@@ -124,7 +125,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
             SysDictType dictType = selectDictTypeById(dictId);
             if (dictDataMapper.countDictDataByType(dictType.getDictType()) > 0)
             {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", dictType.getDictName()));
+                throw new ServiceException(MessageKeys.DICT_ASSIGNED_CANNOT_DELETE, dictType.getDictName());
             }
             dictTypeMapper.deleteDictTypeById(dictId);
             DictUtils.removeDictCache(dictType.getDictType());

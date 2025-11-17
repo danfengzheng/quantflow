@@ -11,6 +11,7 @@ import com.quantflow.common.constant.UserConstants;
 import com.quantflow.common.core.redis.RedisCache;
 import com.quantflow.common.core.text.Convert;
 import com.quantflow.common.enums.DataSourceType;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.StringUtils;
 import com.quantflow.system.domain.SysConfig;
@@ -161,7 +162,7 @@ public class SysConfigServiceImpl implements ISysConfigService
             SysConfig config = selectConfigById(configId);
             if (StringUtils.equals(UserConstants.YES, config.getConfigType()))
             {
-                throw new ServiceException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
+                throw new ServiceException(MessageKeys.CONFIG_BUILTIN_CANNOT_DELETE, config.getConfigKey());
             }
             configMapper.deleteConfigById(configId);
             redisCache.deleteObject(getCacheKey(config.getConfigKey()));

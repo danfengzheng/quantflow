@@ -26,6 +26,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.quantflow.common.constant.Constants;
 import com.quantflow.common.constant.GenConstants;
 import com.quantflow.common.core.text.CharsetKit;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.StringUtils;
 import com.quantflow.generator.domain.GenTable;
@@ -191,7 +192,7 @@ public class GenTableServiceImpl implements IGenTableService
         }
         catch (Exception e)
         {
-            throw new ServiceException("导入失败：" + e.getMessage());
+            throw new ServiceException(MessageKeys.GEN_IMPORT_FAILED, e.getMessage());
         }
     }
 
@@ -280,7 +281,7 @@ public class GenTableServiceImpl implements IGenTableService
                 }
                 catch (IOException e)
                 {
-                    throw new ServiceException("渲染模板失败，表名：" + table.getTableName());
+                    throw new ServiceException(MessageKeys.GEN_TEMPLATE_RENDER_FAILED, table.getTableName());
                 }
             }
         }
@@ -302,7 +303,7 @@ public class GenTableServiceImpl implements IGenTableService
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
         if (StringUtils.isEmpty(dbTableColumns))
         {
-            throw new ServiceException("同步数据失败，原表结构不存在");
+            throw new ServiceException(MessageKeys.GEN_SYNC_DATA_FAILED);
         }
         List<String> dbTableColumnNames = dbTableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
 
@@ -414,26 +415,26 @@ public class GenTableServiceImpl implements IGenTableService
             JSONObject paramsObj = JSON.parseObject(options);
             if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_CODE)))
             {
-                throw new ServiceException("树编码字段不能为空");
+                throw new ServiceException(MessageKeys.GEN_TREE_CODE_EMPTY);
             }
             else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_PARENT_CODE)))
             {
-                throw new ServiceException("树父编码字段不能为空");
+                throw new ServiceException(MessageKeys.GEN_TREE_PARENT_CODE_EMPTY);
             }
             else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_NAME)))
             {
-                throw new ServiceException("树名称字段不能为空");
+                throw new ServiceException(MessageKeys.GEN_TREE_NAME_EMPTY);
             }
         }
         else if (GenConstants.TPL_SUB.equals(genTable.getTplCategory()))
         {
             if (StringUtils.isEmpty(genTable.getSubTableName()))
             {
-                throw new ServiceException("关联子表的表名不能为空");
+                throw new ServiceException(MessageKeys.GEN_SUB_TABLE_NAME_EMPTY);
             }
             else if (StringUtils.isEmpty(genTable.getSubTableFkName()))
             {
-                throw new ServiceException("子表关联的外键名不能为空");
+                throw new ServiceException(MessageKeys.GEN_SUB_TABLE_FOREIGN_KEY_EMPTY);
             }
         }
     }

@@ -171,3 +171,10 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+# 国际化配置
+i18n:
+  # 默认语言（当请求头没有Accept-Language或解析失败时使用）
+  # 支持的语言：zh-CN（简体中文）、zh-TW（繁体中文）、en-US（英文）、ja-JP（日语）
+  # 默认值：zh-CN
+  default-locale: zh-CN

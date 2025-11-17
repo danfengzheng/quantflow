@@ -11,6 +11,7 @@ import com.quantflow.common.constant.Constants;
 import com.quantflow.common.constant.HttpStatus;
 import com.quantflow.common.core.domain.entity.SysRole;
 import com.quantflow.common.core.domain.model.LoginUser;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 
 /**
@@ -32,7 +33,7 @@ public class SecurityUtils
         }
         catch (Exception e)
         {
-            throw new ServiceException("获取用户ID异常", HttpStatus.UNAUTHORIZED);
+            throw new ServiceException(MessageKeys.SECURITY_GET_USERID_FAILED, HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -47,7 +48,7 @@ public class SecurityUtils
         }
         catch (Exception e)
         {
-            throw new ServiceException("获取部门ID异常", HttpStatus.UNAUTHORIZED);
+            throw new ServiceException(MessageKeys.SECURITY_GET_DEPTID_FAILED, HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -62,7 +63,7 @@ public class SecurityUtils
         }
         catch (Exception e)
         {
-            throw new ServiceException("获取用户账户异常", HttpStatus.UNAUTHORIZED);
+            throw new ServiceException(MessageKeys.SECURITY_GET_USERNAME_FAILED, HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -77,7 +78,7 @@ public class SecurityUtils
         }
         catch (Exception e)
         {
-            throw new ServiceException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+            throw new ServiceException(MessageKeys.SECURITY_GET_USERINFO_FAILED, HttpStatus.UNAUTHORIZED);
         }
     }
 

@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import com.quantflow.common.constant.HttpStatus;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.core.domain.AjaxResult;
 import com.quantflow.common.core.text.Convert;
 import com.quantflow.common.exception.DemoModeException;
 import com.quantflow.common.exception.ServiceException;
+import com.quantflow.common.utils.MessageUtils;
 import com.quantflow.common.utils.StringUtils;
 import com.quantflow.common.utils.html.EscapeUtil;
 
@@ -37,7 +39,7 @@ public class GlobalExceptionHandler
     {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',权限校验失败'{}'", requestURI, e.getMessage());
-        return AjaxResult.error(HttpStatus.FORBIDDEN, "没有权限，请联系管理员授权");
+        return AjaxResult.error(HttpStatus.FORBIDDEN, MessageUtils.message(MessageKeys.ACCESS_DENIED.getKey()));
     }
 
     /**
@@ -71,7 +73,7 @@ public class GlobalExceptionHandler
     {
         String requestURI = request.getRequestURI();
         log.error("请求路径中缺少必需的路径变量'{}',发生系统异常.", requestURI, e);
-        return AjaxResult.error(String.format("请求路径中缺少必需的路径变量[%s]", e.getVariableName()));
+        return AjaxResult.error(MessageUtils.message(MessageKeys.MISSING_PATH_VARIABLE.getKey(), e.getVariableName()));
     }
 
     /**
@@ -87,7 +89,8 @@ public class GlobalExceptionHandler
             value = EscapeUtil.clean(value);
         }
         log.error("请求参数类型不匹配'{}',发生系统异常.", requestURI, e);
-        return AjaxResult.error(String.format("请求参数类型不匹配，参数[%s]要求类型为：'%s'，但输入值为：'%s'", e.getName(), e.getRequiredType().getName(), value));
+        return AjaxResult.error(MessageUtils.message(MessageKeys.METHOD_ARGUMENT_TYPE_MISMATCH.getKey(), 
+            e.getName(), e.getRequiredType().getName(), value));
     }
 
     /**
@@ -140,6 +143,6 @@ public class GlobalExceptionHandler
     @ExceptionHandler(DemoModeException.class)
     public AjaxResult handleDemoModeException(DemoModeException e)
     {
-        return AjaxResult.error("演示模式，不允许操作");
+        return AjaxResult.error(MessageUtils.message(MessageKeys.DEMO_MODE_NOT_ALLOWED.getKey()));
     }
 }

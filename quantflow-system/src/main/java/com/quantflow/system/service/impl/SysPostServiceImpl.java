@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.quantflow.common.constant.UserConstants;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.StringUtils;
 import com.quantflow.system.domain.SysPost;
@@ -146,7 +147,7 @@ public class SysPostServiceImpl implements ISysPostService
             SysPost post = selectPostById(postId);
             if (countUserPostById(postId) > 0)
             {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", post.getPostName()));
+                throw new ServiceException(MessageKeys.POST_ASSIGNED_CANNOT_DELETE, post.getPostName());
             }
         }
         return postMapper.deletePostByIds(postIds);

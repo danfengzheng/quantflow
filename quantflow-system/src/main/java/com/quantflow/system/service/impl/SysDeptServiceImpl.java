@@ -13,6 +13,7 @@ import com.quantflow.common.core.domain.entity.SysDept;
 import com.quantflow.common.core.domain.entity.SysRole;
 import com.quantflow.common.core.domain.entity.SysUser;
 import com.quantflow.common.core.text.Convert;
+import com.quantflow.common.constant.MessageKeys;
 import com.quantflow.common.exception.ServiceException;
 import com.quantflow.common.utils.SecurityUtils;
 import com.quantflow.common.utils.StringUtils;
@@ -197,7 +198,7 @@ public class SysDeptServiceImpl implements ISysDeptService
             List<SysDept> depts = SpringUtils.getAopProxy(this).selectDeptList(dept);
             if (StringUtils.isEmpty(depts))
             {
-                throw new ServiceException("没有权限访问部门数据！");
+                throw new ServiceException(MessageKeys.DEPT_NO_DATA_PERMISSION);
             }
         }
     }
@@ -215,7 +216,7 @@ public class SysDeptServiceImpl implements ISysDeptService
         // 如果父节点不为正常状态,则不允许新增子节点
         if (!UserConstants.DEPT_NORMAL.equals(info.getStatus()))
         {
-            throw new ServiceException("部门停用，不允许新增");
+            throw new ServiceException(MessageKeys.DEPT_DISABLED_CANNOT_ADD);
         }
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
         return deptMapper.insertDept(dept);
