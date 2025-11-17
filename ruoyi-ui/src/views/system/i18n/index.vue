@@ -30,10 +30,12 @@
       </el-form-item>
       <el-form-item label="语言" prop="locale">
         <el-select v-model="queryParams.locale" placeholder="请选择语言" clearable style="width: 150px">
-          <el-option label="简体中文" value="zh-CN" />
-          <el-option label="繁体中文" value="zh-TW" />
-          <el-option label="英文" value="en-US" />
-          <el-option label="日文" value="ja-JP" />
+          <el-option
+            v-for="dict in dict.type.sys_i18n_locale"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -96,11 +98,7 @@
       <el-table-column label="字段名" align="center" prop="fieldName" width="150" />
       <el-table-column label="语言" align="center" prop="locale" width="100">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.locale === 'zh-CN'" type="success">简体中文</el-tag>
-          <el-tag v-else-if="scope.row.locale === 'zh-TW'" type="info">繁体中文</el-tag>
-          <el-tag v-else-if="scope.row.locale === 'en-US'" type="warning">英文</el-tag>
-          <el-tag v-else-if="scope.row.locale === 'ja-JP'" type="danger">日文</el-tag>
-          <span v-else>{{ scope.row.locale }}</span>
+          <dict-tag :options="dict.type.sys_i18n_locale" :value="scope.row.locale"/>
         </template>
       </el-table-column>
       <el-table-column label="翻译内容" align="center" prop="translation" :show-overflow-tooltip="true" />
@@ -138,10 +136,10 @@
     />
 
     <!-- 添加或修改多语言翻译对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body @close="handleDialogClose">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="实体类型" prop="entityType">
-          <el-select v-model="form.entityType" placeholder="请选择实体类型" style="width: 100%">
+          <el-select v-model="form.entityType" placeholder="请选择实体类型" style="width: 100%" :disabled="form.id != null">
             <el-option label="菜单" value="menu" />
             <el-option label="字典数据" value="dict_data" />
             <el-option label="字典类型" value="dict_type" />
@@ -150,17 +148,19 @@
           </el-select>
         </el-form-item>
         <el-form-item label="实体ID" prop="entityId">
-          <el-input-number v-model="form.entityId" :min="1" style="width: 100%" />
+          <el-input-number v-model="form.entityId" :min="1" style="width: 100%" :disabled="form.id != null" />
         </el-form-item>
         <el-form-item label="字段名" prop="fieldName">
-          <el-input v-model="form.fieldName" placeholder="请输入字段名" />
+          <el-input v-model="form.fieldName" placeholder="请输入字段名" :disabled="form.id != null" />
         </el-form-item>
         <el-form-item label="语言" prop="locale">
-          <el-select v-model="form.locale" placeholder="请选择语言" style="width: 100%">
-            <el-option label="简体中文" value="zh-CN" />
-            <el-option label="繁体中文" value="zh-TW" />
-            <el-option label="英文" value="en-US" />
-            <el-option label="日文" value="ja-JP" />
+          <el-select v-model="form.locale" placeholder="请选择语言" style="width: 100%" :disabled="form.id != null">
+            <el-option
+              v-for="dict in dict.type.sys_i18n_locale"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="翻译内容" prop="translation">
@@ -180,6 +180,7 @@ import { listI18n, getI18n, delI18n, addI18n, updateI18n, refreshCache } from '@
 
 export default {
   name: 'I18n',
+  dicts: ['sys_i18n_locale'],
   data() {
     return {
       // 遮罩层
@@ -210,7 +211,14 @@ export default {
         locale: null
       },
       // 表单参数
-      form: {},
+      form: {
+        id: null,
+        entityType: null,
+        entityId: null,
+        fieldName: null,
+        locale: null,
+        translation: null
+      },
       // 表单校验
       rules: {
         entityType: [
@@ -244,21 +252,27 @@ export default {
         this.loading = false
       })
     },
+    // 对话框关闭处理
+    handleDialogClose() {
+      // 对话框关闭时重置表单
+      this.reset()
+    },
     // 取消按钮
     cancel() {
       this.open = false
-      this.reset()
+      // 注意：不需要在这里调用 reset()，因为 @close 事件会触发 handleDialogClose
     },
     // 表单重置
     reset() {
-      this.form = {
+      // 清空表单数据，但保持对象引用以维持响应式
+      Object.assign(this.form, {
         id: null,
         entityType: null,
         entityId: null,
         fieldName: null,
         locale: null,
         translation: null
-      }
+      })
       this.resetForm('form')
     },
     /** 搜索按钮操作 */
@@ -285,13 +299,22 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset()
       const id = row.id || this.ids[0]
-      getI18n(id).then(response => {
-        this.form = response.data
-        this.open = true
-        this.title = '修改多语言翻译'
-      })
+      if (!id) {
+        this.$modal.msgError('请选择要修改的数据')
+        return
+      }
+      // 先填充数据，再打开对话框，避免闪屏
+      this.form.id = row.id
+      this.form.entityType = row.entityType
+      this.form.entityId = row.entityId
+      this.form.fieldName = row.fieldName
+      this.form.locale = row.locale
+      this.form.translation = row.translation
+      // 设置标题
+      this.title = '修改多语言翻译'
+      // 打开对话框
+      this.open = true
     },
     /** 提交按钮 */
     submitForm() {

@@ -25,13 +25,20 @@
 
         <el-dropdown class="right-menu-item hover-effect" @command="changeLang">
           <span class="el-dropdown-link">
-            {{ currentLangLabel }}
+            <span class="lang-icon">{{ currentLangIcon }}</span>
+            <span class="lang-text">{{ currentLangLabel }}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="zh-CN">简体中文</el-dropdown-item>
-            <el-dropdown-item command="zh-TW">繁體中文</el-dropdown-item>
-            <el-dropdown-item command="en-US">English</el-dropdown-item>
-            <el-dropdown-item command="ja-JP">日本語</el-dropdown-item>
+            <el-dropdown-item
+              v-for="dict in dict.type.sys_i18n_locale"
+              :key="dict.value"
+              :command="dict.value"
+            >
+              <span class="lang-option">
+                <span class="lang-icon">{{ getLangIcon(dict.value) }}</span>
+                <span>{{ dict.label }}</span>
+              </span>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -71,6 +78,7 @@ import RuoYiDoc from '@/components/RuoYi/Doc'
 
 export default {
   emits: ['setLayout'],
+  dicts: ['sys_i18n_locale'],
   components: {
     Breadcrumb,
     TopNav,
@@ -100,13 +108,23 @@ export default {
     },
     currentLangLabel() {
       const locale = this.$i18n && this.$i18n.locale
-      const langMap = {
-        'zh-CN': '简体',
-        'zh-TW': '繁體',
-        'en-US': 'EN',
-        'ja-JP': '日本語'
+      if (this.dict && this.dict.type && this.dict.type.sys_i18n_locale) {
+        const dictItem = this.dict.type.sys_i18n_locale.find(item => item.value === locale)
+        if (dictItem) {
+          // 返回简短标签（用于显示在按钮上）
+          const shortLabelMap = {
+            'zh-CN': '简体',
+            'zh-TW': '繁體',
+            'en-US': 'EN',
+            'ja-JP': '日本語'
+          }
+          return shortLabelMap[locale] || dictItem.label
+        }
       }
-      return langMap[locale] || '简体'
+      return '简体'
+    },
+    currentLangIcon() {
+      return this.getLangIcon(this.$i18n && this.$i18n.locale)
     }
   },
   methods: {
@@ -134,6 +152,15 @@ export default {
         // 可按需刷新路由文案或强制刷新
         this.$message.success(this.$t('message.success.switchLang'))
       }
+    },
+    getLangIcon(locale) {
+      const iconMap = {
+        'zh-CN': '🇨🇳',
+        'zh-TW': '🇹🇼',
+        'en-US': '🇺🇸',
+        'ja-JP': '🇯🇵'
+      }
+      return iconMap[locale] || '🇨🇳'
     }
   }
 }
@@ -199,6 +226,21 @@ export default {
           background: rgba(0, 0, 0, .025)
         }
       }
+
+      .el-dropdown-link {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .lang-icon {
+          font-size: 18px;
+          line-height: 1;
+        }
+
+        .lang-text {
+          font-size: 14px;
+        }
+      }
     }
 
     .avatar-container {
@@ -233,6 +275,20 @@ export default {
           font-size: 12px;
         }
       }
+    }
+  }
+}
+
+// 语言下拉菜单样式
+::v-deep .el-dropdown-menu {
+  .lang-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .lang-icon {
+      font-size: 18px;
+      line-height: 1;
     }
   }
 }
