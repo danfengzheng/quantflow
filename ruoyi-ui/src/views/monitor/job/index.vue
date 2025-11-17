@@ -19,7 +19,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('module.monitor.job.status')" prop="status">
+      <el-form-item :label="$t('field.status')" prop="status">
         <el-select v-model="queryParams.status" :placeholder="$t('placeholder.selectJobStatus')" clearable>
           <el-option
             v-for="dict in dict.type.sys_job_status"
@@ -175,7 +175,7 @@
           <el-col :span="24">
             <el-form-item prop="invokeTarget">
               <span slot="label">
-                {{ $t('module.monitor.job.invokeTarget') }}
+                {{ $t('field.invokeTarget') }}
                 <el-tooltip placement="top">
                   <div slot="content">
                     Bean调用示例：ryTask.ryParams('ry')
@@ -212,7 +212,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('module.monitor.job.misfirePolicy')" prop="misfirePolicy">
+            <el-form-item :label="$t('field.misfirePolicy')" prop="misfirePolicy">
               <el-radio-group v-model="form.misfirePolicy" size="small">
                 <el-radio-button label="1">{{ $t('button.execute') }}</el-radio-button>
                 <el-radio-button label="2">{{ $t('button.runOnce') }}</el-radio-button>
@@ -221,7 +221,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('module.monitor.job.concurrent')" prop="concurrent">
+            <el-form-item :label="$t('field.concurrent')" prop="concurrent">
               <el-radio-group v-model="form.concurrent" size="small">
                 <el-radio-button label="0">{{ $t('common.yes') }}</el-radio-button>
                 <el-radio-button label="1">{{ $t('common.no') }}</el-radio-button>
@@ -236,7 +236,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="$t('module.monitor.job.cronExpression') + $t('button.generate')" :visible.sync="openCron" append-to-body destroy-on-close class="scrollbar">
+    <el-dialog :title="$t('field.cronExpression') + $t('button.generate')" :visible.sync="openCron" append-to-body destroy-on-close class="scrollbar">
       <crontab @hide="openCron=false" @fill="crontabFill" :expression="expression"></crontab>
     </el-dialog>
 

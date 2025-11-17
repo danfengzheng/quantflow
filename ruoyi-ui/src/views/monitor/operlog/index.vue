@@ -46,7 +46,7 @@
       <el-form-item :label="$t('field.status')" prop="status">
         <el-select
           v-model="queryParams.status"
-          :placeholder="$t('module.monitor.operLog.status')"
+          :placeholder="$t('placeholder.selectStatus')"
           clearable
           style="width: 240px"
         >
@@ -123,7 +123,7 @@
       <el-table-column :label="$t('field.operName')" align="center" prop="operName" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
       <el-table-column :label="$t('field.operIp')" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('field.operLocation')" align="center" prop="operLocation" :show-overflow-tooltip="true" />
-      <el-table-column :label="$t('module.monitor.operLog.status')" align="center" prop="status">
+      <el-table-column :label="$t('field.status')" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
         </template>

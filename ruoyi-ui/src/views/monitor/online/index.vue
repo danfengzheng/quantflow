@@ -36,7 +36,7 @@
       <el-table-column :label="$t('field.tokenId')" align="center" prop="tokenId" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('field.loginName')" align="center" prop="userName" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('field.deptName')" align="center" prop="deptName" />
-      <el-table-column :label="$t('module.monitor.online.ipaddr')" align="center" prop="ipaddr" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('field.ipaddr')" align="center" prop="ipaddr" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('field.loginLocation')" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('field.browser')" align="center" prop="browser" />
       <el-table-column :label="$t('field.os')" align="center" prop="os" />

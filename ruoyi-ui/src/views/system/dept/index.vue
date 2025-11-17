@@ -137,7 +137,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('module.system.dept.status')">
+            <el-form-item :label="$t('field.status')">
               <el-radio-group v-model="form.status">
                 <el-radio
                   v-for="dict in dict.type.sys_normal_disable"
@@ -153,31 +153,19 @@
           <el-col :span="24">
             <el-collapse v-model="activeI18nCollapse" style="margin-bottom: 10px;">
               <el-collapse-item title="多语言设置" name="i18n">
-                <el-form :model="i18nForm" label-width="120px" size="small">
-                  <el-row :gutter="20">
-                    <el-col :span="12">
-                      <el-form-item label="简体中文 (zh-CN)">
-                        <el-input v-model="i18nForm.dept_name['zh-CN']" placeholder="请输入简体中文部门名称" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="繁体中文 (zh-TW)">
-                        <el-input v-model="i18nForm.dept_name['zh-TW']" placeholder="請輸入繁體中文部門名稱" />
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row :gutter="20">
-                    <el-col :span="12">
-                      <el-form-item label="English (en-US)">
-                        <el-input v-model="i18nForm.dept_name['en-US']" placeholder="Enter English dept name" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="日本語 (ja-JP)">
-                        <el-input v-model="i18nForm.dept_name['ja-JP']" placeholder="部門名を入力してください" />
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+                <el-form :model="i18nForm" label-width="140px" size="small">
+                  <el-form-item label="简体中文 (zh-CN)">
+                    <el-input v-model="i18nForm.dept_name['zh-CN']" placeholder="请输入简体中文部门名称" />
+                  </el-form-item>
+                  <el-form-item label="繁体中文 (zh-TW)">
+                    <el-input v-model="i18nForm.dept_name['zh-TW']" placeholder="請輸入繁體中文部門名稱" />
+                  </el-form-item>
+                  <el-form-item label="English (en-US)">
+                    <el-input v-model="i18nForm.dept_name['en-US']" placeholder="Enter English dept name" />
+                  </el-form-item>
+                  <el-form-item label="日本語 (ja-JP)">
+                    <el-input v-model="i18nForm.dept_name['ja-JP']" placeholder="部門名を入力してください" />
+                  </el-form-item>
                 </el-form>
                 <div style="margin-top: 10px; text-align: right;">
                   <el-button type="primary" size="small" @click="saveI18nTranslationsInline" :disabled="!form.deptId">

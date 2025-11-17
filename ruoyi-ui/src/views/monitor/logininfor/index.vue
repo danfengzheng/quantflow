@@ -22,7 +22,7 @@
       <el-form-item :label="$t('field.status')" prop="status">
         <el-select
           v-model="queryParams.status"
-          :placeholder="$t('module.monitor.loginLog.status')"
+          :placeholder="$t('placeholder.selectStatus')"
           clearable
           style="width: 240px"
         >
@@ -106,7 +106,7 @@
       <el-table-column :label="$t('field.loginLocation')" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('field.browser')" align="center" prop="browser" :show-overflow-tooltip="true" />
       <el-table-column :label="$t('field.os')" align="center" prop="os" />
-      <el-table-column :label="$t('module.monitor.loginLog.status')" align="center" prop="status">
+      <el-table-column :label="$t('field.status')" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
         </template>

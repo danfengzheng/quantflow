@@ -83,7 +83,7 @@
           <dict-tag :options="dict.type.sys_notice_type" :value="scope.row.noticeType"/>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('module.system.notice.status')" align="center" prop="status" width="100">
+      <el-table-column :label="$t('field.status')" align="center" prop="status" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_notice_status" :value="scope.row.status"/>
         </template>
@@ -144,7 +144,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item :label="$t('module.system.notice.status')">
+            <el-form-item :label="$t('field.status')">
               <el-radio-group v-model="form.status">
                 <el-radio
                   v-for="dict in dict.type.sys_notice_status"

@@ -135,7 +135,7 @@
         <el-form-item :label="$t('field.postSort')" prop="postSort">
           <el-input-number v-model="form.postSort" controls-position="right" :min="0" />
         </el-form-item>
-        <el-form-item :label="$t('module.system.post.status')" prop="status">
+        <el-form-item :label="$t('field.status')" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.sys_normal_disable"

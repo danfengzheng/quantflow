@@ -10,7 +10,7 @@
         />
       </el-form-item>
       <el-form-item :label="$t('field.status')" prop="status">
-        <el-select v-model="queryParams.status" :placeholder="$t('module.system.menu.status')" clearable>
+        <el-select v-model="queryParams.status" :placeholder="$t('placeholder.selectStatus')" clearable>
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
             :key="dict.value"
@@ -182,59 +182,35 @@
               <el-collapse-item title="多语言设置" name="i18n">
                 <el-tabs v-model="i18nActiveTab" type="border-card">
                   <el-tab-pane label="菜单名称" name="menu_name">
-                    <el-form :model="i18nForm" label-width="120px" size="small">
-                      <el-row :gutter="20">
-                        <el-col :span="12">
-                          <el-form-item label="简体中文 (zh-CN)">
-                            <el-input v-model="i18nForm.menu_name['zh-CN']" placeholder="请输入简体中文菜单名称" />
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                          <el-form-item label="繁体中文 (zh-TW)">
-                            <el-input v-model="i18nForm.menu_name['zh-TW']" placeholder="請輸入繁體中文菜單名稱" />
-                          </el-form-item>
-                        </el-col>
-                      </el-row>
-                      <el-row :gutter="20">
-                        <el-col :span="12">
-                          <el-form-item label="English (en-US)">
-                            <el-input v-model="i18nForm.menu_name['en-US']" placeholder="Enter English menu name" />
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                          <el-form-item label="日本語 (ja-JP)">
-                            <el-input v-model="i18nForm.menu_name['ja-JP']" placeholder="メニュー名を入力してください" />
-                          </el-form-item>
-                        </el-col>
-                      </el-row>
+                    <el-form :model="i18nForm" label-width="140px" size="small">
+                      <el-form-item label="简体中文 (zh-CN)">
+                        <el-input v-model="i18nForm.menu_name['zh-CN']" placeholder="请输入简体中文菜单名称" />
+                      </el-form-item>
+                      <el-form-item label="繁体中文 (zh-TW)">
+                        <el-input v-model="i18nForm.menu_name['zh-TW']" placeholder="請輸入繁體中文菜單名稱" />
+                      </el-form-item>
+                      <el-form-item label="English (en-US)">
+                        <el-input v-model="i18nForm.menu_name['en-US']" placeholder="Enter English menu name" />
+                      </el-form-item>
+                      <el-form-item label="日本語 (ja-JP)">
+                        <el-input v-model="i18nForm.menu_name['ja-JP']" placeholder="メニュー名を入力してください" />
+                      </el-form-item>
                     </el-form>
                   </el-tab-pane>
                   <el-tab-pane label="备注" name="remark">
-                    <el-form :model="i18nForm" label-width="120px" size="small">
-                      <el-row :gutter="20">
-                        <el-col :span="12">
-                          <el-form-item label="简体中文 (zh-CN)">
-                            <el-input v-model="i18nForm.remark['zh-CN']" type="textarea" :rows="3" placeholder="请输入简体中文备注" />
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                          <el-form-item label="繁体中文 (zh-TW)">
-                            <el-input v-model="i18nForm.remark['zh-TW']" type="textarea" :rows="3" placeholder="請輸入繁體中文備註" />
-                          </el-form-item>
-                        </el-col>
-                      </el-row>
-                      <el-row :gutter="20">
-                        <el-col :span="12">
-                          <el-form-item label="English (en-US)">
-                            <el-input v-model="i18nForm.remark['en-US']" type="textarea" :rows="3" placeholder="Enter English remark" />
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                          <el-form-item label="日本語 (ja-JP)">
-                            <el-input v-model="i18nForm.remark['ja-JP']" type="textarea" :rows="3" placeholder="備考を入力してください" />
-                          </el-form-item>
-                        </el-col>
-                      </el-row>
+                    <el-form :model="i18nForm" label-width="140px" size="small">
+                      <el-form-item label="简体中文 (zh-CN)">
+                        <el-input v-model="i18nForm.remark['zh-CN']" type="textarea" :rows="3" placeholder="请输入简体中文备注" />
+                      </el-form-item>
+                      <el-form-item label="繁体中文 (zh-TW)">
+                        <el-input v-model="i18nForm.remark['zh-TW']" type="textarea" :rows="3" placeholder="請輸入繁體中文備註" />
+                      </el-form-item>
+                      <el-form-item label="English (en-US)">
+                        <el-input v-model="i18nForm.remark['en-US']" type="textarea" :rows="3" placeholder="Enter English remark" />
+                      </el-form-item>
+                      <el-form-item label="日本語 (ja-JP)">
+                        <el-input v-model="i18nForm.remark['ja-JP']" type="textarea" :rows="3" placeholder="備考を入力してください" />
+                      </el-form-item>
                     </el-form>
                   </el-tab-pane>
                 </el-tabs>
@@ -352,7 +328,7 @@
                 <el-tooltip content="选择停用则路由将不会出现在侧边栏，也不能被访问" placement="top">
                 <i class="el-icon-question"></i>
                 </el-tooltip>
-                {{ $t('module.system.menu.status') }}
+                {{ $t('field.status') }}
               </span>
               <el-radio-group v-model="form.status">
                 <el-radio
