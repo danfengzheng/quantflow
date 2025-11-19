@@ -213,6 +213,8 @@
         <module>quantflow-generator</module>
         <module>quantflow-common</module>
         <module>quantflow-trading</module>
+        <module>quantflow-quote</module>
+        <module>framework</module>
     </modules>
     <packaging>pom</packaging>
 
